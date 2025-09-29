@@ -2,21 +2,25 @@
 	import { onMount } from "svelte";
 	import { format } from "date-fns";
 	import { ro } from "date-fns/locale";
-	import { 
-		Users, 
-		BarChart3, 
-		Settings, 
-		Plus, 
-		Trash2, 
-		Edit3, 
-		Eye, 
-		Clock,
-		TrendingUp,
-		Calendar,
-		UserCheck,
-		Database
-	} from "lucide-svelte";
-	import { userService, projectService, taskService, statsService, type User, type Project, type Task } from '$lib/api';
+import { 
+	Users, 
+	BarChart3, 
+	Settings, 
+	Plus, 
+	Trash2, 
+	Edit3, 
+	Eye, 
+	Clock,
+	TrendingUp,
+	Calendar,
+	UserCheck,
+	Database,
+	Download,
+	FileText,
+	FileSpreadsheet,
+	FileCode
+} from "lucide-svelte";
+	import { userService, projectService, taskService, statsService, exportService, type User, type Project, type Task } from '$lib/api';
 import { notifications } from '$lib/notifications';
 
 	// Starea aplicației
@@ -24,10 +28,18 @@ import { notifications } from '$lib/notifications';
 	let users: User[] = $state([]);
 	let projects: Project[] = $state([]);
 	let allTasks: Task[] = $state([]);
-	let overviewStats = $state({});
+	let overviewStats = $state({
+	total_users: 0,
+	total_hours: 0,
+	active_projects: 0,
+	total_tasks: 0,
+	top_user: { name: 'N/A', hours: 0 },
+	average_hours_per_user: 0
+});
 	let selectedUser: User | null = $state(null);
 	let showAddModal = $state(false);
 	let newItem = $state({ name: "", type: "", description: "" });
+	let exportLoading = $state(false);
 
 	onMount(() => {
 		loadAllData();
@@ -120,12 +132,96 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 	function getProjectsByType(moduleType: string) {
 		return projects.filter(project => project.module_type === moduleType);
 	}
+
+	// Funcții de export
+	async function exportJSON() {
+		try {
+			exportLoading = true;
+			const data = await exportService.exportJSON();
+			
+			const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.json`;
+			a.click();
+			URL.revokeObjectURL(url);
+			
+			notifications.success('Export JSON', 'Datele au fost exportate în JSON cu succes!');
+		} catch (error) {
+			console.error('Export JSON error:', error);
+			notifications.error('Eroare Export', 'Eroare la exportarea în JSON!');
+		} finally {
+			exportLoading = false;
+		}
+	}
+
+	async function exportXML() {
+		try {
+			exportLoading = true;
+			const response = await exportService.exportXML();
+			
+			const blob = new Blob([response.xml], { type: 'application/xml' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.xml`;
+			a.click();
+			URL.revokeObjectURL(url);
+			
+			notifications.success('Export XML', 'Datele au fost exportate în XML cu succes!');
+		} catch (error) {
+			console.error('Export XML error:', error);
+			notifications.error('Eroare Export', 'Eroare la exportarea în XML!');
+		} finally {
+			exportLoading = false;
+		}
+	}
+
+	async function exportExcel() {
+		try {
+			exportLoading = true;
+			const blob = await exportService.exportExcel();
+			
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.xlsx`;
+			a.click();
+			URL.revokeObjectURL(url);
+			
+			notifications.success('Export Excel', 'Datele au fost exportate în Excel cu succes!');
+		} catch (error) {
+			console.error('Export Excel error:', error);
+			notifications.error('Eroare Export', 'Eroare la exportarea în Excel!');
+		} finally {
+			exportLoading = false;
+		}
+	}
 </script>
 
 <div class="admin-page">
 	<div class="admin-header">
-		<h1>Admin Panel</h1>
-		<p>Monitorizare completă și gestionare sistem</p>
+		<div class="header-content">
+			<div class="header-text">
+				<h1>Admin Panel</h1>
+				<p>Monitorizare completă și gestionare sistem</p>
+			</div>
+			<div class="export-buttons">
+				<button class="export-btn json" onclick={exportJSON} disabled={exportLoading}>
+					<FileText size={16} />
+					JSON
+				</button>
+				<button class="export-btn xml" onclick={exportXML} disabled={exportLoading}>
+					<FileCode size={16} />
+					XML
+				</button>
+				<button class="export-btn excel" onclick={exportExcel} disabled={exportLoading}>
+					<FileSpreadsheet size={16} />
+					Excel
+				</button>
+			</div>
+		</div>
 	</div>
 
 	<!-- Tabs -->
@@ -133,7 +229,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "overview"}
-			on:click={() => activeTab = "overview"}
+			onclick={() => activeTab = "overview"}
 		>
 			<BarChart3 size={20} />
 			Overview
@@ -141,7 +237,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "users"}
-			on:click={() => activeTab = "users"}
+			onclick={() => activeTab = "users"}
 		>
 			<Users size={20} />
 			Utilizatori
@@ -149,7 +245,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "projects"}
-			on:click={() => activeTab = "projects"}
+			onclick={() => activeTab = "projects"}
 		>
 			<Database size={20} />
 			Proiecte
@@ -157,7 +253,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "evoms"}
-			on:click={() => activeTab = "evoms"}
+			onclick={() => activeTab = "evoms"}
 		>
 			<TrendingUp size={20} />
 			EVOM-uri
@@ -165,7 +261,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "operational"}
-			on:click={() => activeTab = "operational"}
+			onclick={() => activeTab = "operational"}
 		>
 			<Settings size={20} />
 			Operational
@@ -173,7 +269,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		<button 
 			class="tab-btn" 
 			class:active={activeTab === "tasks"}
-			on:click={() => activeTab = "tasks"}
+			onclick={() => activeTab = "tasks"}
 		>
 			<Clock size={20} />
 			Task-uri
@@ -247,7 +343,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			<div class="users-section">
 				<div class="section-header">
 					<h3>Utilizatori</h3>
-					<button class="add-btn" on:click={() => showAddModal = true}>
+					<button class="add-btn" onclick={() => showAddModal = true}>
 						<Plus size={16} />
 						Adaugă Utilizator
 					</button>
@@ -275,7 +371,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 									<div class="tasks-count">{getUserTasks(user.id!).length} task-uri</div>
 								</div>
 								<div class="user-actions">
-									<button class="action-btn view" on:click={() => selectedUser = user}>
+									<button class="action-btn view" onclick={() => selectedUser = user}>
 										<Eye size={16} />
 									</button>
 									<button class="action-btn edit">
@@ -295,7 +391,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			<div class="items-section">
 				<div class="section-header">
 					<h3>Proiecte</h3>
-					<button class="add-btn" on:click={() => { newItem.type = "proiecte"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.type = "proiecte"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă Proiect
 					</button>
@@ -320,7 +416,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 								<button class="action-btn edit">
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" on:click={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -333,7 +429,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			<div class="items-section">
 				<div class="section-header">
 					<h3>EVOM-uri</h3>
-					<button class="add-btn" on:click={() => { newItem.type = "evom"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.type = "evom"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă EVOM
 					</button>
@@ -358,7 +454,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 								<button class="action-btn edit">
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" on:click={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -371,7 +467,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			<div class="items-section">
 				<div class="section-header">
 					<h3>Operational</h3>
-					<button class="add-btn" on:click={() => { newItem.type = "operational"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.type = "operational"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă Operational
 					</button>
@@ -396,7 +492,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 								<button class="action-btn edit">
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" on:click={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -434,11 +530,11 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 
 	<!-- Modal pentru adăugare -->
 	{#if showAddModal}
-		<div class="modal-overlay" on:click={() => showAddModal = false}>
-			<div class="modal-content" on:click|stopPropagation>
+		<div class="modal-overlay" onclick={() => showAddModal = false}>
+			<div class="modal-content" onclick={(e) => e.stopPropagation()}>
 				<div class="modal-header">
 					<h3>Adaugă {newItem.type === "proiecte" ? "Proiect" : newItem.type === "evom" ? "EVOM" : "Operational"}</h3>
-					<button class="close-btn" on:click={() => showAddModal = false}>×</button>
+					<button class="close-btn" onclick={() => showAddModal = false}>×</button>
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
@@ -451,8 +547,8 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn-cancel" on:click={() => showAddModal = false}>Anulează</button>
-					<button class="btn-save" on:click={addItem}>Salvează</button>
+					<button class="btn-cancel" onclick={() => showAddModal = false}>Anulează</button>
+					<button class="btn-save" onclick={addItem}>Salvează</button>
 				</div>
 			</div>
 		</div>
@@ -1032,6 +1128,91 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 
 	.no-users p {
 		margin: 0.5rem 0;
+	}
+
+	/* Export buttons */
+	.header-content {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+	}
+
+	.export-buttons {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.export-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid #e5e7eb;
+		background: white;
+		border-radius: 6px;
+		cursor: pointer;
+		font-size: 0.875rem;
+		font-weight: 500;
+		transition: all 0.2s;
+	}
+
+	.export-btn:hover:not(:disabled) {
+		background: #f9fafb;
+		border-color: #d1d5db;
+	}
+
+	.export-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.export-btn.json {
+		color: #059669;
+		border-color: #10b981;
+	}
+
+	.export-btn.json:hover:not(:disabled) {
+		background: #ecfdf5;
+		border-color: #059669;
+	}
+
+	.export-btn.xml {
+		color: #dc2626;
+		border-color: #ef4444;
+	}
+
+	.export-btn.xml:hover:not(:disabled) {
+		background: #fef2f2;
+		border-color: #dc2626;
+	}
+
+	.export-btn.excel {
+		color: #2563eb;
+		border-color: #3b82f6;
+	}
+
+	.export-btn.excel:hover:not(:disabled) {
+		background: #eff6ff;
+		border-color: #2563eb;
+	}
+
+	/* Responsive pentru export buttons */
+	@media (max-width: 768px) {
+		.header-content {
+			flex-direction: column;
+			gap: 1rem;
+			align-items: stretch;
+		}
+
+		.export-buttons {
+			justify-content: center;
+		}
+
+		.export-btn {
+			flex: 1;
+			justify-content: center;
+		}
 	}
 
 	/* Responsive pentru utilizatori */

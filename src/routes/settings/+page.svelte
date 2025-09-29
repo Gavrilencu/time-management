@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { Settings, User, Bell, Shield, Database, Download } from 'lucide-svelte';
-import { userService, taskService, projectService, type User as UserType, type Task, type Project } from '$lib/api';
+import { Settings, User, Bell, Shield, Database, Download, FileText, FileCode, FileSpreadsheet } from 'lucide-svelte';
+import { userService, taskService, projectService, exportService, type User as UserType, type Task, type Project } from '$lib/api';
 import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
@@ -15,7 +15,7 @@ workingHours: 8,
 weekStart: 'monday'
 });
 
-let currentUser: UserType | null = $state(null);
+let currentUserData: UserType | null = $state(null);
 let userTasks: Task[] = $state([]);
 let userProjects: Project[] = $state([]);
 let loading = $state(false);
@@ -27,10 +27,10 @@ loadUserData();
 
 // Monitorizează schimbările în formular
 function checkForChanges() {
-if (currentUser) {
+if (currentUserData) {
 hasChanges = 
-userSettings.name !== currentUser.name || 
-userSettings.email !== currentUser.email;
+userSettings.name !== currentUserData.name || 
+userSettings.email !== currentUserData.email;
 } else {
 hasChanges = false;
 }
@@ -44,22 +44,22 @@ const users = await userService.getAll();
 
 if (users.length === 0) {
 notifications.warning('Nu există utilizatori', 'Nu există utilizatori în sistem. Creează primul utilizator în Admin.');
-currentUser = null;
+currentUserData = null;
 return;
 }
 
-currentUser = users.find(u => u.id === 1) || users[0];
+currentUserData = users.find(u => u.id === 1) || users[0];
 
-if (currentUser) {
-userSettings.name = currentUser.name;
-userSettings.email = currentUser.email;
+if (currentUserData) {
+userSettings.name = currentUserData.name;
+userSettings.email = currentUserData.email;
 }
 
 // Verifică schimbările după încărcare
 checkForChanges();
 
 // TODO: Înlocuiește cu ID-ul utilizatorului autentificat
-userTasks = await taskService.getByUser($currentUser?.id || 1);
+userTasks = await taskService.getByUser(currentUserData?.id || 1);
 userProjects = await projectService.getAll();
 } catch (error) {
 console.error('Error loading user data:', error);
@@ -92,18 +92,18 @@ return;
 }
 
 // Actualizează utilizatorul prin API dacă există
-if (currentUser && currentUser.id) {
+if (currentUserData && currentUserData.id) {
 try {
-await userService.update(currentUser.id, {
+await userService.update(currentUserData.id, {
 name: userSettings.name.trim(),
 email: userSettings.email.trim(),
-role: currentUser.role,
-total_hours: currentUser.total_hours
+role: currentUserData.role,
+total_hours: currentUserData.total_hours
 });
 notifications.success('Succes', 'Setările au fost salvate în baza de date!');
-} catch (error) {
+} catch (error: any) {
 console.error('Error updating user:', error);
-if (error.message.includes('Email already exists')) {
+if (error.message && error.message.includes('Email already exists')) {
 notifications.error('Email existent', 'Acest email este deja folosit de alt utilizator!');
 } else {
 notifications.error('Eroare', 'Eroare la actualizarea utilizatorului!');
@@ -131,28 +131,66 @@ loading = false;
 }
 }
 
-async function exportData() {
+async function exportJSON() {
 try {
 loading = true;
-// Exportă datele reale din API
-const data = {
-user: currentUser,
-tasks: userTasks,
-projects: userProjects,
-settings: userSettings,
-exportDate: new Date().toISOString()
-};
+const data = await exportService.exportJSON();
 
 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
 const url = URL.createObjectURL(blob);
 const a = document.createElement('a');
 a.href = url;
-a.download = `kpi-data-export-${new Date().toISOString().split('T')[0]}.json`;
+a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.json`;
 a.click();
 URL.revokeObjectURL(url);
+
+notifications.success('Export JSON', 'Datele au fost exportate în JSON cu succes!');
 } catch (error) {
-console.error('Error exporting data:', error);
-notifications.error('Eroare', 'Eroare la exportarea datelor!');
+console.error('Error exporting JSON:', error);
+notifications.error('Eroare Export', 'Eroare la exportarea în JSON!');
+} finally {
+loading = false;
+}
+}
+
+async function exportXML() {
+try {
+loading = true;
+const response = await exportService.exportXML();
+
+const blob = new Blob([response.xml], { type: 'application/xml' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.xml`;
+a.click();
+URL.revokeObjectURL(url);
+
+notifications.success('Export XML', 'Datele au fost exportate în XML cu succes!');
+} catch (error) {
+console.error('Error exporting XML:', error);
+notifications.error('Eroare Export', 'Eroare la exportarea în XML!');
+} finally {
+loading = false;
+}
+}
+
+async function exportExcel() {
+try {
+loading = true;
+const blob = await exportService.exportExcel();
+
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = `kpi-export-${new Date().toISOString().split('T')[0]}.xlsx`;
+a.click();
+URL.revokeObjectURL(url);
+
+notifications.success('Export Excel', 'Datele au fost exportate în Excel cu succes!');
+} catch (error) {
+console.error('Error exporting Excel:', error);
+notifications.error('Eroare Export', 'Eroare la exportarea în Excel!');
 } finally {
 loading = false;
 }
@@ -180,8 +218,8 @@ loading = false;
 <input 
 type="text" 
 bind:value={userSettings.name} 
-on:input={checkForChanges}
-class:has-changes={hasChanges && userSettings.name !== currentUser?.name}
+oninput={checkForChanges}
+class:has-changes={hasChanges && userSettings.name !== currentUserData?.name}
 />
 </div>
 <div class="form-group">
@@ -189,17 +227,17 @@ class:has-changes={hasChanges && userSettings.name !== currentUser?.name}
 <input 
 type="email" 
 bind:value={userSettings.email} 
-on:input={checkForChanges}
-class:has-changes={hasChanges && userSettings.email !== currentUser?.email}
+oninput={checkForChanges}
+class:has-changes={hasChanges && userSettings.email !== currentUserData?.email}
 />
 </div>
 <div class="form-group">
 <label>Rol</label>
-<input type="text" value={currentUser?.role || 'N/A'} disabled />
+<input type="text" value={currentUserData?.role || 'N/A'} disabled />
 </div>
 <div class="form-group">
 <label>Total ore lucrate</label>
-<input type="text" value={`${currentUser?.total_hours || 0} ore`} disabled />
+<input type="text" value={`${currentUserData?.total_hours || 0} ore`} disabled />
 </div>
 {/if}
 </div>
@@ -244,10 +282,20 @@ class:has-changes={hasChanges && userSettings.email !== currentUser?.email}
 <h3>Date și Siguranță</h3>
 </div>
 <div class="form-group">
-<button class="action-btn export" on:click={exportData} disabled={loading}>
-<Download size={16} />
-{loading ? 'Se exportă...' : 'Exportă Date'}
+<div class="export-buttons">
+<button class="export-btn json" onclick={exportJSON} disabled={loading}>
+<FileText size={16} />
+JSON
 </button>
+<button class="export-btn xml" onclick={exportXML} disabled={loading}>
+<FileCode size={16} />
+XML
+</button>
+<button class="export-btn excel" onclick={exportExcel} disabled={loading}>
+<FileSpreadsheet size={16} />
+Excel
+</button>
+</div>
 </div>
 <div class="form-group">
 <label>Statistici</label>
@@ -272,7 +320,7 @@ class:has-changes={hasChanges && userSettings.email !== currentUser?.email}
 <div class="settings-actions">
 <button 
 class="save-btn" 
-on:click={saveSettings} 
+onclick={saveSettings} 
 disabled={loading || !hasChanges}
 class:has-changes={hasChanges}
 >
@@ -402,6 +450,67 @@ border-color: #d1fae5;
 .action-btn.export:hover {
 background: #ecfdf5;
 border-color: #a7f3d0;
+}
+
+/* Export buttons */
+.export-buttons {
+display: flex;
+gap: 0.5rem;
+flex-wrap: wrap;
+}
+
+.export-btn {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.5rem 1rem;
+border: 1px solid #e5e7eb;
+background: white;
+border-radius: 6px;
+cursor: pointer;
+font-size: 0.875rem;
+font-weight: 500;
+transition: all 0.2s;
+}
+
+.export-btn:hover:not(:disabled) {
+background: #f9fafb;
+border-color: #d1d5db;
+}
+
+.export-btn:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+}
+
+.export-btn.json {
+color: #059669;
+border-color: #10b981;
+}
+
+.export-btn.json:hover:not(:disabled) {
+background: #ecfdf5;
+border-color: #059669;
+}
+
+.export-btn.xml {
+color: #dc2626;
+border-color: #ef4444;
+}
+
+.export-btn.xml:hover:not(:disabled) {
+background: #fef2f2;
+border-color: #dc2626;
+}
+
+.export-btn.excel {
+color: #2563eb;
+border-color: #3b82f6;
+}
+
+.export-btn.excel:hover:not(:disabled) {
+background: #eff6ff;
+border-color: #2563eb;
 }
 
 .settings-actions {

@@ -67,6 +67,8 @@ clearCurrentUser();
 kerberosLogout();
 goto('/login');
 }
+
+////test
 </script>
 
 <svelte:head>
@@ -126,7 +128,19 @@ href={item.href}
 class="nav-item" 
 class:active={$page.url.pathname === item.href}
 >
-{item.icon && <item.icon size={20} />}
+{#if item.icon === BarChart3}
+<BarChart3 size={20} />
+{:else if item.icon === Calendar}
+<Calendar size={20} />
+{:else if item.icon === Clock}
+<Clock size={20} />
+{:else if item.icon === Plus}
+<Plus size={20} />
+{:else if item.icon === Users}
+<Users size={20} />
+{:else if item.icon === Settings}
+<Settings size={20} />
+{/if}
 <span>{item.name}</span>
 </a>
 {/each}

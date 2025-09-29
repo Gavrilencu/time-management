@@ -161,3 +161,23 @@ export const statsService = {
 		return response.json();
 	}
 };
+
+export const exportService = {
+	async exportJSON(): Promise<any> {
+		const response = await fetch(`${API_URL}/api/export/json`);
+		if (!response.ok) throw new Error('Failed to export JSON');
+		return response.json();
+	},
+
+	async exportXML(): Promise<any> {
+		const response = await fetch(`${API_URL}/api/export/xml`);
+		if (!response.ok) throw new Error('Failed to export XML');
+		return response.json();
+	},
+
+	async exportExcel(): Promise<Blob> {
+		const response = await fetch(`${API_URL}/api/export/excel`);
+		if (!response.ok) throw new Error('Failed to export Excel');
+		return response.blob();
+	}
+};
