@@ -24,21 +24,12 @@ export interface KerberosUser {
  * - Sau folosește biblioteca Kerberos pentru Node.js
  */
 export async function getKerberosUser(): Promise<KerberosUser> {
-    // Simulare pentru demo - înlocuiește cu implementarea reală
+    // TODO: Implementează integrarea reală cu Kerberos
+    // Pentru moment, returnează o eroare pentru a forța implementarea reală
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            // Simulează datele Kerberos
-            const mockUser: KerberosUser = {
-                username: 'john.doe',
-                email: 'john.doe@company.com',
-                displayName: 'John Doe',
-                department: 'IT Development',
-                domain: 'COMPANY',
-                groups: ['Users', 'Developers']
-            };
-            
-            resolve(mockUser);
-        }, 1000);
+            reject(new Error('Kerberos integration not implemented. Please implement real Kerberos authentication.'));
+        }, 100);
     });
 }
 

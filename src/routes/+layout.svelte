@@ -25,8 +25,8 @@ const kerberosData = await getKerberosUser();
 await authenticateUser(kerberosData);
 } catch (error) {
 console.error('Kerberos authentication failed:', error);
-// Fallback pentru demo
-setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'Admin', department: 'IT Development', total_hours: 0 });
+// Nu există fallback - utilizatorul trebuie să se autentifice prin Kerberos
+notifications.error('Autentificare eșuată', 'Nu s-a putut autentifica utilizatorul prin Kerberos!');
 } finally {
 setAuthLoading(false);
 }
