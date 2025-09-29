@@ -2,6 +2,8 @@
 	import { onMount } from "svelte";
 	import { format } from "date-fns";
 	import { ro } from "date-fns/locale";
+	import { goto } from '$app/navigation';
+	import { currentUser } from '$lib/auth';
 import { 
 	Users, 
 	BarChart3, 
@@ -21,7 +23,17 @@ import {
 	FileCode
 } from "lucide-svelte";
 	import { userService, projectService, taskService, statsService, exportService, type User, type Project, type Task } from '$lib/api';
-import { notifications } from '$lib/notifications';
+	import { notifications } from '$lib/notifications';
+
+	// Verifică autorizarea admin
+	onMount(() => {
+		if (!$currentUser || $currentUser.role !== 'Admin') {
+			notifications.error('Acces interzis', 'Nu ai permisiuni de administrator!');
+			goto('/');
+			return;
+		}
+		loadAllDataInBackground();
+	});
 
 	// Starea aplicației
 	let activeTab = $state("overview");
@@ -38,13 +50,10 @@ import { notifications } from '$lib/notifications';
 });
 	let selectedUser: User | null = $state(null);
 	let showAddModal = $state(false);
+	let showEditModal = $state(false);
+	let editingUser: User | null = $state(null);
 	let newItem = $state({ name: "", type: "", description: "" });
 	let exportLoading = $state(false);
-
-	onMount(() => {
-		// Încarcă datele în background pentru performanță mai bună
-		loadAllDataInBackground();
-	});
 
 	async function loadAllDataInBackground() {
 		try {
@@ -208,6 +217,40 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			exportLoading = false;
 		}
 	}
+
+	// Funcții pentru gestionarea utilizatorilor
+	function editUser(user: User) {
+		editingUser = { ...user };
+		showEditModal = true;
+	}
+
+	async function updateUser() {
+		if (!editingUser) return;
+		
+		try {
+			await userService.update(editingUser.id!, editingUser);
+			await loadUsers();
+			showEditModal = false;
+			editingUser = null;
+			notifications.success('Utilizator actualizat', 'Utilizatorul a fost actualizat cu succes!');
+		} catch (error) {
+			console.error('Error updating user:', error);
+			notifications.error('Eroare', 'Eroare la actualizarea utilizatorului!');
+		}
+	}
+
+	async function deleteUser(userId: number) {
+		if (!confirm('Ești sigur că vrei să ștergi acest utilizator?')) return;
+		
+		try {
+			await userService.delete(userId);
+			await loadUsers();
+			notifications.success('Utilizator șters', 'Utilizatorul a fost șters cu succes!');
+		} catch (error) {
+			console.error('Error deleting user:', error);
+			notifications.error('Eroare', 'Eroare la ștergerea utilizatorului!');
+		}
+	}
 </script>
 
 <div class="admin-page">
@@ -305,7 +348,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							<Clock size={24} />
 						</div>
 						<div class="stat-info">
-							<div class="stat-value">{Number(overviewStats.total_hours || 0).toFixed(1)}h</div>
+Тг							<div class="stat-value">{Number(overviewStats.total_hours || 0).toFixed(1)}h</div>
 							<div class="stat-label">Total ore lucrate</div>
 						</div>
 					</div>
@@ -384,10 +427,10 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 									<button class="action-btn view" onclick={() => selectedUser = user}>
 										<Eye size={16} />
 									</button>
-									<button class="action-btn edit">
+									<button class="action-btn edit" onclick={() => editUser(user)}>
 										<Edit3 size={16} />
 									</button>
-									<button class="action-btn delete">
+									<button class="action-btn delete" onclick={() => deleteUser(user.id!)}>
 										<Trash2 size={16} />
 									</button>
 								</div>
@@ -564,6 +607,57 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 		</div>
 	{/if}
 </div>
+
+<!-- Modal pentru editarea utilizatorilor -->
+{#if showEditModal && editingUser}
+	<div class="edit-modal" onclick={(e) => e.target === e.currentTarget && (showEditModal = false)}>
+		<div class="edit-modal-content">
+			<h3>Editează Utilizator</h3>
+			<div class="edit-form-group">
+				<label for="edit-name">Nume:</label>
+				<input 
+					id="edit-name"
+					type="text" 
+					bind:value={editingUser.name}
+					placeholder="Numele utilizatorului"
+				/>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-email">Email:</label>
+				<input 
+					id="edit-email"
+					type="email" 
+					bind:value={editingUser.email}
+					placeholder="email@example.com"
+				/>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-department">Department:</label>
+				<input 
+					id="edit-department"
+					type="text" 
+					bind:value={editingUser.department}
+					placeholder="Department"
+				/>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-role">Rol:</label>
+				<select id="edit-role" bind:value={editingUser.role}>
+					<option value="User">User</option>
+					<option value="Admin">Admin</option>
+				</select>
+			</div>
+			<div class="edit-modal-actions">
+				<button class="cancel-btn" onclick={() => showEditModal = false}>
+					Anulează
+				</button>
+				<button class="save-btn" onclick={updateUser}>
+					Salvează
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.admin-page {
@@ -1272,5 +1366,96 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 			width: 28px;
 			height: 28px;
 		}
+	}
+
+	/* Modal pentru editarea utilizatorilor */
+	.edit-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+	}
+
+	.edit-modal-content {
+		background: white;
+		border-radius: 12px;
+		padding: 2rem;
+		width: 90%;
+		max-width: 500px;
+		max-height: 90vh;
+		overflow-y: auto;
+	}
+
+	.edit-modal h3 {
+		margin: 0 0 1.5rem 0;
+		color: #1f2937;
+		font-size: 1.5rem;
+	}
+
+	.edit-form-group {
+		margin-bottom: 1rem;
+	}
+
+	.edit-form-group label {
+		display: block;
+		margin-bottom: 0.5rem;
+		font-weight: 500;
+		color: #374151;
+	}
+
+	.edit-form-group input,
+	.edit-form-group select {
+		width: 100%;
+		padding: 0.75rem;
+		border: 1px solid #d1d5db;
+		border-radius: 6px;
+		font-size: 0.875rem;
+	}
+
+	.edit-form-group input:focus,
+	.edit-form-group select:focus {
+		outline: none;
+		border-color: #2563eb;
+		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+	}
+
+	.edit-modal-actions {
+		display: flex;
+		gap: 1rem;
+		margin-top: 2rem;
+		justify-content: flex-end;
+	}
+
+	.edit-modal-actions button {
+		padding: 0.75rem 1.5rem;
+		border: none;
+		border-radius: 6px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.edit-modal-actions .cancel-btn {
+		background: #f3f4f6;
+		color: #374151;
+	}
+
+	.edit-modal-actions .cancel-btn:hover {
+		background: #e5e7eb;
+	}
+
+	.edit-modal-actions .save-btn {
+		background: #2563eb;
+		color: white;
+	}
+
+	.edit-modal-actions .save-btn:hover {
+		background: #1d4ed8;
 	}
 </style>

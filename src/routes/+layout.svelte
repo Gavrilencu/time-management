@@ -26,7 +26,7 @@ await authenticateUser(kerberosData);
 } catch (error) {
 console.error('Kerberos authentication failed:', error);
 // Fallback pentru demo
-setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'User', department: 'IT Development', total_hours: 0 });
+setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'Admin', department: 'IT Development', total_hours: 0 });
 } finally {
 setAuthLoading(false);
 }
@@ -66,9 +66,20 @@ notifications.error('Eroare autentificare', 'Eroare la autentificarea utilizator
 		{ name: 'Calendar', href: '/calendar', icon: Calendar },
 		{ name: 'Timp Lucru', href: '/time-tracking', icon: Clock },
 		{ name: 'Adaugă Task', href: '/add-task', icon: Plus },
-		{ name: 'Admin', href: '/admin', icon: Users },
 		{ name: 'Setări', href: '/settings', icon: Settings }
 	];
+
+	// Adaugă Admin doar pentru utilizatorii cu rol de admin
+	const adminMenuItem = { name: 'Admin', href: '/admin', icon: Users };
+	
+	// Funcție pentru a obține meniul complet bazat pe rol
+	function getMenuItems() {
+		const items = [...menuItems];
+		if ($currentUser?.role === 'Admin') {
+			items.splice(4, 0, adminMenuItem); // Inserează Admin înainte de Setări
+		}
+		return items;
+	}
 
 function logout() {
 clearCurrentUser();
@@ -131,7 +142,7 @@ Reîncearcă
 </div>
 
 <nav class="sidebar-nav">
-{#each menuItems as item}
+{#each getMenuItems() as item}
 <a 
 href={item.href} 
 class="nav-item" 
