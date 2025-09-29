@@ -9,11 +9,14 @@ import { userService } from '$lib/api';
 import { notifications } from '$lib/notifications';
 import { getKerberosUser, kerberosLogout } from '$lib/kerberos';
 import { currentUser, isAuthenticated, authLoading, setCurrentUser, clearCurrentUser, setAuthLoading } from '$lib/auth';
+import { currentTheme } from '$lib/themes';
 
 let { children } = $props();
 
 // Autentificare automată cu Kerberos (non-blocking)
 onMount(() => {
+// Inițializează tema
+currentTheme.initTheme();
 // Nu bloca încărcarea paginii - autentificarea se face în background
 authenticateInBackground();
 });
@@ -402,6 +405,85 @@ transition: background 0.2s;
 
 .retry-btn:hover {
 background: #b91c1c;
+}
+
+/* Variabile CSS pentru teme */
+:root {
+--color-primary: #2563eb;
+--color-secondary: #64748b;
+--color-background: #ffffff;
+--color-surface: #f8fafc;
+--color-text: #1f2937;
+--color-textSecondary: #6b7280;
+--color-border: #e5e7eb;
+--color-accent: #3b82f6;
+--color-success: #059669;
+--color-warning: #d97706;
+--color-error: #dc2626;
+}
+
+/* Aplică variabilele în stilurile existente */
+.app-container {
+background-color: var(--color-background);
+color: var(--color-text);
+}
+
+.sidebar {
+background-color: var(--color-surface);
+border-right: 1px solid var(--color-border);
+}
+
+.sidebar-header h1 {
+color: var(--color-text);
+}
+
+.nav-item {
+color: var(--color-textSecondary);
+}
+
+.nav-item:hover {
+background-color: var(--color-surface);
+color: var(--color-text);
+}
+
+.nav-item.active {
+background-color: var(--color-primary);
+color: white;
+}
+
+.main-content {
+background-color: var(--color-background);
+}
+
+.auth-container {
+background-color: var(--color-background);
+}
+
+.auth-card {
+background-color: var(--color-surface);
+border: 1px solid var(--color-border);
+}
+
+.auth-header h1 {
+color: var(--color-text);
+}
+
+.auth-header p {
+color: var(--color-textSecondary);
+}
+
+.auth-error p {
+color: var(--color-error);
+}
+
+.retry-btn {
+background: var(--color-error);
+color: white;
+}
+
+.retry-btn:hover {
+background: var(--color-error);
+opacity: 0.9;
 }
 </style>
 

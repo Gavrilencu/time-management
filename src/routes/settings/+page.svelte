@@ -5,12 +5,13 @@ import { userService, taskService, projectService, exportService, type User as U
 import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
+import { currentTheme, themes, type Theme } from '$lib/themes';
 
 let userSettings = $state({
 name: 'Utilizator',
 email: 'user@example.com',
 notifications: true,
-theme: 'light',
+theme: 'light' as Theme,
 workingHours: 8,
 weekStart: 'monday'
 });
@@ -55,6 +56,11 @@ userSettings.name = currentUserData.name;
 userSettings.email = currentUserData.email;
 }
 
+// Încarcă tema curentă din store
+currentTheme.subscribe((theme) => {
+userSettings.theme = theme;
+});
+
 // Verifică schimbările după încărcare
 checkForChanges();
 
@@ -67,6 +73,12 @@ notifications.error('Eroare', 'Eroare la încărcarea datelor utilizatorului!');
 } finally {
 loading = false;
 }
+}
+
+// Funcție pentru schimbarea temei
+function changeTheme(theme: Theme) {
+currentTheme.setTheme(theme);
+notifications.success('Temă schimbată', `Tema a fost schimbată în ${themes[theme].label}`);
 }
 
 async function saveSettings() {
@@ -253,6 +265,28 @@ class:has-changes={hasChanges && userSettings.email !== currentUserData?.email}
 <input type="checkbox" bind:checked={userSettings.notifications} />
 <span>Activează notificările</span>
 </label>
+</div>
+</div>
+
+<!-- Teme -->
+<div class="settings-card">
+<div class="card-header">
+<Settings size={24} />
+<h3>Temă Aplicație</h3>
+</div>
+<div class="form-group">
+<label>Selectează tema</label>
+<div class="theme-selector">
+{#each Object.entries(themes) as [key, theme]}
+<button 
+class="theme-option {userSettings.theme === key ? 'active' : ''}"
+onclick={() => changeTheme(key as Theme)}
+>
+<div class="theme-preview" style="background: linear-gradient(135deg, {theme.colors.primary}, {theme.colors.accent})"></div>
+<span>{theme.label}</span>
+</button>
+{/each}
+</div>
 </div>
 </div>
 
@@ -606,5 +640,69 @@ color: #1f2937;
 .action-btn:disabled {
 opacity: 0.6;
 cursor: not-allowed;
+}
+
+/* Stiluri pentru selectorul de teme */
+.theme-selector {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+gap: 1rem;
+margin-top: 0.5rem;
+}
+
+.theme-option {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.5rem;
+padding: 1rem;
+border: 2px solid #e5e7eb;
+border-radius: 8px;
+background: white;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+
+.theme-option:hover {
+border-color: #3b82f6;
+transform: translateY(-2px);
+box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.theme-option.active {
+border-color: #2563eb;
+background: #eff6ff;
+box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.theme-preview {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+border: 2px solid white;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-option span {
+font-size: 0.875rem;
+font-weight: 500;
+color: #374151;
+}
+
+.theme-option.active span {
+color: #2563eb;
+font-weight: 600;
+}
+
+/* Responsive pentru teme */
+@media (max-width: 768px) {
+.theme-selector {
+grid-template-columns: 1fr;
+gap: 0.75rem;
+}
+
+.theme-option {
+padding: 0.75rem;
+}
 }
 </style>
