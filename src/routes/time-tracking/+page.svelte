@@ -9,15 +9,15 @@ import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 
 let isRunning = $state(false);
-let startTime = $state(null);
+let startTime: number | null = $state(null);
 let elapsedTime = $state(0);
 let currentTask = $state('');
 let selectedProject = $state('');
 let selectedProjectId = $state(0);
-let timerInterval = $state(null);
+let timerInterval: number | null = $state(null);
 let projects: Project[] = $state([]);
 let recentTasks: Task[] = $state([]);
-let weeklyData = $state([]);
+let weeklyData: { day: string; hours: number; tasks: number }[] = $state([]);
 let loading = $state(false);
 
 onMount(() => {
@@ -65,18 +65,24 @@ isRunning = true;
 startTime = Date.now();
 
 timerInterval = setInterval(() => {
-elapsedTime = Date.now() - startTime;
+elapsedTime = Date.now() - (startTime || 0);
 }, 1000);
 }
 
 function pauseTimer() {
 isRunning = false;
+if (timerInterval) {
 clearInterval(timerInterval);
+timerInterval = null;
+}
 }
 
 async function stopTimer() {
 isRunning = false;
+if (timerInterval) {
 clearInterval(timerInterval);
+timerInterval = null;
+}
 
 const hours = elapsedTime / (1000 * 60 * 60);
 
@@ -107,7 +113,8 @@ selectedProject = '';
 selectedProjectId = 0;
 }
 
-function formatTime(ms: number) {
+function formatTime(ms: number | null) {
+if (!ms) return '00:00:00';
 const totalSeconds = Math.floor(ms / 1000);
 const hours = Math.floor(totalSeconds / 3600);
 const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -121,6 +128,7 @@ return weeklyData.reduce((total, day) => total + day.hours, 0);
 }
 
 function getAverageDailyHours() {
+if (weeklyData.length === 0) return '0.0';
 return Number(getTotalWeeklyHours() / weeklyData.length).toFixed(1);
 }
 
@@ -149,16 +157,16 @@ selectedProjectId = project?.id || 0;
 
 <div class="timer-controls">
 {#if !isRunning}
-<button class="control-btn start" on:click={startTimer}>
+<button class="control-btn start" onclick={startTimer}>
 <Play size={20} />
 Start
 </button>
 {:else}
-<button class="control-btn pause" on:click={pauseTimer}>
+<button class="control-btn pause" onclick={pauseTimer}>
 <Pause size={20} />
 Pause
 </button>
-<button class="control-btn stop" on:click={stopTimer}>
+<button class="control-btn stop" onclick={stopTimer}>
 <Square size={20} />
 Stop
 </button>
@@ -179,7 +187,7 @@ disabled={isRunning}
 
 <div class="form-group">
 <label>Proiect</label>
-<select on:change={onProjectChange} disabled={isRunning}>
+<select onchange={onProjectChange} disabled={isRunning}>
 <option value="">Selectează proiect</option>
 {#each projects as project}
 <option value={project.name}>{project.name}</option>
