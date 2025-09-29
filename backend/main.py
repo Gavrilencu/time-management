@@ -12,8 +12,21 @@ import xml.etree.ElementTree as ET
 import pandas as pd
 import tempfile
 import configparser
+from decimal import Decimal
 
 app = FastAPI(title="KPI Time Tracker API", version="1.0.0")
+
+# Funcție pentru a converti tipurile Decimal în float pentru JSON
+def convert_decimals_to_float(data):
+    """Convertește toate tipurile Decimal din date în float pentru serializare JSON"""
+    if isinstance(data, dict):
+        return {key: convert_decimals_to_float(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [convert_decimals_to_float(item) for item in data]
+    elif isinstance(data, Decimal):
+        return float(data)
+    else:
+        return data
 
 # CORS pentru frontend
 app.add_middleware(
@@ -544,6 +557,11 @@ async def export_json():
         
         conn.close()
         
+        # Convertește tipurile Decimal în float pentru serializare JSON
+        users = convert_decimals_to_float(users)
+        projects = convert_decimals_to_float(projects)
+        tasks = convert_decimals_to_float(tasks)
+        
         export_data = {
             "export_info": {
                 "timestamp": datetime.datetime.now().isoformat(),
@@ -584,6 +602,11 @@ async def export_xml():
         tasks = cursor.fetchall()
         
         conn.close()
+        
+        # Convertește tipurile Decimal în float pentru serializare
+        users = convert_decimals_to_float(users)
+        projects = convert_decimals_to_float(projects)
+        tasks = convert_decimals_to_float(tasks)
         
         # Create XML structure
         root = ET.Element("kpi_export")
@@ -643,6 +666,11 @@ async def export_excel():
         tasks = cursor.fetchall()
         
         conn.close()
+        
+        # Convertește tipurile Decimal în float pentru pandas
+        users = convert_decimals_to_float(users)
+        projects = convert_decimals_to_float(projects)
+        tasks = convert_decimals_to_float(tasks)
         
         # Create Excel file
         with tempfile.NamedTemporaryFile(delete=False, suffix='.xlsx') as tmp_file:
