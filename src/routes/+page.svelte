@@ -234,12 +234,17 @@ on:click={() => selectDate(day)}
 <span class="day-number">{format(day, 'd')}</span>
 </div>
 <div class="day-tasks">
-{#each getTasksForDate(day) as task}
+{#each getTasksForDate(day).slice(0, 3) as task}
 <div class="task-mini">
 <span class="task-hours">{task.hours}h</span>
 <span class="task-desc">{task.description}</span>
 </div>
 {/each}
+{#if getTasksForDate(day).length > 3}
+<div class="task-more">
++{getTasksForDate(day).length - 3} mai multe
+</div>
+{/if}
 </div>
 <div class="day-total">
 {Number(getTotalHoursForDate(day)).toFixed(1)}h
@@ -522,6 +527,10 @@ padding: 0.75rem;
 cursor: pointer;
 transition: all 0.2s;
 min-height: 120px;
+max-height: 200px;
+overflow: hidden;
+display: flex;
+flex-direction: column;
 }
 
 .calendar-day:hover {
@@ -554,6 +563,9 @@ color: #1f2937;
 
 .day-tasks {
 margin-bottom: 0.5rem;
+flex: 1;
+overflow-y: auto;
+max-height: 100px;
 }
 
 .task-mini {
@@ -562,6 +574,19 @@ padding: 0.25rem 0.5rem;
 border-radius: 4px;
 margin-bottom: 0.25rem;
 font-size: 0.75rem;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.task-more {
+background: #e5e7eb;
+padding: 0.25rem 0.5rem;
+border-radius: 4px;
+font-size: 0.75rem;
+color: #6b7280;
+text-align: center;
+font-style: italic;
 }
 
 .task-hours {

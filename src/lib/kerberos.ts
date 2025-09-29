@@ -9,6 +9,7 @@ export interface KerberosUser {
     username: string;
     email: string;
     displayName: string;
+    department: string;
     domain?: string;
     groups?: string[];
 }
@@ -31,6 +32,7 @@ export async function getKerberosUser(): Promise<KerberosUser> {
                 username: 'john.doe',
                 email: 'john.doe@company.com',
                 displayName: 'John Doe',
+                department: 'IT Development',
                 domain: 'COMPANY',
                 groups: ['Users', 'Developers']
             };

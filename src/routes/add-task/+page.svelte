@@ -254,6 +254,8 @@ required
 .add-task-page {
 max-width: 1000px;
 margin: 0 auto;
+padding: 0 1rem;
+box-sizing: border-box;
 }
 
 .page-header {
@@ -276,6 +278,13 @@ margin: 0;
 display: grid;
 grid-template-columns: 2fr 1fr;
 gap: 2rem;
+}
+
+@media (max-width: 768px) {
+.form-container {
+grid-template-columns: 1fr;
+gap: 1rem;
+}
 }
 
 .form-card {
@@ -363,6 +372,8 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 z-index: 10;
 max-height: 200px;
 overflow-y: auto;
+min-width: 0;
+word-wrap: break-word;
 }
 
 .dropdown-item {
@@ -374,6 +385,10 @@ text-align: left;
 cursor: pointer;
 font-size: 0.875rem;
 transition: background 0.2s;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+box-sizing: border-box;
 }
 
 .dropdown-item:hover {

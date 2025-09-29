@@ -30,6 +30,7 @@ class User(BaseModel):
     name: str
     email: str
     role: str
+    department: str
     total_hours: Optional[float] = 0.0
 
 class Project(BaseModel):
@@ -84,6 +85,7 @@ def init_db():
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) UNIQUE NOT NULL,
                 role VARCHAR(50) NOT NULL,
+                department VARCHAR(100) NOT NULL,
                 total_hours DECIMAL(10,2) DEFAULT 0.0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -233,8 +235,8 @@ async def create_user(user: User):
         conn.close()
         raise HTTPException(status_code=400, detail="Email already exists")
     
-    cursor.execute("INSERT INTO users (name, email, role) VALUES (%s, %s, %s)", 
-                   (user.name, user.email, user.role))
+    cursor.execute("INSERT INTO users (name, email, role, department) VALUES (%s, %s, %s, %s)", 
+                   (user.name, user.email, user.role, user.department))
     user_id = cursor.lastrowid
     conn.commit()
     conn.close()
@@ -258,8 +260,8 @@ async def update_user(user_id: int, user: User):
         conn.close()
         raise HTTPException(status_code=400, detail="Email already exists")
     
-    cursor.execute("UPDATE users SET name = %s, email = %s, role = %s WHERE id = %s", 
-                   (user.name, user.email, user.role, user_id))
+    cursor.execute("UPDATE users SET name = %s, email = %s, role = %s, department = %s WHERE id = %s", 
+                   (user.name, user.email, user.role, user.department, user_id))
     conn.commit()
     conn.close()
     user.id = user_id
@@ -326,7 +328,7 @@ async def get_tasks():
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
-        SELECT t.*, u.name as user_name, p.name as project_name, p.module_type
+        SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
         FROM tasks t
         JOIN users u ON t.user_id = u.id
         JOIN projects p ON t.project_id = p.id
@@ -336,14 +338,31 @@ async def get_tasks():
     conn.close()
     return tasks
 
+@app.get("/api/tasks/department/{department}")
+async def get_department_tasks(department: str):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("""
+        SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
+        FROM tasks t
+        JOIN users u ON t.user_id = u.id
+        JOIN projects p ON t.project_id = p.id
+        WHERE u.department = %s
+        ORDER BY t.date DESC, t.created_at DESC
+    """, (department,))
+    tasks = cursor.fetchall()
+    conn.close()
+    return tasks
+
 @app.get("/api/tasks/user/{user_id}")
 async def get_user_tasks(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     cursor.execute("""
-        SELECT t.*, p.name as project_name, p.module_type
+        SELECT t.*, p.name as project_name, p.module_type, u.department as user_department
         FROM tasks t
         JOIN projects p ON t.project_id = p.id
+        JOIN users u ON t.user_id = u.id
         WHERE t.user_id = %s
         ORDER BY t.date DESC, t.created_at DESC
     """, (user_id,))

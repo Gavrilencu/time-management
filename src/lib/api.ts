@@ -6,6 +6,7 @@ export interface User {
 	name: string;
 	email: string;
 	role: string;
+	department: string;
 	total_hours?: number;
 }
 
@@ -131,6 +132,12 @@ export const taskService = {
 	async getByUser(userId: number): Promise<Task[]> {
 		const response = await fetch(`${API_URL}/api/tasks/user/${userId}`);
 		if (!response.ok) throw new Error('Failed to fetch user tasks');
+		return response.json();
+	},
+
+	async getByDepartment(department: string): Promise<Task[]> {
+		const response = await fetch(`${API_URL}/api/tasks/department/${encodeURIComponent(department)}`);
+		if (!response.ok) throw new Error('Failed to fetch department tasks');
 		return response.json();
 	},
 

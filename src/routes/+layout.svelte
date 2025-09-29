@@ -26,13 +26,13 @@ await authenticateUser(kerberosData);
 } catch (error) {
 console.error('Kerberos authentication failed:', error);
 // Fallback pentru demo
-setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'User', total_hours: 0 });
+setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'User', department: 'IT Development', total_hours: 0 });
 } finally {
 setAuthLoading(false);
 }
 }
 
-async function authenticateUser(kerberosData: { username: string; email: string; displayName: string }) {
+async function authenticateUser(kerberosData: { username: string; email: string; displayName: string; department: string }) {
 try {
 // Optimizare: verifică direct utilizatorul după email în loc să încarci toți utilizatorii
 let user;
@@ -43,7 +43,8 @@ user = await userService.getByEmail(kerberosData.email);
 user = await userService.create({
 name: kerberosData.displayName,
 email: kerberosData.email,
-role: 'User' // Rol default
+role: 'User', // Rol default
+department: kerberosData.department
 });
 notifications.success('Utilizator creat', `Bun venit, ${kerberosData.displayName}!`);
 }
