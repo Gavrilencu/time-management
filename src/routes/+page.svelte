@@ -195,8 +195,8 @@ return Math.min(100, (dailyProgress / maxDailyHours) * 100);
 <div class="progress-header">
 <h2>Progresul zilnic - {format(selectedDate, 'dd MMMM yyyy', { locale: ro })}</h2>
 <div class="progress-stats">
-<span class="hours-worked">{dailyProgress.toFixed(1)}h</span>
-<span class="hours-remaining">{getRemainingHours().toFixed(1)}h rămas</span>
+<span class="hours-worked">{Number(dailyProgress).toFixed(1)}h</span>
+<span class="hours-remaining">{Number(getRemainingHours()).toFixed(1)}h rămas</span>
 </div>
 </div>
 <div class="progress-bar">
@@ -242,7 +242,7 @@ on:click={() => selectDate(day)}
 {/each}
 </div>
 <div class="day-total">
-{getTotalHoursForDate(day).toFixed(1)}h
+{Number(getTotalHoursForDate(day)).toFixed(1)}h
 </div>
 </div>
 {/each}

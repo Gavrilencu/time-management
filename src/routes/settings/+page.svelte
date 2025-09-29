@@ -310,7 +310,7 @@ Excel
 </div>
 <div class="stat-item">
 <span class="stat-label">Ore totale:</span>
-<span class="stat-value">{userTasks.reduce((sum, task) => sum + (task.hours || 0), 0).toFixed(1)}h</span>
+<span class="stat-value">{Number(userTasks.reduce((sum, task) => sum + (task.hours || 0), 0)).toFixed(1)}h</span>
 </div>
 </div>
 </div>

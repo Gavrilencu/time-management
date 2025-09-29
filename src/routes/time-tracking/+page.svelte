@@ -86,14 +86,14 @@ await taskService.create({
 user_id: $currentUser?.id || 1,
 project_id: selectedProjectId,
 description: currentTask,
-hours: parseFloat(hours.toFixed(2)),
+hours: parseFloat(Number(hours).toFixed(2)),
 date: format(new Date(), 'yyyy-MM-dd')
 });
 
 // Reîncarcă datele
 await loadData();
 
-notifications.success('Task salvat', `Task salvat cu succes: ${hours.toFixed(2)} ore`);
+notifications.success('Task salvat', `Task salvat cu succes: ${Number(hours).toFixed(2)} ore`);
 } catch (error) {
 console.error('Error saving task:', error);
 notifications.error('Eroare', 'Eroare la salvarea task-ului!');
@@ -121,7 +121,7 @@ return weeklyData.reduce((total, day) => total + day.hours, 0);
 }
 
 function getAverageDailyHours() {
-return (getTotalWeeklyHours() / weeklyData.length).toFixed(1);
+return Number(getTotalWeeklyHours() / weeklyData.length).toFixed(1);
 }
 
 function onProjectChange(event: Event) {

@@ -305,7 +305,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							<Clock size={24} />
 						</div>
 						<div class="stat-info">
-							<div class="stat-value">{(overviewStats.total_hours || 0).toFixed(1)}h</div>
+							<div class="stat-value">{Number(overviewStats.total_hours || 0).toFixed(1)}h</div>
 							<div class="stat-label">Total ore lucrate</div>
 						</div>
 					</div>
@@ -314,7 +314,7 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							<BarChart3 size={24} />
 						</div>
 						<div class="stat-info">
-							<div class="stat-value">{(overviewStats.average_hours_per_user || 0).toFixed(1)}h</div>
+							<div class="stat-value">{Number(overviewStats.average_hours_per_user || 0).toFixed(1)}h</div>
 							<div class="stat-label">Medie ore/user</div>
 						</div>
 					</div>
