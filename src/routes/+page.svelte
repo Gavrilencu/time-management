@@ -36,30 +36,41 @@ let weekDays = $state([]);
 
 onMount(() => {
 updateWeekDays();
-loadData();
+// Încarcă datele în background pentru performanță mai bună
+loadDataInBackground();
 });
 
-function updateWeekDays() {
-weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
+async function loadDataInBackground() {
+try {
+// Încarcă proiectele mai întâi (mai importante pentru UI)
+allProjects = await projectService.getAll();
+updateModules();
+
+// Apoi încarcă task-urile în background
+tasks = await taskService.getAll();
+updateDailyProgress();
+} catch (error) {
+console.error('Error loading data:', error);
+notifications.error('Eroare încărcare', 'Eroare la încărcarea datelor!');
+}
 }
 
-async function loadData() {
-try {
-// Încarcă proiectele și task-urile din API
-allProjects = await projectService.getAll();
-tasks = await taskService.getAll();
-
+function updateModules() {
 // Organizează proiectele pe module
 modules.forEach(module => {
 module.projects = allProjects
 .filter(p => p.module_type === module.id)
 .map(p => p.name);
 });
-
-updateDailyProgress();
-} catch (error) {
-console.error('Error loading data:', error);
 }
+
+function updateWeekDays() {
+weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
+}
+
+async function loadData() {
+// Funcția veche - acum redirectează către versiunea optimizată
+await loadDataInBackground();
 }
 
 function updateDailyProgress() {

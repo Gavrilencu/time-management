@@ -12,8 +12,13 @@ import { currentUser, isAuthenticated, authLoading, setCurrentUser, clearCurrent
 
 let { children } = $props();
 
-// Autentificare automată cu Kerberos
-onMount(async () => {
+// Autentificare automată cu Kerberos (non-blocking)
+onMount(() => {
+// Nu bloca încărcarea paginii - autentificarea se face în background
+authenticateInBackground();
+});
+
+async function authenticateInBackground() {
 try {
 setAuthLoading(true);
 const kerberosData = await getKerberosUser();
@@ -25,27 +30,30 @@ setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'Use
 } finally {
 setAuthLoading(false);
 }
-});
+}
 
 async function authenticateUser(kerberosData: { username: string; email: string; displayName: string }) {
 try {
-// Verifică dacă utilizatorul există în baza de date
-const users = await userService.getAll();
-let user = users.find(u => u.email === kerberosData.email);
-
-if (!user) {
-// Creează utilizatorul automat dacă nu există
+// Optimizare: verifică direct utilizatorul după email în loc să încarci toți utilizatorii
+let user;
+try {
+user = await userService.getByEmail(kerberosData.email);
+} catch (error) {
+// Utilizatorul nu există, îl creez
 user = await userService.create({
 name: kerberosData.displayName,
 email: kerberosData.email,
 role: 'User' // Rol default
 });
 notifications.success('Utilizator creat', `Bun venit, ${kerberosData.displayName}!`);
-} else {
-notifications.info('Bun venit', `Salut, ${user.name}!`);
 }
 
+if (user) {
 setCurrentUser(user);
+if (user.name !== kerberosData.displayName) {
+notifications.info('Bun venit', `Salut, ${user.name}!`);
+}
+}
 } catch (error) {
 console.error('Error authenticating user:', error);
 notifications.error('Eroare autentificare', 'Eroare la autentificarea utilizatorului!');

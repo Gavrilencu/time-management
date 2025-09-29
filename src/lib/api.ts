@@ -49,6 +49,17 @@ export const userService = {
 		return response.json();
 	},
 
+	async getByEmail(email: string): Promise<User> {
+		const response = await fetch(`${API_URL}/api/users/email/${encodeURIComponent(email)}`);
+		if (!response.ok) {
+			if (response.status === 404) {
+				throw new Error('User not found');
+			}
+			throw new Error('Failed to fetch user');
+		}
+		return response.json();
+	},
+
 	async create(user: User): Promise<User> {
 		const response = await fetch(`${API_URL}/api/users`, {
 			method: 'POST',

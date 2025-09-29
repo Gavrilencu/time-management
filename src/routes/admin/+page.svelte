@@ -42,11 +42,16 @@ import { notifications } from '$lib/notifications';
 	let exportLoading = $state(false);
 
 	onMount(() => {
-		loadAllData();
+		// Încarcă datele în background pentru performanță mai bună
+		loadAllDataInBackground();
 	});
 
-	async function loadAllData() {
+	async function loadAllDataInBackground() {
 		try {
+			// Încarcă statisticile mai întâi (pentru overview)
+			overviewStats = await statsService.getOverview();
+			
+			// Apoi încarcă datele în paralel
 			await Promise.all([
 				loadUsers(),
 				loadProjects(),
@@ -56,6 +61,11 @@ import { notifications } from '$lib/notifications';
 		} catch (error) {
 			console.error('Error loading data:', error);
 		}
+	}
+
+	// Funcția veche pentru compatibilitate
+	async function loadAllData() {
+		await loadAllDataInBackground();
 	}
 
 	async function loadUsers() {

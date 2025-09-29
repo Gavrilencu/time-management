@@ -209,6 +209,19 @@ async def get_users():
     conn.close()
     return users
 
+@app.get("/api/users/email/{email}", response_model=User)
+async def get_user_by_email(email: str):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    return user
+
 @app.post("/api/users", response_model=User)
 async def create_user(user: User):
     conn = get_db_connection()
