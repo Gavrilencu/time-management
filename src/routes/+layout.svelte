@@ -3,31 +3,68 @@ import favicon from '$lib/assets/favicon.svg';
 import { onMount } from 'svelte';
 import { goto } from '$app/navigation';
 import { page } from '$app/stores';
-import { Calendar, Clock, BarChart3, Settings, LogOut, Plus } from 'lucide-svelte';
+import { Calendar, Clock, BarChart3, Settings, LogOut, Plus, Users } from 'lucide-svelte';
+import NotificationContainer from '$lib/NotificationContainer.svelte';
+import { userService } from '$lib/api';
+import { notifications } from '$lib/notifications';
+import { getKerberosUser, kerberosLogout } from '$lib/kerberos';
+import { currentUser, isAuthenticated, authLoading, setCurrentUser, clearCurrentUser, setAuthLoading } from '$lib/auth';
 
 let { children } = $props();
-let isAuthenticated = $state(false);
-let currentUser = $state(null);
 
-// Simulare autentificare automată
-onMount(() => {
-setTimeout(() => {
-isAuthenticated = true;
-currentUser = { name: 'Utilizator', email: 'user@example.com' };
-}, 1000);
+// Autentificare automată cu Kerberos
+onMount(async () => {
+try {
+setAuthLoading(true);
+const kerberosData = await getKerberosUser();
+await authenticateUser(kerberosData);
+} catch (error) {
+console.error('Kerberos authentication failed:', error);
+// Fallback pentru demo
+setCurrentUser({ id: 1, name: 'Demo User', email: 'demo@example.com', role: 'User', total_hours: 0 });
+} finally {
+setAuthLoading(false);
+}
 });
 
-const menuItems = [
-{ name: 'Dashboard', href: '/', icon: BarChart3 },
-{ name: 'Calendar', href: '/calendar', icon: Calendar },
-{ name: 'Timp Lucru', href: '/time-tracking', icon: Clock },
-{ name: 'Adaugă Task', href: '/add-task', icon: Plus },
-{ name: 'Setări', href: '/settings', icon: Settings }
-];
+async function authenticateUser(kerberosData: { username: string; email: string; displayName: string }) {
+try {
+// Verifică dacă utilizatorul există în baza de date
+const users = await userService.getAll();
+let user = users.find(u => u.email === kerberosData.email);
+
+if (!user) {
+// Creează utilizatorul automat dacă nu există
+user = await userService.create({
+name: kerberosData.displayName,
+email: kerberosData.email,
+role: 'User' // Rol default
+});
+notifications.success('Utilizator creat', `Bun venit, ${kerberosData.displayName}!`);
+} else {
+notifications.info('Bun venit', `Salut, ${user.name}!`);
+}
+
+setCurrentUser(user);
+} catch (error) {
+console.error('Error authenticating user:', error);
+notifications.error('Eroare autentificare', 'Eroare la autentificarea utilizatorului!');
+}
+}
+
+	const menuItems = [
+		{ name: 'Dashboard', href: '/', icon: BarChart3 },
+		{ name: 'Calendar', href: '/calendar', icon: Calendar },
+		{ name: 'Timp Lucru', href: '/time-tracking', icon: Clock },
+		{ name: 'Adaugă Task', href: '/add-task', icon: Plus },
+		{ name: 'Admin', href: '/admin', icon: Users },
+		{ name: 'Setări', href: '/settings', icon: Settings }
+	];
 
 function logout() {
-isAuthenticated = false;
-currentUser = null;
+clearCurrentUser();
+// TODO: Implementează logout Kerberos real
+kerberosLogout();
 goto('/login');
 }
 </script>
@@ -37,7 +74,8 @@ goto('/login');
 <title>KPI Time Tracker</title>
 </svelte:head>
 
-{#if !isAuthenticated}
+{#if $authLoading}
+<!-- Loading UI -->
 <div class="auth-container">
 <div class="auth-card">
 <div class="auth-header">
@@ -45,10 +83,29 @@ goto('/login');
 <Clock size={48} />
 </div>
 <h1>KPI Time Tracker</h1>
-<p>Se autentifică automat...</p>
+<p>Se autentifică prin Kerberos...</p>
 </div>
 <div class="auth-spinner">
 <div class="spinner"></div>
+</div>
+</div>
+</div>
+{:else if !$isAuthenticated}
+<!-- Authentication failed UI -->
+<div class="auth-container">
+<div class="auth-card">
+<div class="auth-header">
+<div class="logo">
+<Clock size={48} />
+</div>
+<h1>KPI Time Tracker</h1>
+<p>Eroare la autentificare</p>
+</div>
+<div class="auth-error">
+<p>Nu s-a putut autentifica utilizatorul prin Kerberos.</p>
+<button class="retry-btn" onclick={() => window.location.reload()}>
+Reîncearcă
+</button>
 </div>
 </div>
 </div>
@@ -69,7 +126,7 @@ href={item.href}
 class="nav-item" 
 class:active={$page.url.pathname === item.href}
 >
-<svelte:component this={item.icon} size={20} />
+{item.icon && <item.icon size={20} />}
 <span>{item.name}</span>
 </a>
 {/each}
@@ -78,14 +135,14 @@ class:active={$page.url.pathname === item.href}
 <div class="sidebar-footer">
 <div class="user-info">
 <div class="user-avatar">
-{currentUser?.name?.charAt(0)}
+{$currentUser?.name?.charAt(0)}
 </div>
 <div class="user-details">
-<span class="user-name">{currentUser?.name}</span>
-<span class="user-email">{currentUser?.email}</span>
+<span class="user-name">{$currentUser?.name}</span>
+<span class="user-email">{$currentUser?.email}</span>
 </div>
 </div>
-<button class="logout-btn" on:click={logout}>
+<button class="logout-btn" onclick={logout}>
 <LogOut size={16} />
 Logout
 </button>
@@ -286,4 +343,33 @@ padding: 2rem;
 background-color: #f8fafc;
 min-height: 100vh;
 }
+
+.auth-error {
+text-align: center;
+padding: 1rem 0;
+}
+
+.auth-error p {
+color: #dc2626;
+margin-bottom: 1rem;
+font-size: 0.9rem;
+}
+
+.retry-btn {
+background: #dc2626;
+color: white;
+border: none;
+padding: 0.75rem 1.5rem;
+border-radius: 6px;
+cursor: pointer;
+font-weight: 500;
+transition: background 0.2s;
+}
+
+.retry-btn:hover {
+background: #b91c1c;
+}
 </style>
+
+<!-- Container pentru notificări -->
+<NotificationContainer />

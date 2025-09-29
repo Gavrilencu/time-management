@@ -1,8 +1,12 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
-import { ro } from 'date-fns/locale';
-import { Calendar, Clock, Plus, ChevronDown, ChevronUp, Trash2, Edit3 } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
+	import { ro } from 'date-fns/locale';
+	import { Calendar, Clock, Plus, ChevronDown, ChevronUp, Trash2, Edit3 } from 'lucide-svelte';
+	import { projectService, taskService, type Project, type Task, type TaskCreate } from '$lib/api';
+import { notifications } from '$lib/notifications';
+import { page } from '$app/stores';
+import { currentUser } from '$lib/auth';
 
 // Starea aplicației
 let selectedDate = $state(new Date());
@@ -14,14 +18,15 @@ let showAddForm = $state(false);
 let showModuleDropdown = $state(false);
 let showProjectDropdown = $state(false);
 
-// Datele aplicației
+// Datele aplicației - începe curată
 let modules = $state([
-{ id: 'proiecte', name: 'Proiecte', projects: ['Website Company', 'Mobile App', 'E-commerce Platform'] },
-{ id: 'evom', name: 'EVOM', projects: ['EVOM Development', 'EVOM Testing', 'EVOM Maintenance'] },
-{ id: 'operational', name: 'Operational', projects: ['Support', 'Maintenance', 'Documentation'] }
+{ id: 'proiecte', name: 'Proiecte', projects: [] },
+{ id: 'evom', name: 'EVOM', projects: [] },
+{ id: 'operational', name: 'Operational', projects: [] }
 ]);
 
-let tasks = $state([]);
+let allProjects: Project[] = $state([]);
+let tasks: Task[] = $state([]);
 let dailyProgress = $state(0); // ore lucrate în ziua curentă
 const maxDailyHours = 8;
 
@@ -31,62 +36,88 @@ let weekDays = $state([]);
 
 onMount(() => {
 updateWeekDays();
-loadTasks();
+loadData();
 });
 
 function updateWeekDays() {
 weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
 }
 
-function loadTasks() {
-// Simulare încărcare task-uri din localStorage
-const savedTasks = localStorage.getItem('kpi-tasks');
-if (savedTasks) {
-tasks = JSON.parse(savedTasks);
-}
-updateDailyProgress();
-}
+async function loadData() {
+try {
+// Încarcă proiectele și task-urile din API
+allProjects = await projectService.getAll();
+tasks = await taskService.getAll();
 
-function saveTasks() {
-localStorage.setItem('kpi-tasks', JSON.stringify(tasks));
+// Organizează proiectele pe module
+modules.forEach(module => {
+module.projects = allProjects
+.filter(p => p.module_type === module.id)
+.map(p => p.name);
+});
+
 updateDailyProgress();
+} catch (error) {
+console.error('Error loading data:', error);
+}
 }
 
 function updateDailyProgress() {
 const today = format(selectedDate, 'yyyy-MM-dd');
 dailyProgress = tasks
 .filter(task => task.date === today)
-.reduce((total, task) => total + parseFloat(task.hours || 0), 0);
+.reduce((total, task) => total + (task.hours || 0), 0);
 }
 
-function addTask() {
+async function addTask() {
 if (!selectedModule || !selectedProject || !taskDescription || !taskHours) {
-alert('Te rog completează toate câmpurile!');
+notifications.warning('Câmpuri incomplete', 'Te rog completează toate câmpurile!');
 return;
 }
 
-const newTask = {
-id: Date.now(),
-date: format(selectedDate, 'yyyy-MM-dd'),
-module: selectedModule,
-project: selectedProject,
+try {
+// Găsește proiectul selectat
+const project = allProjects.find(p => 
+p.module_type === selectedModule && p.name === selectedProject
+);
+
+if (!project) {
+notifications.error('Proiect negăsit', 'Proiectul selectat nu a fost găsit!');
+return;
+}
+
+const taskData: TaskCreate = {
+user_id: $currentUser?.id || 1,
+project_id: project.id!,
 description: taskDescription,
 hours: parseFloat(taskHours),
-createdAt: new Date().toISOString()
+date: format(selectedDate, 'yyyy-MM-dd')
 };
 
-tasks = [...tasks, newTask];
-saveTasks();
+// Creează task-ul prin API
+await taskService.create(taskData);
+
+// Reîncarcă datele
+await loadData();
 
 // Reset form
 taskDescription = '';
 taskHours = '';
 showAddForm = false;
+} catch (error) {
+console.error('Error adding task:', error);
+notifications.error('Eroare', 'Eroare la adăugarea task-ului!');
+}
 }
 
-function deleteTask(taskId) {
-tasks = tasks.filter(task => task.id !== taskId);
-saveTasks();
+async function deleteTask(taskId: number) {
+try {
+await taskService.delete(taskId);
+await loadData(); // Reîncarcă datele
+} catch (error) {
+console.error('Error deleting task:', error);
+notifications.error('Eroare', 'Eroare la ștergerea task-ului!');
+}
 }
 
 function getTasksForDate(date) {
@@ -122,7 +153,9 @@ return selectedProject || 'Selectează proiect';
 }
 
 function getAvailableProjects() {
-return modules.find(m => m.id === selectedModule)?.projects || [];
+return allProjects
+.filter(p => p.module_type === selectedModule)
+.map(p => p.name);
 }
 
 function navigateWeek(direction) {
@@ -313,14 +346,14 @@ Adaugă Task
 {#each getTasksForDate(selectedDate) as task}
 <div class="task-item">
 <div class="task-info">
-<div class="task-header">
-<span class="task-module">{modules.find(m => m.id === task.module)?.name}</span>
-<span class="task-project">{task.project}</span>
-</div>
+						<div class="task-header">
+							<span class="task-module">{task.module_type || 'N/A'}</span>
+							<span class="task-project">{task.project_name || 'N/A'}</span>
+						</div>
 <p class="task-description">{task.description}</p>
 <div class="task-meta">
 <span class="task-hours">{task.hours}h</span>
-<span class="task-time">{format(new Date(task.createdAt), 'HH:mm')}</span>
+							<span class="task-time">{task.created_at ? format(new Date(task.created_at), 'HH:mm') : 'N/A'}</span>
 </div>
 </div>
 <div class="task-actions">

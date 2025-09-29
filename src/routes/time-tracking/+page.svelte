@@ -1,45 +1,63 @@
 <script lang="ts">
+import { onMount } from 'svelte';
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
 import { ro } from 'date-fns/locale';
 import { Clock, Play, Pause, Square, BarChart3 } from 'lucide-svelte';
+import { projectService, taskService, statsService, type Project, type Task } from '$lib/api';
+import { notifications } from '$lib/notifications';
+import { page } from '$app/stores';
+import { currentUser } from '$lib/auth';
 
 let isRunning = $state(false);
 let startTime = $state(null);
 let elapsedTime = $state(0);
 let currentTask = $state('');
 let selectedProject = $state('');
+let selectedProjectId = $state(0);
 let timerInterval = $state(null);
-
-const projects = [
-'Website Company',
-'Mobile App', 
-'E-commerce Platform',
-'EVOM Development',
-'EVOM Testing',
-'Support',
-'Maintenance'
-];
-
+let projects: Project[] = $state([]);
+let recentTasks: Task[] = $state([]);
 let weeklyData = $state([]);
+let loading = $state(false);
 
 onMount(() => {
-loadWeeklyData();
+loadData();
 });
 
+async function loadData() {
+try {
+loading = true;
+projects = await projectService.getAll();
+recentTasks = await taskService.getAll();
+loadWeeklyData();
+} catch (error) {
+console.error('Error loading data:', error);
+} finally {
+loading = false;
+}
+}
+
 function loadWeeklyData() {
-// Simulare date săptămânale
-weeklyData = [
-{ day: 'Luni', hours: 7.5, tasks: 3 },
-{ day: 'Marți', hours: 8, tasks: 4 },
-{ day: 'Miercuri', hours: 6.5, tasks: 2 },
-{ day: 'Joi', hours: 8, tasks: 5 },
-{ day: 'Vineri', hours: 7, tasks: 3 }
-];
+// Calculează datele săptămânale din task-urile reale
+const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
+const dayNames = ['Luni', 'Marți', 'Miercuri', 'Joi', 'Vineri', 'Sâmbătă', 'Duminică'];
+
+weeklyData = weekDays.map((day, index) => {
+const dayStr = format(day, 'yyyy-MM-dd');
+const dayTasks = recentTasks.filter(task => task.date === dayStr);
+const totalHours = dayTasks.reduce((sum, task) => sum + (task.hours || 0), 0);
+return {
+day: dayNames[index],
+hours: totalHours,
+tasks: dayTasks.length
+};
+});
 }
 
 function startTimer() {
 if (!currentTask || !selectedProject) {
-alert('Te rog completează task-ul și proiectul!');
+notifications.warning('Câmpuri incomplete', 'Te rog completează task-ul și proiectul!');
 return;
 }
 
@@ -56,28 +74,40 @@ isRunning = false;
 clearInterval(timerInterval);
 }
 
-function stopTimer() {
+async function stopTimer() {
 isRunning = false;
 clearInterval(timerInterval);
 
 const hours = elapsedTime / (1000 * 60 * 60);
 
-// Aici ar trebui să salvezi task-ul în baza de date
-console.log('Task salvat:', {
+try {
+// Salvează task-ul în baza de date
+await taskService.create({
+user_id: $currentUser?.id || 1,
+project_id: selectedProjectId,
 description: currentTask,
-project: selectedProject,
-hours: hours.toFixed(2),
+hours: parseFloat(hours.toFixed(2)),
 date: format(new Date(), 'yyyy-MM-dd')
 });
+
+// Reîncarcă datele
+await loadData();
+
+notifications.success('Task salvat', `Task salvat cu succes: ${hours.toFixed(2)} ore`);
+} catch (error) {
+console.error('Error saving task:', error);
+notifications.error('Eroare', 'Eroare la salvarea task-ului!');
+}
 
 // Reset timer
 elapsedTime = 0;
 startTime = null;
 currentTask = '';
 selectedProject = '';
+selectedProjectId = 0;
 }
 
-function formatTime(ms) {
+function formatTime(ms: number) {
 const totalSeconds = Math.floor(ms / 1000);
 const hours = Math.floor(totalSeconds / 3600);
 const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -92,6 +122,13 @@ return weeklyData.reduce((total, day) => total + day.hours, 0);
 
 function getAverageDailyHours() {
 return (getTotalWeeklyHours() / weeklyData.length).toFixed(1);
+}
+
+function onProjectChange(event: Event) {
+const target = event.target as HTMLSelectElement;
+selectedProject = target.value;
+const project = projects.find(p => p.name === target.value);
+selectedProjectId = project?.id || 0;
 }
 </script>
 
@@ -142,10 +179,10 @@ disabled={isRunning}
 
 <div class="form-group">
 <label>Proiect</label>
-<select bind:value={selectedProject} disabled={isRunning}>
+<select on:change={onProjectChange} disabled={isRunning}>
 <option value="">Selectează proiect</option>
 {#each projects as project}
-<option value={project}>{project}</option>
+<option value={project.name}>{project.name}</option>
 {/each}
 </select>
 </div>
@@ -192,29 +229,23 @@ disabled={isRunning}
 <!-- Istoric recent -->
 <div class="recent-tasks">
 <h3>Task-uri Recente</h3>
+{#if loading}
+<div class="loading">Se încarcă...</div>
+{:else}
 <div class="tasks-list">
+{#each recentTasks.slice(0, 5) as task}
 <div class="task-item">
 <div class="task-info">
-<div class="task-description">Development Website</div>
-<div class="task-project">Website Company</div>
+<div class="task-description">{task.description}</div>
+<div class="task-project">{task.project_name}</div>
 </div>
-<div class="task-time">2.5h</div>
+<div class="task-time">{task.hours}h</div>
 </div>
-<div class="task-item">
-<div class="task-info">
-<div class="task-description">Testing Mobile App</div>
-<div class="task-project">Mobile App</div>
+{:else}
+<div class="no-tasks">Nu sunt task-uri recente</div>
+{/each}
 </div>
-<div class="task-time">1.5h</div>
-</div>
-<div class="task-item">
-<div class="task-info">
-<div class="task-description">Bug Fixes</div>
-<div class="task-project">E-commerce Platform</div>
-</div>
-<div class="task-time">3h</div>
-</div>
-</div>
+{/if}
 </div>
 </div>
 
@@ -492,5 +523,17 @@ color: #6b7280;
 font-weight: 600;
 color: #059669;
 font-size: 1.125rem;
+}
+
+.loading {
+text-align: center;
+padding: 2rem;
+color: #6b7280;
+}
+
+.no-tasks {
+text-align: center;
+padding: 2rem;
+color: #6b7280;
 }
 </style>

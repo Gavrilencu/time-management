@@ -1,24 +1,29 @@
 <script lang="ts">
+import { onMount } from 'svelte';
 import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addMonths, subMonths, addDays, isSameMonth, isSameDay, isToday } from 'date-fns';
 import { ro } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-svelte';
+import { taskService, type Task } from '$lib/api';
 
 let currentDate = $state(new Date());
 let selectedDate = $state(new Date());
-let tasks = $state([]);
-
-// Simulare date pentru demo
-const sampleTasks = [
-{ date: '2024-01-15', hours: 6.5, description: 'Development' },
-{ date: '2024-01-16', hours: 8, description: 'Testing' },
-{ date: '2024-01-17', hours: 4.5, description: 'Documentation' },
-{ date: '2024-01-18', hours: 7, description: 'Bug fixes' },
-{ date: '2024-01-19', hours: 8, description: 'Feature development' }
-];
+let tasks: Task[] = $state([]);
+let loading = $state(false);
 
 onMount(() => {
-tasks = sampleTasks;
+loadTasks();
 });
+
+async function loadTasks() {
+try {
+loading = true;
+tasks = await taskService.getAll();
+} catch (error) {
+console.error('Error loading tasks:', error);
+} finally {
+loading = false;
+}
+}
 
 function getDaysInMonth() {
 const monthStart = startOfMonth(currentDate);
@@ -37,20 +42,20 @@ day = addDays(day, 1);
 return days;
 }
 
-function getTasksForDate(date) {
+function getTasksForDate(date: Date) {
 const dateStr = format(date, 'yyyy-MM-dd');
 return tasks.filter(task => task.date === dateStr);
 }
 
-function getTotalHoursForDate(date) {
-return getTasksForDate(date).reduce((total, task) => total + task.hours, 0);
+function getTotalHoursForDate(date: Date) {
+return getTasksForDate(date).reduce((total, task) => total + (task.hours || 0), 0);
 }
 
-function navigateMonth(direction) {
+function navigateMonth(direction: string) {
 currentDate = direction === 'next' ? addMonths(currentDate, 1) : subMonths(currentDate, 1);
 }
 
-function selectDate(date) {
+function selectDate(date: Date) {
 selectedDate = date;
 }
 </script>
@@ -106,16 +111,26 @@ on:click={() => selectDate(day)}
 
 <div class="selected-day-info">
 <h3>Detalii pentru {format(selectedDate, 'dd MMMM yyyy', { locale: ro })}</h3>
+{#if loading}
+<div class="loading">Se încarcă...</div>
+{:else}
 <div class="tasks-list">
 {#each getTasksForDate(selectedDate) as task}
 <div class="task-detail">
 <div class="task-hours">{task.hours}h</div>
-<div class="task-description">{task.description}</div>
+<div class="task-description">
+<div class="task-title">{task.description}</div>
+<div class="task-meta">
+<span class="project-name">{task.project_name}</span>
+<span class="user-name">{task.user_name}</span>
+</div>
+</div>
 </div>
 {:else}
 <p class="no-tasks">Nu sunt task-uri pentru această zi</p>
 {/each}
 </div>
+{/if}
 </div>
 </div>
 
@@ -289,6 +304,35 @@ text-align: center;
 .task-description {
 color: #374151;
 font-weight: 500;
+flex: 1;
+}
+
+.task-title {
+font-weight: 500;
+margin-bottom: 0.25rem;
+}
+
+.task-meta {
+display: flex;
+gap: 1rem;
+font-size: 0.75rem;
+color: #6b7280;
+}
+
+.project-name {
+color: #2563eb;
+font-weight: 500;
+}
+
+.user-name {
+color: #059669;
+font-weight: 500;
+}
+
+.loading {
+text-align: center;
+padding: 2rem;
+color: #6b7280;
 }
 
 .no-tasks {

@@ -1,59 +1,90 @@
 <script lang="ts">
+import { onMount } from 'svelte';
 import { format } from 'date-fns';
 import { ro } from 'date-fns/locale';
 import { Plus, Calendar, Clock, ChevronDown } from 'lucide-svelte';
+import { projectService, taskService, type Project, type TaskCreate } from '$lib/api';
+import { notifications } from '$lib/notifications';
+import { page } from '$app/stores';
+import { currentUser } from '$lib/auth';
 
 let selectedDate = $state(new Date());
 let selectedModule = $state('');
 let selectedProject = $state('');
+let selectedProjectId = $state(0);
 let taskDescription = $state('');
 let taskHours = $state('');
 let showModuleDropdown = $state(false);
 let showProjectDropdown = $state(false);
+let projects: Project[] = $state([]);
+let loading = $state(false);
 
 const modules = [
-{ id: 'proiecte', name: 'Proiecte', projects: ['Website Company', 'Mobile App', 'E-commerce Platform'] },
-{ id: 'evom', name: 'EVOM', projects: ['EVOM Development', 'EVOM Testing', 'EVOM Maintenance'] },
-{ id: 'operational', name: 'Operational', projects: ['Support', 'Maintenance', 'Documentation'] }
+{ id: 'proiecte', name: 'Proiecte' },
+{ id: 'evom', name: 'EVOM' },
+{ id: 'operational', name: 'Operational' }
 ];
 
-let tasks = $state([]);
+onMount(() => {
+loadProjects();
+});
 
-function addTask() {
+async function loadProjects() {
+try {
+loading = true;
+projects = await projectService.getAll();
+} catch (error) {
+console.error('Error loading projects:', error);
+} finally {
+loading = false;
+}
+}
+
+async function addTask() {
 if (!selectedModule || !selectedProject || !taskDescription || !taskHours) {
-alert('Te rog completează toate câmpurile!');
+notifications.warning('Câmpuri incomplete', 'Te rog completează toate câmpurile!');
 return;
 }
 
-const newTask = {
-id: Date.now(),
-date: format(selectedDate, 'yyyy-MM-dd'),
-module: selectedModule,
-project: selectedProject,
+try {
+loading = true;
+
+const taskData: TaskCreate = {
+user_id: $currentUser?.id || 1,
+project_id: selectedProjectId,
 description: taskDescription,
 hours: parseFloat(taskHours),
-createdAt: new Date().toISOString()
+date: format(selectedDate, 'yyyy-MM-dd')
 };
 
-tasks = [...tasks, newTask];
+await taskService.create(taskData);
 
 // Reset form
 taskDescription = '';
 taskHours = '';
 selectedModule = '';
 selectedProject = '';
+selectedProjectId = 0;
 
-alert('Task adăugat cu succes!');
+notifications.success('Succes', 'Task adăugat cu succes!');
+} catch (error) {
+console.error('Error adding task:', error);
+notifications.error('Eroare', 'Eroare la adăugarea task-ului!');
+} finally {
+loading = false;
+}
 }
 
-function selectModule(module) {
+function selectModule(module: { id: string; name: string }) {
 selectedModule = module.id;
 selectedProject = '';
+selectedProjectId = 0;
 showModuleDropdown = false;
 }
 
-function selectProject(project) {
-selectedProject = project;
+function selectProject(project: Project) {
+selectedProject = project.name;
+selectedProjectId = project.id!;
 showProjectDropdown = false;
 }
 
@@ -66,7 +97,7 @@ return selectedProject || 'Selectează proiect';
 }
 
 function getAvailableProjects() {
-return modules.find(m => m.id === selectedModule)?.projects || [];
+return projects.filter(p => p.module_type === selectedModule);
 }
 </script>
 
@@ -146,7 +177,7 @@ type="button"
 class="dropdown-item" 
 on:click={() => selectProject(project)}
 >
-{project}
+{project.name}
 </button>
 {/each}
 </div>
@@ -183,9 +214,9 @@ required
 />
 </div>
 
-<button type="submit" class="submit-btn">
+<button type="submit" class="submit-btn" disabled={loading}>
 <Plus size={20} />
-Adaugă Task
+{loading ? 'Se salvează...' : 'Adaugă Task'}
 </button>
 </form>
 </div>
@@ -366,8 +397,13 @@ font-size: 1rem;
 transition: background 0.2s;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
 background: #1d4ed8;
+}
+
+.submit-btn:disabled {
+background: #9ca3af;
+cursor: not-allowed;
 }
 
 .preview-card {
