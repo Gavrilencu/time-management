@@ -420,6 +420,30 @@ background: #b91c1c;
 --color-success: #059669;
 --color-warning: #d97706;
 --color-error: #dc2626;
+--color-card: #ffffff;
+--color-cardBorder: #e5e7eb;
+--color-button: #2563eb;
+--color-buttonHover: #1d4ed8;
+--color-buttonSecondary: #f3f4f6;
+--color-input: #ffffff;
+--color-inputBorder: #d1d5db;
+--color-inputFocus: #3b82f6;
+--color-modal: #ffffff;
+--color-modalOverlay: rgba(0, 0, 0, 0.5);
+--color-sidebar: #f8fafc;
+--color-sidebarText: #6b7280;
+--color-navbar: #ffffff;
+--color-navbarText: #1f2937;
+--color-table: #ffffff;
+--color-tableHeader: #f9fafb;
+--color-tableRow: #ffffff;
+--color-tableBorder: #e5e7eb;
+--color-badge: #eff6ff;
+--color-badgeText: #1e40af;
+--color-progress: #e5e7eb;
+--color-progressFill: #3b82f6;
+--color-shadow: rgba(0, 0, 0, 0.1);
+--color-shadowHover: rgba(0, 0, 0, 0.15);
 }
 
 /* Aplică variabilele în stilurile existente */
@@ -497,9 +521,9 @@ opacity: 0.9;
 
 /* Stiluri pentru input-uri și form-uri */
 input, textarea, select {
-background-color: var(--color-background);
+background-color: var(--color-input);
 color: var(--color-text);
-border: 1px solid var(--color-border);
+border: 1px solid var(--color-inputBorder);
 border-radius: 6px;
 padding: 0.75rem;
 font-size: 0.875rem;
@@ -511,7 +535,7 @@ max-width: 100%;
 
 input:focus, textarea:focus, select:focus {
 outline: none;
-border-color: var(--color-primary);
+border-color: var(--color-inputFocus);
 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
@@ -522,7 +546,7 @@ opacity: 0.7;
 
 /* Butoane */
 button {
-background-color: var(--color-primary);
+background-color: var(--color-button);
 color: white;
 border: none;
 border-radius: 6px;
@@ -534,7 +558,7 @@ transition: all 0.2s ease;
 }
 
 button:hover {
-background-color: var(--color-accent);
+background-color: var(--color-buttonHover);
 transform: translateY(-1px);
 }
 
@@ -544,11 +568,117 @@ cursor: not-allowed;
 transform: none;
 }
 
+button.secondary {
+background-color: var(--color-buttonSecondary);
+color: var(--color-text);
+}
+
+button.secondary:hover {
+background-color: var(--color-border);
+}
+
 /* Card-uri și containere */
 .card, .settings-card, .stats-card {
-background-color: var(--color-surface);
-border: 1px solid var(--color-border);
+background-color: var(--color-card);
+border: 1px solid var(--color-cardBorder);
 color: var(--color-text);
+box-shadow: 0 1px 3px var(--color-shadow);
+border-radius: 8px;
+padding: 1.5rem;
+}
+
+.card:hover, .settings-card:hover, .stats-card:hover {
+box-shadow: 0 4px 6px var(--color-shadowHover);
+}
+
+/* Tabele */
+table {
+background-color: var(--color-table);
+border: 1px solid var(--color-tableBorder);
+border-radius: 8px;
+overflow: hidden;
+}
+
+th {
+background-color: var(--color-tableHeader);
+color: var(--color-text);
+padding: 1rem;
+text-align: left;
+font-weight: 600;
+}
+
+td {
+background-color: var(--color-tableRow);
+color: var(--color-text);
+padding: 0.75rem 1rem;
+border-bottom: 1px solid var(--color-tableBorder);
+}
+
+tr:hover td {
+background-color: var(--color-surface);
+}
+
+/* Badge-uri */
+.badge {
+background-color: var(--color-badge);
+color: var(--color-badgeText);
+padding: 0.25rem 0.75rem;
+border-radius: 9999px;
+font-size: 0.75rem;
+font-weight: 500;
+display: inline-block;
+}
+
+/* Progress bar */
+.progress-bar {
+background-color: var(--color-progress);
+border-radius: 6px;
+overflow: hidden;
+height: 8px;
+}
+
+.progress-fill {
+background-color: var(--color-progressFill);
+height: 100%;
+transition: width 0.3s ease;
+}
+
+/* Modal-uri */
+.modal {
+background-color: var(--color-modalOverlay);
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+z-index: 1000;
+}
+
+.modal-content {
+background-color: var(--color-modal);
+border-radius: 12px;
+padding: 2rem;
+max-width: 500px;
+width: 90%;
+box-shadow: 0 20px 25px var(--color-shadow);
+}
+
+/* Navbar */
+.navbar {
+background-color: var(--color-navbar);
+color: var(--color-navbarText);
+border-bottom: 1px solid var(--color-border);
+padding: 1rem 2rem;
+}
+
+/* Sidebar */
+.sidebar {
+background-color: var(--color-sidebar);
+color: var(--color-sidebarText);
+border-right: 1px solid var(--color-border);
 }
 
 /* Link-uri */
