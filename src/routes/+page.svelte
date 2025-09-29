@@ -47,7 +47,13 @@ allProjects = await projectService.getAll();
 updateModules();
 
 // Apoi încarcă task-urile în background
+if ($currentUser?.department) {
+// Încarcă task-urile filtrate pe departament
+tasks = await taskService.getByDepartment($currentUser.department);
+} else {
+// Fallback la toate task-urile dacă nu are departament
 tasks = await taskService.getAll();
+}
 updateDailyProgress();
 } catch (error) {
 console.error('Error loading data:', error);
@@ -175,7 +181,8 @@ updateWeekDays();
 }
 
 function getRemainingHours() {
-return Math.max(0, maxDailyHours - dailyProgress);
+const remaining = maxDailyHours - dailyProgress;
+return remaining;
 }
 
 function getProgressPercentage() {
@@ -196,7 +203,11 @@ return Math.min(100, (dailyProgress / maxDailyHours) * 100);
 <h2>Progresul zilnic - {format(selectedDate, 'dd MMMM yyyy', { locale: ro })}</h2>
 <div class="progress-stats">
 <span class="hours-worked">{Number(dailyProgress).toFixed(1)}h</span>
+{#if getRemainingHours() >= 0}
 <span class="hours-remaining">{Number(getRemainingHours()).toFixed(1)}h rămas</span>
+{:else}
+<span class="hours-overtime">{Number(Math.abs(getRemainingHours())).toFixed(1)}h în plus</span>
+{/if}
 </div>
 </div>
 <div class="progress-bar">
@@ -449,6 +460,12 @@ font-size: 1.125rem;
 .hours-remaining {
 font-weight: 600;
 color: #6b7280;
+font-size: 1.125rem;
+}
+
+.hours-overtime {
+font-weight: 600;
+color: #dc2626;
 font-size: 1.125rem;
 }
 

@@ -131,17 +131,52 @@ notifications.error('Eroare', 'Eroare la adăugarea elementului!');
 }
 	}
 
-async function deleteItem(id: number) {
-if (!confirm("Ești sigur că vrei să ștergi acest element?")) return;
+// Funcții pentru confirmarea ștergerii
+let showDeleteModal = $state(false);
+let itemToDelete: { id: number; name: string; type: string } | null = $state(null);
 
-try {
-await projectService.delete(id);
-await loadProjects();
-notifications.success('Succes', 'Element șters cu succes!');
-} catch (error) {
-console.error("Error deleting item:", error);
-notifications.error('Eroare', 'Eroare la ștergerea elementului!');
+function confirmDelete(id: number, name: string, type: string) {
+	itemToDelete = { id, name, type };
+	showDeleteModal = true;
 }
+
+async function deleteItem(id: number) {
+	if (!itemToDelete) return;
+
+	try {
+		await projectService.delete(id);
+		await loadProjects();
+		showDeleteModal = false;
+		itemToDelete = null;
+		notifications.success('Succes', 'Element șters cu succes!');
+	} catch (error) {
+		console.error("Error deleting item:", error);
+		notifications.error('Eroare', 'Eroare la ștergerea elementului!');
+	}
+}
+
+// Funcții pentru editarea proiectelor
+let showEditProjectModal = $state(false);
+let editingProject: Project | null = $state(null);
+
+function editProject(project: Project) {
+	editingProject = { ...project };
+	showEditProjectModal = true;
+}
+
+async function updateProject() {
+	if (!editingProject) return;
+
+	try {
+		await projectService.update(editingProject.id!, editingProject);
+		await loadProjects();
+		showEditProjectModal = false;
+		editingProject = null;
+		notifications.success('Succes', 'Proiect actualizat cu succes!');
+	} catch (error) {
+		console.error("Error updating project:", error);
+		notifications.error('Eroare', 'Eroare la actualizarea proiectului!');
+	}
 }
 
 	function getUserTasks(userId: number) {
@@ -466,10 +501,10 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							</div>
 							<div class="project-hours">{project.total_hours || 0}h</div>
 							<div class="project-actions">
-								<button class="action-btn edit">
+								<button class="action-btn edit" onclick={() => editProject(project)}>
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => confirmDelete(project.id!, project.name, 'proiect')}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -504,10 +539,10 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							</div>
 							<div class="project-hours">{project.total_hours || 0}h</div>
 							<div class="project-actions">
-								<button class="action-btn edit">
+								<button class="action-btn edit" onclick={() => editProject(project)}>
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => confirmDelete(project.id!, project.name, 'proiect')}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -542,10 +577,10 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 							</div>
 							<div class="project-hours">{project.total_hours || 0}h</div>
 							<div class="project-actions">
-								<button class="action-btn edit">
+								<button class="action-btn edit" onclick={() => editProject(project)}>
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" onclick={() => deleteItem(project.id!)}>
+								<button class="action-btn delete" onclick={() => confirmDelete(project.id!, project.name, 'proiect')}>
 									<Trash2 size={16} />
 								</button>
 							</div>
@@ -653,6 +688,79 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 				</button>
 				<button class="save-btn" onclick={updateUser}>
 					Salvează
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+<!-- Modal pentru editarea proiectelor -->
+{#if showEditProjectModal && editingProject}
+	<div class="edit-modal" onclick={(e) => e.target === e.currentTarget && (showEditProjectModal = false)}>
+		<div class="edit-modal-content">
+			<h3>Editează Proiect</h3>
+			<div class="edit-form-group">
+				<label for="edit-project-name">Nume:</label>
+				<input 
+					id="edit-project-name"
+					type="text" 
+					bind:value={editingProject.name}
+					placeholder="Numele proiectului"
+				/>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-project-desc">Descriere:</label>
+				<textarea 
+					id="edit-project-desc"
+					bind:value={editingProject.description}
+					placeholder="Descrierea proiectului"
+					rows="3"
+				></textarea>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-project-status">Status:</label>
+				<select id="edit-project-status" bind:value={editingProject.status}>
+					<option value="active">Activ</option>
+					<option value="inactive">Inactiv</option>
+					<option value="completed">Completat</option>
+				</select>
+			</div>
+			<div class="edit-form-group">
+				<label for="edit-project-module">Modul:</label>
+				<select id="edit-project-module" bind:value={editingProject.module_type}>
+					<option value="proiecte">Proiecte</option>
+					<option value="evom">EVOM</option>
+					<option value="operational">Operational</option>
+				</select>
+			</div>
+			<div class="edit-modal-actions">
+				<button class="cancel-btn" onclick={() => showEditProjectModal = false}>
+					Anulează
+				</button>
+				<button class="save-btn" onclick={updateProject}>
+					Salvează
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
+<!-- Modal pentru confirmarea ștergerii -->
+{#if showDeleteModal && itemToDelete}
+	<div class="delete-modal" onclick={(e) => e.target === e.currentTarget && (showDeleteModal = false)}>
+		<div class="delete-modal-content">
+			<div class="delete-icon">
+				<Trash2 size={48} />
+			</div>
+			<h3>Confirmă ștergerea</h3>
+			<p>Ești sigur că vrei să ștergi <strong>{itemToDelete.name}</strong>?</p>
+			<p class="delete-warning">Această acțiune nu poate fi anulată!</p>
+			<div class="delete-modal-actions">
+				<button class="cancel-btn" onclick={() => showDeleteModal = false}>
+					Anulează
+				</button>
+				<button class="delete-btn" onclick={() => deleteItem(itemToDelete!.id)}>
+					Șterge definitiv
 				</button>
 			</div>
 		</div>
@@ -1457,5 +1565,74 @@ notifications.error('Eroare', 'Eroare la ștergerea elementului!');
 
 	.edit-modal-actions .save-btn:hover {
 		background: #1d4ed8;
+	}
+
+	/* Modal pentru confirmarea ștergerii */
+	.delete-modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000;
+	}
+
+	.delete-modal-content {
+		background: white;
+		border-radius: 12px;
+		padding: 2rem;
+		max-width: 400px;
+		width: 90%;
+		text-align: center;
+		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+	}
+
+	.delete-icon {
+		color: #dc2626;
+		margin-bottom: 1rem;
+	}
+
+	.delete-modal-content h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: #1f2937;
+		margin-bottom: 0.5rem;
+	}
+
+	.delete-modal-content p {
+		color: #6b7280;
+		margin-bottom: 0.5rem;
+	}
+
+	.delete-warning {
+		color: #dc2626 !important;
+		font-weight: 500;
+		font-size: 0.875rem;
+	}
+
+	.delete-modal-actions {
+		display: flex;
+		gap: 1rem;
+		margin-top: 1.5rem;
+		justify-content: center;
+	}
+
+	.delete-btn {
+		background: #dc2626;
+		color: white;
+		border: none;
+		border-radius: 6px;
+		padding: 0.75rem 1.5rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background 0.2s;
+	}
+
+	.delete-btn:hover {
+		background: #b91c1c;
 	}
 </style>
