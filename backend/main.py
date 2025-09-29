@@ -11,6 +11,7 @@ import json
 import xml.etree.ElementTree as ET
 import pandas as pd
 import tempfile
+import configparser
 
 app = FastAPI(title="KPI Time Tracker API", version="1.0.0")
 
@@ -58,6 +59,10 @@ class TaskCreate(BaseModel):
 # Inițializare bază de date MySQL
 def init_db():
     try:
+        print(f"Conectare la MySQL: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
+        print(f"Utilizator: {MYSQL_CONFIG['user']}")
+        print(f"Baza de date: {MYSQL_CONFIG['database']}")
+        
         # Creează baza de date dacă nu există
         temp_config = MYSQL_CONFIG.copy()
         temp_config.pop('database', None)
@@ -66,6 +71,7 @@ def init_db():
         temp_cursor = temp_conn.cursor()
         temp_cursor.execute(f"CREATE DATABASE IF NOT EXISTS {MYSQL_CONFIG['database']}")
         temp_conn.close()
+        print(f"Baza de date '{MYSQL_CONFIG['database']}' creată/verificată")
         
         # Conectează la baza de date creată
         conn = pymysql.connect(**MYSQL_CONFIG)
@@ -82,6 +88,7 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        print("Tabel 'users' creat/verificat")
 
         # Tabel proiecte
         cursor.execute("""
@@ -95,6 +102,7 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        print("Tabel 'projects' creat/verificat")
 
         # Tabel task-uri
         cursor.execute("""
@@ -110,25 +118,50 @@ def init_db():
                 FOREIGN KEY (project_id) REFERENCES projects (id) ON DELETE CASCADE
             )
         """)
+        print("Tabel 'tasks' creat/verificat")
 
         conn.commit()
         conn.close()
-        print("MySQL database initialized successfully")
+        print("✅ MySQL database initialized successfully")
         
     except pymysql.Error as e:
-        print(f"Error initializing MySQL database: {e}")
-        raise HTTPException(status_code=500, detail="MySQL initialization failed. Please ensure MySQL is running and configured.")
+        print(f"❌ Error initializing MySQL database: {e}")
+        print("🔧 Verifică:")
+        print("   1. MySQL Server este instalat și rulează")
+        print("   2. Credențialele din mysql_config.ini sunt corecte")
+        print("   3. Utilizatorul are permisiuni pentru a crea baze de date")
+        raise HTTPException(status_code=500, detail=f"MySQL initialization failed: {str(e)}")
+    except FileNotFoundError as e:
+        print(f"❌ {e}")
+        raise HTTPException(status_code=500, detail=f"Configuration file not found: {str(e)}")
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        raise HTTPException(status_code=500, detail=f"Database initialization failed: {str(e)}")
+
+# Încarcă configurarea MySQL din fișier
+def load_mysql_config():
+    config = configparser.ConfigParser()
+    config_file = os.path.join(os.path.dirname(__file__), 'mysql_config.ini')
+    
+    if not os.path.exists(config_file):
+        raise FileNotFoundError(f"Fișierul de configurare MySQL nu există: {config_file}")
+    
+    config.read(config_file)
+    
+    mysql_config = {
+        'host': config.get('mysql', 'host'),
+        'port': config.getint('mysql', 'port'),
+        'user': config.get('mysql', 'user'),
+        'password': config.get('mysql', 'password'),
+        'database': config.get('mysql', 'database'),
+        'charset': config.get('mysql', 'charset'),
+        'autocommit': config.getboolean('mysql', 'autocommit')
+    }
+    
+    return mysql_config
 
 # Configurare MySQL
-MYSQL_CONFIG = {
-    'host': os.getenv('MYSQL_HOST', 'localhost'),
-    'port': int(os.getenv('MYSQL_PORT', 3306)),
-    'user': os.getenv('MYSQL_USER', 'root'),
-    'password': os.getenv('MYSQL_PASSWORD', ''),
-    'database': os.getenv('MYSQL_DATABASE', 'kpi_tracker'),
-    'charset': 'utf8mb4',
-    'autocommit': True
-}
+MYSQL_CONFIG = load_mysql_config()
 
 # Funcție pentru conexiunea la MySQL
 def get_db_connection():
@@ -136,8 +169,13 @@ def get_db_connection():
         connection = pymysql.connect(**MYSQL_CONFIG)
         return connection
     except pymysql.Error as e:
-        print(f"Error connecting to MySQL: {e}")
-        raise HTTPException(status_code=500, detail="MySQL connection failed. Please ensure MySQL is running.")
+        print(f"❌ Error connecting to MySQL: {e}")
+        print(f"🔧 Configurare folosită: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
+        print("🔧 Verifică:")
+        print("   1. MySQL Server rulează")
+        print("   2. Credențialele sunt corecte în mysql_config.ini")
+        print("   3. Baza de date există")
+        raise HTTPException(status_code=500, detail=f"MySQL connection failed: {str(e)}")
 
 def update_user_hours(user_id: int):
     conn = get_db_connection()
