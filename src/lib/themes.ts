@@ -42,17 +42,17 @@ export const themes: Record<Theme, ThemeConfig> = {
 		name: 'dark',
 		label: 'Întunecat',
 		colors: {
-			primary: '#3b82f6',
+			primary: '#60a5fa',
 			secondary: '#94a3b8',
 			background: '#0f172a',
 			surface: '#1e293b',
-			text: '#f1f5f9',
+			text: '#f8fafc',
 			textSecondary: '#cbd5e1',
 			border: '#334155',
-			accent: '#60a5fa',
-			success: '#10b981',
-			warning: '#f59e0b',
-			error: '#ef4444'
+			accent: '#3b82f6',
+			success: '#34d399',
+			warning: '#fbbf24',
+			error: '#f87171'
 		}
 	},
 	blue: {

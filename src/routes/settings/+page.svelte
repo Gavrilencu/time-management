@@ -398,10 +398,11 @@ margin-bottom: 2rem;
 }
 
 .settings-card {
-background: white;
+background: var(--color-surface);
 padding: 1.5rem;
 border-radius: 12px;
 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+border: 1px solid var(--color-border);
 }
 
 .card-header {
@@ -414,7 +415,7 @@ margin-bottom: 1.5rem;
 .card-header h3 {
 font-size: 1.25rem;
 font-weight: 600;
-color: #1f2937;
+color: var(--color-text);
 margin: 0;
 }
 
@@ -425,7 +426,7 @@ margin-bottom: 1rem;
 .form-group label {
 display: block;
 font-weight: 500;
-color: #374151;
+color: var(--color-text);
 margin-bottom: 0.5rem;
 }
 
@@ -433,17 +434,26 @@ margin-bottom: 0.5rem;
 .form-group select {
 width: 100%;
 padding: 0.75rem;
-border: 1px solid #d1d5db;
+border: 1px solid var(--color-border);
 border-radius: 6px;
 font-size: 0.875rem;
 transition: border-color 0.2s;
+background-color: var(--color-background);
+color: var(--color-text);
+box-sizing: border-box;
+max-width: 100%;
 }
 
 .form-group input:focus,
 .form-group select:focus {
 outline: none;
-border-color: #2563eb;
+border-color: var(--color-primary);
 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input::placeholder {
+color: var(--color-textSecondary);
+opacity: 0.7;
 }
 
 .checkbox-label {
@@ -557,7 +567,7 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .save-btn {
-background: #2563eb;
+background: var(--color-primary);
 color: white;
 border: none;
 border-radius: 8px;
@@ -569,12 +579,13 @@ transition: background 0.2s;
 }
 
 .save-btn:hover:not(:disabled) {
-background: #1d4ed8;
+background: var(--color-accent);
 }
 
 .save-btn:disabled {
-background: #9ca3af;
+background: var(--color-textSecondary);
 cursor: not-allowed;
+opacity: 0.6;
 }
 
 .save-btn.has-changes {
@@ -656,22 +667,22 @@ flex-direction: column;
 align-items: center;
 gap: 0.5rem;
 padding: 1rem;
-border: 2px solid #e5e7eb;
+border: 2px solid var(--color-border);
 border-radius: 8px;
-background: white;
+background: var(--color-background);
 cursor: pointer;
 transition: all 0.2s ease;
 }
 
 .theme-option:hover {
-border-color: #3b82f6;
+border-color: var(--color-primary);
 transform: translateY(-2px);
-box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .theme-option.active {
-border-color: #2563eb;
-background: #eff6ff;
+border-color: var(--color-primary);
+background: var(--color-surface);
 box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
@@ -686,11 +697,11 @@ box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 .theme-option span {
 font-size: 0.875rem;
 font-weight: 500;
-color: #374151;
+color: var(--color-text);
 }
 
 .theme-option.active span {
-color: #2563eb;
+color: var(--color-primary);
 font-weight: 600;
 }
 

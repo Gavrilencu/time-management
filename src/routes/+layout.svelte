@@ -426,6 +426,7 @@ background: #b91c1c;
 .app-container {
 background-color: var(--color-background);
 color: var(--color-text);
+min-height: 100vh;
 }
 
 .sidebar {
@@ -439,6 +440,10 @@ color: var(--color-text);
 
 .nav-item {
 color: var(--color-textSecondary);
+border-radius: 6px;
+margin: 0.25rem 0;
+padding: 0.75rem 1rem;
+transition: all 0.2s ease;
 }
 
 .nav-item:hover {
@@ -453,15 +458,18 @@ color: white;
 
 .main-content {
 background-color: var(--color-background);
+color: var(--color-text);
 }
 
 .auth-container {
 background-color: var(--color-background);
+color: var(--color-text);
 }
 
 .auth-card {
 background-color: var(--color-surface);
 border: 1px solid var(--color-border);
+color: var(--color-text);
 }
 
 .auth-header h1 {
@@ -479,11 +487,79 @@ color: var(--color-error);
 .retry-btn {
 background: var(--color-error);
 color: white;
+border: none;
 }
 
 .retry-btn:hover {
 background: var(--color-error);
 opacity: 0.9;
+}
+
+/* Stiluri pentru input-uri și form-uri */
+input, textarea, select {
+background-color: var(--color-background);
+color: var(--color-text);
+border: 1px solid var(--color-border);
+border-radius: 6px;
+padding: 0.75rem;
+font-size: 0.875rem;
+transition: border-color 0.2s ease;
+box-sizing: border-box;
+width: 100%;
+max-width: 100%;
+}
+
+input:focus, textarea:focus, select:focus {
+outline: none;
+border-color: var(--color-primary);
+box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input::placeholder, textarea::placeholder {
+color: var(--color-textSecondary);
+opacity: 0.7;
+}
+
+/* Butoane */
+button {
+background-color: var(--color-primary);
+color: white;
+border: none;
+border-radius: 6px;
+padding: 0.75rem 1rem;
+font-size: 0.875rem;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+
+button:hover {
+background-color: var(--color-accent);
+transform: translateY(-1px);
+}
+
+button:disabled {
+opacity: 0.6;
+cursor: not-allowed;
+transform: none;
+}
+
+/* Card-uri și containere */
+.card, .settings-card, .stats-card {
+background-color: var(--color-surface);
+border: 1px solid var(--color-border);
+color: var(--color-text);
+}
+
+/* Link-uri */
+a {
+color: var(--color-primary);
+text-decoration: none;
+}
+
+a:hover {
+color: var(--color-accent);
+text-decoration: underline;
 }
 </style>
 
