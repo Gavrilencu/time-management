@@ -1,0 +1,496 @@
+<script lang="ts">
+import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
+import { ro } from 'date-fns/locale';
+import { Clock, Play, Pause, Square, BarChart3 } from 'lucide-svelte';
+
+let isRunning = $state(false);
+let startTime = $state(null);
+let elapsedTime = $state(0);
+let currentTask = $state('');
+let selectedProject = $state('');
+let timerInterval = $state(null);
+
+const projects = [
+'Website Company',
+'Mobile App', 
+'E-commerce Platform',
+'EVOM Development',
+'EVOM Testing',
+'Support',
+'Maintenance'
+];
+
+let weeklyData = $state([]);
+
+onMount(() => {
+loadWeeklyData();
+});
+
+function loadWeeklyData() {
+// Simulare date săptămânale
+weeklyData = [
+{ day: 'Luni', hours: 7.5, tasks: 3 },
+{ day: 'Marți', hours: 8, tasks: 4 },
+{ day: 'Miercuri', hours: 6.5, tasks: 2 },
+{ day: 'Joi', hours: 8, tasks: 5 },
+{ day: 'Vineri', hours: 7, tasks: 3 }
+];
+}
+
+function startTimer() {
+if (!currentTask || !selectedProject) {
+alert('Te rog completează task-ul și proiectul!');
+return;
+}
+
+isRunning = true;
+startTime = Date.now();
+
+timerInterval = setInterval(() => {
+elapsedTime = Date.now() - startTime;
+}, 1000);
+}
+
+function pauseTimer() {
+isRunning = false;
+clearInterval(timerInterval);
+}
+
+function stopTimer() {
+isRunning = false;
+clearInterval(timerInterval);
+
+const hours = elapsedTime / (1000 * 60 * 60);
+
+// Aici ar trebui să salvezi task-ul în baza de date
+console.log('Task salvat:', {
+description: currentTask,
+project: selectedProject,
+hours: hours.toFixed(2),
+date: format(new Date(), 'yyyy-MM-dd')
+});
+
+// Reset timer
+elapsedTime = 0;
+startTime = null;
+currentTask = '';
+selectedProject = '';
+}
+
+function formatTime(ms) {
+const totalSeconds = Math.floor(ms / 1000);
+const hours = Math.floor(totalSeconds / 3600);
+const minutes = Math.floor((totalSeconds % 3600) / 60);
+const seconds = totalSeconds % 60;
+
+return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function getTotalWeeklyHours() {
+return weeklyData.reduce((total, day) => total + day.hours, 0);
+}
+
+function getAverageDailyHours() {
+return (getTotalWeeklyHours() / weeklyData.length).toFixed(1);
+}
+</script>
+
+<div class="time-tracking-page">
+<div class="page-header">
+<h1>Urmărire Timp Lucru</h1>
+<p>Monitorizează-ți timpul de lucru în timp real</p>
+</div>
+
+<div class="tracking-grid">
+<!-- Timer -->
+<div class="timer-section">
+<div class="timer-card">
+<div class="timer-display">
+<Clock size={48} />
+<div class="time">{formatTime(elapsedTime)}</div>
+</div>
+
+<div class="timer-controls">
+{#if !isRunning}
+<button class="control-btn start" on:click={startTimer}>
+<Play size={20} />
+Start
+</button>
+{:else}
+<button class="control-btn pause" on:click={pauseTimer}>
+<Pause size={20} />
+Pause
+</button>
+<button class="control-btn stop" on:click={stopTimer}>
+<Square size={20} />
+Stop
+</button>
+{/if}
+</div>
+</div>
+
+<div class="task-form">
+<div class="form-group">
+<label>Descriere Task</label>
+<input 
+type="text" 
+bind:value={currentTask}
+placeholder="Ce lucrezi acum?"
+disabled={isRunning}
+/>
+</div>
+
+<div class="form-group">
+<label>Proiect</label>
+<select bind:value={selectedProject} disabled={isRunning}>
+<option value="">Selectează proiect</option>
+{#each projects as project}
+<option value={project}>{project}</option>
+{/each}
+</select>
+</div>
+</div>
+</div>
+
+<!-- Statistici săptămânale -->
+<div class="stats-section">
+<div class="stats-header">
+<h3>Statistici Săptămânale</h3>
+<BarChart3 size={24} />
+</div>
+
+<div class="stats-grid">
+<div class="stat-card">
+<div class="stat-value">{getTotalWeeklyHours()}h</div>
+<div class="stat-label">Total săptămână</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">{getAverageDailyHours()}h</div>
+<div class="stat-label">Medie zilnică</div>
+</div>
+<div class="stat-card">
+<div class="stat-value">{weeklyData.reduce((total, day) => total + day.tasks, 0)}</div>
+<div class="stat-label">Task-uri completate</div>
+</div>
+</div>
+
+<div class="weekly-chart">
+<h4>Progresul săptămânii</h4>
+<div class="chart-bars">
+{#each weeklyData as day}
+<div class="chart-bar">
+<div class="bar-fill" style="height: {(day.hours / 8) * 100}%"></div>
+<div class="bar-label">{day.day}</div>
+<div class="bar-value">{day.hours}h</div>
+</div>
+{/each}
+</div>
+</div>
+</div>
+</div>
+
+<!-- Istoric recent -->
+<div class="recent-tasks">
+<h3>Task-uri Recente</h3>
+<div class="tasks-list">
+<div class="task-item">
+<div class="task-info">
+<div class="task-description">Development Website</div>
+<div class="task-project">Website Company</div>
+</div>
+<div class="task-time">2.5h</div>
+</div>
+<div class="task-item">
+<div class="task-info">
+<div class="task-description">Testing Mobile App</div>
+<div class="task-project">Mobile App</div>
+</div>
+<div class="task-time">1.5h</div>
+</div>
+<div class="task-item">
+<div class="task-info">
+<div class="task-description">Bug Fixes</div>
+<div class="task-project">E-commerce Platform</div>
+</div>
+<div class="task-time">3h</div>
+</div>
+</div>
+</div>
+</div>
+
+<style>
+.time-tracking-page {
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.page-header {
+margin-bottom: 2rem;
+}
+
+.page-header h1 {
+font-size: 2rem;
+font-weight: 700;
+color: #1f2937;
+margin: 0 0 0.5rem 0;
+}
+
+.page-header p {
+color: #6b7280;
+margin: 0;
+}
+
+.tracking-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2rem;
+margin-bottom: 2rem;
+}
+
+.timer-section {
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+}
+
+.timer-card {
+background: white;
+padding: 2rem;
+border-radius: 12px;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+text-align: center;
+}
+
+.timer-display {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 1rem;
+margin-bottom: 2rem;
+}
+
+.timer-display svg {
+color: #2563eb;
+}
+
+.time {
+font-size: 3rem;
+font-weight: 700;
+color: #1f2937;
+font-family: 'Courier New', monospace;
+}
+
+.timer-controls {
+display: flex;
+gap: 1rem;
+justify-content: center;
+}
+
+.control-btn {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+padding: 0.75rem 1.5rem;
+border: none;
+border-radius: 8px;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.2s;
+}
+
+.control-btn.start {
+background: #10b981;
+color: white;
+}
+
+.control-btn.start:hover {
+background: #059669;
+}
+
+.control-btn.pause {
+background: #f59e0b;
+color: white;
+}
+
+.control-btn.pause:hover {
+background: #d97706;
+}
+
+.control-btn.stop {
+background: #ef4444;
+color: white;
+}
+
+.control-btn.stop:hover {
+background: #dc2626;
+}
+
+.task-form {
+background: white;
+padding: 1.5rem;
+border-radius: 12px;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+margin-bottom: 1rem;
+}
+
+.form-group label {
+display: block;
+font-weight: 500;
+color: #374151;
+margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+width: 100%;
+padding: 0.75rem;
+border: 1px solid #d1d5db;
+border-radius: 6px;
+font-size: 0.875rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+outline: none;
+border-color: #2563eb;
+box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.stats-section {
+background: white;
+padding: 1.5rem;
+border-radius: 12px;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.stats-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 1.5rem;
+}
+
+.stats-header h3 {
+font-size: 1.25rem;
+font-weight: 600;
+color: #1f2937;
+margin: 0;
+}
+
+.stats-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 1rem;
+margin-bottom: 2rem;
+}
+
+.stat-card {
+text-align: center;
+padding: 1rem;
+background: #f9fafb;
+border-radius: 8px;
+}
+
+.stat-value {
+font-size: 1.5rem;
+font-weight: 700;
+color: #1f2937;
+margin-bottom: 0.25rem;
+}
+
+.stat-label {
+font-size: 0.875rem;
+color: #6b7280;
+}
+
+.weekly-chart h4 {
+font-size: 1rem;
+font-weight: 600;
+color: #374151;
+margin: 0 0 1rem 0;
+}
+
+.chart-bars {
+display: flex;
+gap: 0.5rem;
+height: 200px;
+align-items: end;
+}
+
+.chart-bar {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 100%;
+}
+
+.bar-fill {
+width: 100%;
+background: linear-gradient(to top, #3b82f6, #60a5fa);
+border-radius: 4px 4px 0 0;
+min-height: 20px;
+margin-bottom: 0.5rem;
+}
+
+.bar-label {
+font-size: 0.75rem;
+color: #6b7280;
+margin-bottom: 0.25rem;
+}
+
+.bar-value {
+font-size: 0.75rem;
+font-weight: 600;
+color: #1f2937;
+}
+
+.recent-tasks {
+background: white;
+padding: 1.5rem;
+border-radius: 12px;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.recent-tasks h3 {
+font-size: 1.25rem;
+font-weight: 600;
+color: #1f2937;
+margin: 0 0 1rem 0;
+}
+
+.tasks-list {
+display: flex;
+flex-direction: column;
+gap: 0.75rem;
+}
+
+.task-item {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+background: #f9fafb;
+border-radius: 8px;
+}
+
+.task-description {
+font-weight: 500;
+color: #1f2937;
+margin-bottom: 0.25rem;
+}
+
+.task-project {
+font-size: 0.875rem;
+color: #6b7280;
+}
+
+.task-time {
+font-weight: 600;
+color: #059669;
+font-size: 1.125rem;
+}
+</style>
