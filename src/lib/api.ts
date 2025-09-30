@@ -142,6 +142,16 @@ export const projectService = {
 		return response.json();
 	},
 
+	async update(id: number, project: Project): Promise<Project> {
+		const response = await fetch(`${API_URL}/time-monitoring/api/projects/${id}`, {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(project)
+		});
+		if (!response.ok) throw new Error('Failed to update project');
+		return response.json();
+	},
+
 	async delete(id: number): Promise<void> {
 		const response = await fetch(`${API_URL}/time-monitoring/api/projects/${id}`, {
 			method: 'DELETE'

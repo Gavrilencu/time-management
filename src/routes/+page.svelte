@@ -9,7 +9,7 @@ import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 
 // Starea aplicației
-let selectedDate = $state(new Date());
+let selectedDate = $state<Date>(new Date());
 let selectedModule = $state('');
 let selectedProject = $state('');
 let taskDescription = $state('');
@@ -19,10 +19,10 @@ let showModuleDropdown = $state(false);
 let showProjectDropdown = $state(false);
 
 // Datele aplicației - începe curată
-let modules = $state([
-{ id: 'proiecte', name: 'Proiecte', projects: [] },
-{ id: 'evom', name: 'EVOM', projects: [] },
-{ id: 'operational', name: 'Operational', projects: [] }
+let modules = $state<Array<{id: string, name: string, projects: string[]}>>([
+	{ id: 'proiecte', name: 'Proiecte', projects: [] },
+	{ id: 'evom', name: 'EVOM', projects: [] },
+	{ id: 'operational', name: 'Operational', projects: [] }
 ]);
 
 let allProjects: Project[] = $state([]);
@@ -128,37 +128,40 @@ notifications.error('Eroare', 'Eroare la adăugarea task-ului!');
 }
 
 async function deleteTask(taskId: number) {
-try {
-await taskService.delete(taskId);
-await loadData(); // Reîncarcă datele
-} catch (error) {
-console.error('Error deleting task:', error);
-notifications.error('Eroare', 'Eroare la ștergerea task-ului!');
-}
-}
-
-function getTasksForDate(date) {
-return tasks.filter(task => task.date === format(date, 'yyyy-MM-dd'));
-}
-
-function getTotalHoursForDate(date) {
-return getTasksForDate(date).reduce((total, task) => total + task.hours, 0);
+	if (!confirm('Ești sigur că vrei să ștergi acest task?')) return;
+	
+	try {
+		await taskService.delete(taskId);
+		await loadData(); // Reîncarcă datele
+		notifications.success('Task șters', 'Task-ul a fost șters cu succes!');
+	} catch (error) {
+		console.error('Error deleting task:', error);
+		notifications.error('Eroare', 'Eroare la ștergerea task-ului!');
+	}
 }
 
-function selectDate(date) {
-selectedDate = date;
-updateDailyProgress();
+function getTasksForDate(date: Date) {
+	return tasks.filter(task => task.date === format(date, 'yyyy-MM-dd'));
 }
 
-function selectModule(module) {
-selectedModule = module.id;
-selectedProject = '';
-showModuleDropdown = false;
+function getTotalHoursForDate(date: Date) {
+	return getTasksForDate(date).reduce((total, task) => total + task.hours, 0);
 }
 
-function selectProject(project) {
-selectedProject = project;
-showProjectDropdown = false;
+function selectDate(date: Date) {
+	selectedDate = date;
+	updateDailyProgress();
+}
+
+function selectModule(module: Project) {
+	selectedModule = String(module.id || '');
+	selectedProject = '';
+	showModuleDropdown = false;
+}
+
+function selectProject(project: string) {
+	selectedProject = project;
+	showProjectDropdown = false;
 }
 
 function getSelectedModuleName() {
@@ -175,7 +178,7 @@ return allProjects
 .map(p => p.name);
 }
 
-function navigateWeek(direction) {
+function navigateWeek(direction: number) {
 currentWeek = addDays(currentWeek, direction * 7);
 updateWeekDays();
 }
@@ -224,11 +227,11 @@ return Math.min(100, (dailyProgress / maxDailyHours) * 100);
 <!-- Calendar -->
 <div class="calendar-section">
 <div class="calendar-header">
-<button class="nav-btn" on:click={() => navigateWeek(-1)}>
+		<button class="nav-btn" onclick={() => navigateWeek(-1)}>
 <ChevronUp size={20} />
 </button>
 <h3>{format(currentWeek, 'MMMM yyyy', { locale: ro })}</h3>
-<button class="nav-btn" on:click={() => navigateWeek(1)}>
+		<button class="nav-btn" onclick={() => navigateWeek(1)}>
 <ChevronDown size={20} />
 </button>
 </div>
@@ -238,7 +241,7 @@ return Math.min(100, (dailyProgress / maxDailyHours) * 100);
 <div 
 class="calendar-day" 
 class:selected={isSameDay(day, selectedDate)}
-on:click={() => selectDate(day)}
+	onclick={() => selectDate(day)}
 >
 <div class="day-header">
 <span class="day-name">{format(day, 'EEE', { locale: ro })}</span>
@@ -271,7 +274,7 @@ on:click={() => selectDate(day)}
 <h3>Adaugă Task Nou</h3>
 <button 
 class="toggle-btn" 
-on:click={() => showAddForm = !showAddForm}
+	onclick={() => showAddForm = !showAddForm}
 >
 <Plus size={20} />
 {showAddForm ? 'Anulează' : 'Adaugă'}
@@ -286,7 +289,7 @@ on:click={() => showAddForm = !showAddForm}
 <div class="dropdown">
 <button 
 class="dropdown-btn" 
-on:click={() => showModuleDropdown = !showModuleDropdown}
+	onclick={() => showModuleDropdown = !showModuleDropdown}
 >
 {getSelectedModuleName()}
 <ChevronDown size={16} />
@@ -296,7 +299,7 @@ on:click={() => showModuleDropdown = !showModuleDropdown}
 {#each modules as module}
 <button 
 class="dropdown-item" 
-on:click={() => selectModule(module)}
+		onclick={() => selectModule({ ...module, description: '', module_type: module.id, id: 0 } as unknown as Project)}
 >
 {module.name}
 </button>
@@ -313,7 +316,7 @@ on:click={() => selectModule(module)}
 <div class="dropdown">
 <button 
 class="dropdown-btn" 
-on:click={() => showProjectDropdown = !showProjectDropdown}
+		onclick={() => showProjectDropdown = !showProjectDropdown}
 >
 {getSelectedProjectName()}
 <ChevronDown size={16} />
@@ -323,7 +326,7 @@ on:click={() => showProjectDropdown = !showProjectDropdown}
 {#each getAvailableProjects() as project}
 <button 
 class="dropdown-item" 
-on:click={() => selectProject(project)}
+		onclick={() => selectProject(project)}
 >
 {project}
 </button>
@@ -357,7 +360,7 @@ placeholder="Ex: 2.5"
 />
 </div>
 
-<button class="submit-btn" on:click={addTask}>
+	<button class="submit-btn" onclick={addTask}>
 <Plus size={16} />
 Adaugă Task
 </button>
@@ -384,12 +387,12 @@ Adaugă Task
 </div>
 </div>
 <div class="task-actions">
-<button class="action-btn edit" on:click={() => console.log('Edit', task.id)}>
-<Edit3 size={16} />
-</button>
-<button class="action-btn delete" on:click={() => deleteTask(task.id)}>
-<Trash2 size={16} />
-</button>
+								<button class="action-btn edit" onclick={() => console.log('Edit', task.id)}>
+									<Edit3 size={16} />
+								</button>
+								<button class="action-btn delete" onclick={() => deleteTask(task.id!)}>
+									<Trash2 size={16} />
+								</button>
 </div>
 </div>
 {:else}
@@ -540,94 +543,97 @@ gap: 0.5rem;
 }
 
 .calendar-day {
-border: 1px solid #e5e7eb;
-border-radius: 8px;
-padding: 0.75rem;
-cursor: pointer;
-transition: all 0.2s;
-min-height: 120px;
-max-height: 200px;
-overflow: hidden;
-display: flex;
-flex-direction: column;
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	padding: 0.75rem;
+	cursor: pointer;
+	transition: all 0.2s;
+	min-height: 120px;
+	max-height: 200px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-card);
+	color: var(--color-text);
 }
 
 .calendar-day:hover {
-background: #f9fafb;
-border-color: #d1d5db;
+	background: var(--color-surface);
+	border-color: var(--color-border);
 }
 
 .calendar-day.selected {
-background: #eff6ff;
-border-color: #2563eb;
+	background: var(--color-badge);
+	border-color: var(--color-primary);
 }
 
 .day-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 0.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
 }
 
 .day-name {
-font-size: 0.75rem;
-color: #6b7280;
-font-weight: 500;
+	font-size: 0.75rem;
+	color: var(--color-textSecondary);
+	font-weight: 500;
 }
 
 .day-number {
-font-weight: 600;
-color: #1f2937;
+	font-weight: 600;
+	color: var(--color-text);
 }
 
 .day-tasks {
-margin-bottom: 0.5rem;
-flex: 1;
-overflow-y: auto;
-max-height: 100px;
+	margin-bottom: 0.5rem;
+	flex: 1;
+	overflow-y: auto;
+	max-height: 100px;
 }
 
 .task-mini {
-background: #f3f4f6;
-padding: 0.25rem 0.5rem;
-border-radius: 4px;
-margin-bottom: 0.25rem;
-font-size: 0.75rem;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+	background: var(--color-buttonSecondary);
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	margin-bottom: 0.25rem;
+	font-size: 0.75rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--color-text);
 }
 
 .task-more {
-background: #e5e7eb;
-padding: 0.25rem 0.5rem;
-border-radius: 4px;
-font-size: 0.75rem;
-color: #6b7280;
-text-align: center;
-font-style: italic;
+	background: var(--color-surface);
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	font-size: 0.75rem;
+	color: var(--color-textSecondary);
+	text-align: center;
+	font-style: italic;
 }
 
 .task-hours {
-font-weight: 600;
-color: #059669;
-margin-right: 0.25rem;
+	font-weight: 600;
+	color: var(--color-success);
+	margin-right: 0.25rem;
 }
 
 .task-desc {
-color: #374151;
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
+	color: var(--color-textSecondary);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .day-total {
-font-size: 0.75rem;
-font-weight: 600;
-color: #1f2937;
-text-align: center;
-padding-top: 0.25rem;
-border-top: 1px solid #e5e7eb;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--color-text);
+	text-align: center;
+	padding-top: 0.25rem;
+	border-top: 1px solid var(--color-border);
 }
 
 .form-section {

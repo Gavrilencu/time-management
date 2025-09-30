@@ -10,7 +10,7 @@ import { notifications } from '$lib/notifications';
 import { getKerberosUser, kerberosLogout } from '$lib/kerberos';
 import { currentUser, isAuthenticated, authLoading, setCurrentUser, clearCurrentUser, setAuthLoading } from '$lib/auth';
 import { currentTheme } from '$lib/themes';
-import '../app.css';
+import '$lib/app.css';
 
 let { children } = $props();
 
@@ -117,41 +117,9 @@ function logout() {
 <title>KPI Time Tracker</title>
 </svelte:head>
 
-{#if $authLoading}
-<!-- Loading UI -->
-<div class="auth-container">
-<div class="auth-card">
-<div class="auth-header">
-<div class="logo">
-<Clock size={48} />
-</div>
-<h1>KPI Time Tracker</h1>
-<p>Se autentifică prin Kerberos...</p>
-</div>
-<div class="auth-spinner">
-<div class="spinner"></div>
-</div>
-</div>
-</div>
-{:else if !$isAuthenticated}
-<!-- Authentication failed UI -->
-<div class="auth-container">
-<div class="auth-card">
-<div class="auth-header">
-<div class="logo">
-<Clock size={48} />
-</div>
-<h1>KPI Time Tracker</h1>
-<p>Eroare la autentificare</p>
-</div>
-<div class="auth-error">
-<p>Nu s-a putut autentifica utilizatorul prin Kerberos.</p>
-<button class="retry-btn" onclick={() => window.location.reload()}>
-Reîncearcă
-</button>
-</div>
-</div>
-</div>
+{#if !$isAuthenticated}
+<!-- Show login page content -->
+{@render children?.()}
 {:else}
 <div class="app-container">
 <aside class="sidebar">

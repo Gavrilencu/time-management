@@ -29,7 +29,7 @@ import {
 	onMount(() => {
 		if (!$currentUser || $currentUser.role !== 'Admin') {
 			notifications.error('Acces interzis', 'Nu ai permisiuni de administrator!');
-			goto('/');
+			goto('/time-monitoring/');
 			return;
 		}
 		loadAllDataInBackground();
@@ -274,18 +274,34 @@ async function updateProject() {
 		}
 	}
 
-	async function deleteUser(userId: number) {
-		if (!confirm('Ești sigur că vrei să ștergi acest utilizator?')) return;
-		
-		try {
-			await userService.delete(userId);
-			await loadUsers();
-			notifications.success('Utilizator șters', 'Utilizatorul a fost șters cu succes!');
-		} catch (error) {
-			console.error('Error deleting user:', error);
-			notifications.error('Eroare', 'Eroare la ștergerea utilizatorului!');
-		}
+// Funcții pentru confirmarea ștergerii utilizatorilor
+let showDeleteUserModal = $state(false);
+let userToDelete: User | null = $state(null);
+
+function confirmDeleteUser(user: User) {
+	userToDelete = user;
+	showDeleteUserModal = true;
+}
+
+async function deleteUserConfirmed() {
+	if (!userToDelete) return;
+	
+	try {
+		await userService.delete(userToDelete.id!);
+		await loadUsers();
+		showDeleteUserModal = false;
+		userToDelete = null;
+		notifications.success('Utilizator șters', 'Utilizatorul a fost șters cu succes!');
+	} catch (error) {
+		console.error('Error deleting user:', error);
+		notifications.error('Eroare', 'Eroare la ștergerea utilizatorului!');
 	}
+}
+
+async function deleteUser(userId: number) {
+	// Această funcție nu mai este folosită direct
+	// Folosim confirmDeleteUser în schimb
+}
 </script>
 
 <div class="admin-page">
@@ -473,7 +489,7 @@ async function updateProject() {
 									<button class="action-btn edit" onclick={() => editUser(user)}>
 										<Edit3 size={16} />
 									</button>
-									<button class="action-btn delete" onclick={() => deleteUser(user.id!)}>
+									<button class="action-btn delete" onclick={() => confirmDeleteUser(user)}>
 										<Trash2 size={16} />
 									</button>
 								</div>
@@ -771,6 +787,28 @@ async function updateProject() {
 	</div>
 {/if}
 
+<!-- Modal pentru confirmarea ștergerii utilizatorilor -->
+{#if showDeleteUserModal && userToDelete}
+	<div class="delete-modal" onclick={(e) => e.target === e.currentTarget && (showDeleteUserModal = false)}>
+		<div class="delete-modal-content">
+			<div class="delete-icon">
+				<Trash2 size={48} />
+			</div>
+			<h3>Confirmă ștergerea utilizatorului</h3>
+			<p>Ești sigur că vrei să ștergi utilizatorul <strong>{userToDelete.name}</strong>?</p>
+			<p class="delete-warning">Această acțiune nu poate fi anulată!</p>
+			<div class="delete-modal-actions">
+				<button class="cancel-btn" onclick={() => showDeleteUserModal = false}>
+					Anulează
+				</button>
+				<button class="delete-btn" onclick={deleteUserConfirmed}>
+					Șterge definitiv
+				</button>
+			</div>
+		</div>
+	</div>
+{/if}
+
 <!-- Modal pentru confirmarea ștergerii -->
 {#if showDeleteModal && itemToDelete}
 	<div class="delete-modal" onclick={(e) => e.target === e.currentTarget && (showDeleteModal = false)}>
@@ -837,16 +875,16 @@ async function updateProject() {
 		cursor: pointer;
 		transition: all 0.2s;
 		font-weight: 500;
-		color: #6b7280;
+		color: var(--color-textSecondary);
 	}
 
 	.tab-btn:hover {
-		background: #f3f4f6;
-		color: #374151;
+		background: var(--color-surface);
+		color: var(--color-text);
 	}
 
 	.tab-btn.active {
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 	}
 
@@ -870,14 +908,15 @@ async function updateProject() {
 		align-items: center;
 		gap: 1rem;
 		padding: 1.5rem;
-		background: #f9fafb;
+		background: var(--color-card);
 		border-radius: 12px;
+		border: 1px solid var(--color-cardBorder);
 	}
 
 	.stat-icon {
 		width: 48px;
 		height: 48px;
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 		border-radius: 12px;
 		display: flex;
@@ -915,8 +954,9 @@ async function updateProject() {
 		justify-content: space-between;
 		align-items: center;
 		padding: 1rem;
-		background: #f9fafb;
+		background: var(--color-card);
 		border-radius: 8px;
+		border: 1px solid var(--color-cardBorder);
 	}
 
 	.activity-info {
@@ -927,16 +967,16 @@ async function updateProject() {
 
 	.user-name {
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 	}
 
 	.task-desc {
-		color: #374151;
+		color: var(--color-textSecondary);
 		font-size: 0.875rem;
 	}
 
 	.project-name {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.75rem;
 	}
 
@@ -949,11 +989,11 @@ async function updateProject() {
 
 	.hours {
 		font-weight: 600;
-		color: #059669;
+		color: var(--color-success);
 	}
 
 	.date {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.75rem;
 	}
 
@@ -975,7 +1015,7 @@ async function updateProject() {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 		border: none;
 		border-radius: 8px;
@@ -986,7 +1026,7 @@ async function updateProject() {
 	}
 
 	.add-btn:hover {
-		background: #1d4ed8;
+		background: var(--color-buttonHover);
 	}
 
 	.users-grid {
@@ -1002,16 +1042,16 @@ async function updateProject() {
 		flex-direction: column;
 		gap: 0.75rem;
 		padding: 1.25rem;
-		background: #f9fafb;
+		background: var(--color-card);
 		border-radius: 12px;
-		border: 1px solid #e5e7eb;
+		border: 1px solid var(--color-cardBorder);
 		min-height: 180px;
 		overflow: hidden;
 		transition: all 0.2s;
 	}
 
 	.user-card:hover {
-		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 4px 6px -1px var(--color-shadowHover);
 		transform: translateY(-2px);
 	}
 
@@ -1043,7 +1083,7 @@ async function updateProject() {
 	.user-info h4 {
 		font-size: 0.95rem;
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 		margin: 0 0 0.25rem 0;
 		white-space: nowrap;
 		overflow: hidden;
@@ -1051,7 +1091,7 @@ async function updateProject() {
 	}
 
 	.user-info p {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.8rem;
 		margin: 0 0 0.25rem 0;
 		white-space: nowrap;
@@ -1060,8 +1100,8 @@ async function updateProject() {
 	}
 
 	.user-role {
-		background: #dbeafe;
-		color: #1e40af;
+		background: var(--color-badge);
+		color: var(--color-badgeText);
 		padding: 0.2rem 0.4rem;
 		border-radius: 4px;
 		font-size: 0.7rem;
@@ -1074,18 +1114,18 @@ async function updateProject() {
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem 0;
-		border-top: 1px solid #e5e7eb;
-		border-bottom: 1px solid #e5e7eb;
+		border-top: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.total-hours {
 		font-size: 1.1rem;
 		font-weight: 700;
-		color: #059669;
+		color: var(--color-success);
 	}
 
 	.tasks-count {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.75rem;
 	}
 
@@ -1109,30 +1149,33 @@ async function updateProject() {
 	}
 
 	.action-btn.view {
-		background: #dbeafe;
-		color: #1e40af;
+		background: var(--color-badge);
+		color: var(--color-badgeText);
 	}
 
 	.action-btn.view:hover {
-		background: #bfdbfe;
+		background: var(--color-primary);
+		color: white;
 	}
 
 	.action-btn.edit {
-		background: #fef3c7;
-		color: #92400e;
+		background: var(--color-warning);
+		color: white;
 	}
 
 	.action-btn.edit:hover {
-		background: #fde68a;
+		background: var(--color-warning);
+		opacity: 0.9;
 	}
 
 	.action-btn.delete {
-		background: #fee2e2;
-		color: #dc2626;
+		background: var(--color-error);
+		color: white;
 	}
 
 	.action-btn.delete:hover {
-		background: #fecaca;
+		background: var(--color-error);
+		opacity: 0.9;
 	}
 
 	.items-table, .tasks-table {
@@ -1146,10 +1189,10 @@ async function updateProject() {
 		grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
 		gap: 1rem;
 		padding: 1rem;
-		background: #f9fafb;
+		background: var(--color-tableHeader);
 		border-radius: 8px;
 		font-weight: 600;
-		color: #374151;
+		color: var(--color-text);
 	}
 
 	.tasks-table .table-header {
@@ -1161,9 +1204,10 @@ async function updateProject() {
 		grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
 		gap: 1rem;
 		padding: 1rem;
-		border: 1px solid #e5e7eb;
+		border: 1px solid var(--color-tableBorder);
 		border-radius: 8px;
 		align-items: center;
+		background: var(--color-tableRow);
 	}
 
 	.tasks-table .table-row {
@@ -1172,11 +1216,11 @@ async function updateProject() {
 
 	.project-name {
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 	}
 
 	.project-desc {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.875rem;
 	}
 
@@ -1186,18 +1230,18 @@ async function updateProject() {
 		font-size: 0.75rem;
 		font-weight: 500;
 		text-align: center;
-		background: #f3f4f6;
-		color: #6b7280;
+		background: var(--color-buttonSecondary);
+		color: var(--color-textSecondary);
 	}
 
 	.project-status.active {
-		background: #d1fae5;
-		color: #065f46;
+		background: var(--color-success);
+		color: white;
 	}
 
 	.project-hours {
 		font-weight: 600;
-		color: #059669;
+		color: var(--color-success);
 		text-align: center;
 	}
 
@@ -1209,26 +1253,26 @@ async function updateProject() {
 
 	.task-user {
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 	}
 
 	.task-project {
-		color: #2563eb;
+		color: var(--color-primary);
 		font-weight: 500;
 	}
 
 	.task-desc {
-		color: #374151;
+		color: var(--color-textSecondary);
 	}
 
 	.task-hours {
 		font-weight: 600;
-		color: #059669;
+		color: var(--color-success);
 		text-align: center;
 	}
 
 	.task-date {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		font-size: 0.875rem;
 		text-align: center;
 	}
@@ -1247,12 +1291,13 @@ async function updateProject() {
 	}
 
 	.modal-content {
-		background: white;
+		background: var(--color-modal);
 		border-radius: 12px;
 		width: 90%;
 		max-width: 500px;
 		max-height: 90vh;
 		overflow-y: auto;
+		border: 1px solid var(--color-cardBorder);
 	}
 
 	.modal-header {
@@ -1260,13 +1305,13 @@ async function updateProject() {
 		justify-content: space-between;
 		align-items: center;
 		padding: 1.5rem;
-		border-bottom: 1px solid #e5e7eb;
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.modal-header h3 {
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 		margin: 0;
 	}
 
@@ -1320,9 +1365,9 @@ async function updateProject() {
 
 	.btn-cancel {
 		padding: 0.75rem 1.5rem;
-		border: 1px solid #d1d5db;
-		background: white;
-		color: #374151;
+		border: 1px solid var(--color-border);
+		background: var(--color-buttonSecondary);
+		color: var(--color-text);
 		border-radius: 6px;
 		cursor: pointer;
 		font-weight: 500;
@@ -1330,13 +1375,13 @@ async function updateProject() {
 	}
 
 	.btn-cancel:hover {
-		background: #f9fafb;
+		background: var(--color-surface);
 	}
 
 	.btn-save {
 		padding: 0.75rem 1.5rem;
 		border: none;
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 		border-radius: 6px;
 		cursor: pointer;
@@ -1345,14 +1390,14 @@ async function updateProject() {
 	}
 
 	.btn-save:hover {
-		background: #1d4ed8;
+		background: var(--color-buttonHover);
 	}
 
 	.no-users {
 		grid-column: 1 / -1;
 		text-align: center;
 		padding: 2rem;
-		color: #6b7280;
+		color: var(--color-textSecondary);
 	}
 
 	.no-users p {
@@ -1377,18 +1422,19 @@ async function updateProject() {
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.5rem 1rem;
-		border: 1px solid #e5e7eb;
-		background: white;
+		border: 1px solid var(--color-border);
+		background: var(--color-card);
 		border-radius: 6px;
 		cursor: pointer;
 		font-size: 0.875rem;
 		font-weight: 500;
 		transition: all 0.2s;
+		color: var(--color-text);
 	}
 
 	.export-btn:hover:not(:disabled) {
-		background: #f9fafb;
-		border-color: #d1d5db;
+		background: var(--color-surface);
+		border-color: var(--color-border);
 	}
 
 	.export-btn:disabled {
@@ -1397,33 +1443,33 @@ async function updateProject() {
 	}
 
 	.export-btn.json {
-		color: #059669;
-		border-color: #10b981;
+		color: var(--color-success);
+		border-color: var(--color-success);
 	}
 
 	.export-btn.json:hover:not(:disabled) {
-		background: #ecfdf5;
-		border-color: #059669;
+		background: var(--color-success);
+		color: white;
 	}
 
 	.export-btn.xml {
-		color: #dc2626;
-		border-color: #ef4444;
+		color: var(--color-error);
+		border-color: var(--color-error);
 	}
 
 	.export-btn.xml:hover:not(:disabled) {
-		background: #fef2f2;
-		border-color: #dc2626;
+		background: var(--color-error);
+		color: white;
 	}
 
 	.export-btn.excel {
-		color: #2563eb;
-		border-color: #3b82f6;
+		color: var(--color-primary);
+		border-color: var(--color-primary);
 	}
 
 	.export-btn.excel:hover:not(:disabled) {
-		background: #eff6ff;
-		border-color: #2563eb;
+		background: var(--color-primary);
+		color: white;
 	}
 
 	/* Responsive pentru export buttons */
@@ -1508,18 +1554,19 @@ async function updateProject() {
 	}
 
 	.edit-modal-content {
-		background: white;
+		background: var(--color-modal);
 		border-radius: 12px;
 		padding: 2rem;
 		width: 90%;
 		max-width: 500px;
 		max-height: 90vh;
 		overflow-y: auto;
+		border: 1px solid var(--color-cardBorder);
 	}
 
 	.edit-modal h3 {
 		margin: 0 0 1.5rem 0;
-		color: #1f2937;
+		color: var(--color-text);
 		font-size: 1.5rem;
 	}
 
@@ -1557,21 +1604,21 @@ async function updateProject() {
 	}
 
 	.edit-modal-actions .cancel-btn {
-		background: #f3f4f6;
-		color: #374151;
+		background: var(--color-buttonSecondary);
+		color: var(--color-text);
 	}
 
 	.edit-modal-actions .cancel-btn:hover {
-		background: #e5e7eb;
+		background: var(--color-surface);
 	}
 
 	.edit-modal-actions .save-btn {
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 	}
 
 	.edit-modal-actions .save-btn:hover {
-		background: #1d4ed8;
+		background: var(--color-buttonHover);
 	}
 
 	/* Modal pentru confirmarea ștergerii */
@@ -1589,34 +1636,35 @@ async function updateProject() {
 	}
 
 	.delete-modal-content {
-		background: white;
+		background: var(--color-modal);
 		border-radius: 12px;
 		padding: 2rem;
 		max-width: 400px;
 		width: 90%;
 		text-align: center;
-		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 20px 25px -5px var(--color-shadow);
+		border: 1px solid var(--color-cardBorder);
 	}
 
 	.delete-icon {
-		color: #dc2626;
+		color: var(--color-error);
 		margin-bottom: 1rem;
 	}
 
 	.delete-modal-content h3 {
 		font-size: 1.25rem;
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 		margin-bottom: 0.5rem;
 	}
 
 	.delete-modal-content p {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		margin-bottom: 0.5rem;
 	}
 
 	.delete-warning {
-		color: #dc2626 !important;
+		color: var(--color-error) !important;
 		font-weight: 500;
 		font-size: 0.875rem;
 	}
@@ -1629,7 +1677,7 @@ async function updateProject() {
 	}
 
 	.delete-btn {
-		background: #dc2626;
+		background: var(--color-error);
 		color: white;
 		border: none;
 		border-radius: 6px;
@@ -1640,7 +1688,8 @@ async function updateProject() {
 	}
 
 	.delete-btn:hover {
-		background: #b91c1c;
+		background: var(--color-error);
+		opacity: 0.9;
 	}
 
 	/* Audit section styles */
@@ -1656,35 +1705,35 @@ async function updateProject() {
 	}
 
 	.audit-card {
-		background: #f9fafb;
-		border: 1px solid #e5e7eb;
+		background: var(--color-card);
+		border: 1px solid var(--color-cardBorder);
 		border-radius: 12px;
 		padding: 3rem 2rem;
 		max-width: 500px;
 		text-align: center;
-		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 4px 6px -1px var(--color-shadow);
 	}
 
 	.audit-card svg {
-		color: #2563eb;
+		color: var(--color-primary);
 		margin-bottom: 1rem;
 	}
 
 	.audit-card h4 {
 		font-size: 1.5rem;
 		font-weight: 600;
-		color: #1f2937;
+		color: var(--color-text);
 		margin: 0 0 1rem 0;
 	}
 
 	.audit-card p {
-		color: #6b7280;
+		color: var(--color-textSecondary);
 		margin: 0 0 2rem 0;
 		line-height: 1.6;
 	}
 
 	.audit-btn {
-		background: #2563eb;
+		background: var(--color-primary);
 		color: white;
 		border: none;
 		border-radius: 8px;
@@ -1696,7 +1745,7 @@ async function updateProject() {
 	}
 
 	.audit-btn:hover {
-		background: #1d4ed8;
+		background: var(--color-buttonHover);
 		transform: translateY(-1px);
 	}
 </style>

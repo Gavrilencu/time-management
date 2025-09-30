@@ -114,7 +114,7 @@ return projects.filter(p => p.module_type === selectedModule);
 <h2>Detalii Task</h2>
 </div>
 
-<form on:submit|preventDefault={addTask}>
+	<form onsubmit={addTask}>
 <!-- Data -->
 <div class="form-group">
 <label>
@@ -135,7 +135,7 @@ required
 <button 
 type="button"
 class="dropdown-btn" 
-on:click={() => showModuleDropdown = !showModuleDropdown}
+		onclick={() => showModuleDropdown = !showModuleDropdown}
 >
 {getSelectedModuleName()}
 <ChevronDown size={16} />
@@ -146,7 +146,7 @@ on:click={() => showModuleDropdown = !showModuleDropdown}
 <button 
 type="button"
 class="dropdown-item" 
-on:click={() => selectModule(module)}
+		onclick={() => selectModule(module)}
 >
 {module.name}
 </button>
@@ -164,7 +164,7 @@ on:click={() => selectModule(module)}
 <button 
 type="button"
 class="dropdown-btn" 
-on:click={() => showProjectDropdown = !showProjectDropdown}
+		onclick={() => showProjectDropdown = !showProjectDropdown}
 >
 {getSelectedProjectName()}
 <ChevronDown size={16} />
@@ -175,7 +175,7 @@ on:click={() => showProjectDropdown = !showProjectDropdown}
 <button 
 type="button"
 class="dropdown-item" 
-on:click={() => selectProject(project)}
+		onclick={() => selectProject(project)}
 >
 {project.name}
 </button>
