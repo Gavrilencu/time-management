@@ -93,7 +93,7 @@ export async function isKerberosAvailable(): Promise<boolean> {
 export async function kerberosLogout(): Promise<void> {
     try {
         // Încearcă să facă logout prin endpoint-ul de securitate
-        await fetch('/security/logout', {
+        await fetch('/time-monitoring/security/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -109,9 +109,10 @@ export async function kerberosLogout(): Promise<void> {
 /**
  * Implementare Kerberos completă:
  * 
- * 1. Autentificare prin endpoint-uri de securitate:
- *    - /security/developerIP-login - obține utilizatorul curent
- *    - /security/getUserHierarchy - obține detalii suplimentare
+ * 1. Autentificare prin serviciu extern de securitate:
+ *    - /time-monitoring/security/developerIP-login - obține utilizatorul curent
+ *    - /time-monitoring/security/getUserHierarchy - obține detalii suplimentare
+ *    - /time-monitoring/security/logout - logout utilizator
  * 
  * 2. Mapping complet al datelor utilizatorului:
  *    - username, email, displayName, department
@@ -119,12 +120,15 @@ export async function kerberosLogout(): Promise<void> {
  *    - groups (array de grupuri)
  * 
  * 3. Error handling robust:
- *    - Verifică disponibilitatea endpoint-urilor
+ *    - Verifică disponibilitatea serviciului extern
  *    - Gestionează erorile de rețea
  *    - Fallback pentru logout
  * 
- * 4. Integrare cu Active Directory:
+ * 4. Integrare cu Active Directory prin serviciu extern:
  *    - Extrage domeniul din DN-ul managerului
  *    - Suportă grupuri multiple
  *    - Compatibil cu structura AD
+ * 
+ * NOTA: Endpoint-urile de securitate sunt gestionate de un serviciu extern,
+ * nu de backend-ul aplicației KPI.
  */
