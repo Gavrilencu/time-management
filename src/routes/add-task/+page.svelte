@@ -9,13 +9,11 @@ import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 
 let selectedDate = $state(new Date());
-let selectedModule = $state('proiecte');
+let selectedModule = $state('');
 let selectedProject = $state('');
 let selectedProjectId = $state(0);
 let taskDescription = $state('');
 let taskHours = $state('');
-let showModuleDropdown = $state(false);
-let showProjectDropdown = $state(false);
 let projects: Project[] = $state([]);
 let loading = $state(false);
 
@@ -27,24 +25,8 @@ const modules = [
 
 onMount(() => {
 	loadProjects();
-	
-	// Adaugă event listener pentru a închide dropdown-urile când se face click în afara lor
-	document.addEventListener('click', handleOutsideClick);
-	
-	return () => {
-		document.removeEventListener('click', handleOutsideClick);
-	};
 });
 
-function handleOutsideClick(event: MouseEvent) {
-	const target = event.target as HTMLElement;
-	
-	// Verifică dacă click-ul este în afara dropdown-urilor
-	if (!target.closest('.dropdown')) {
-		showModuleDropdown = false;
-		showProjectDropdown = false;
-	}
-}
 
 async function loadProjects() {
 	try {
@@ -99,31 +81,9 @@ async function addTask() {
 	}
 }
 
-function selectModule(module: { id: string; name: string }) {
-	selectedModule = module.id;
-	selectedProject = '';
-	selectedProjectId = 0;
-	showModuleDropdown = false;
-	showProjectDropdown = false; // Închide dropdown-ul de proiecte
-	console.log('Module selected:', module.id, 'Available projects:', getAvailableProjects().length);
-}
 
-function selectProject(project: Project) {
-	selectedProject = project.name;
-	selectedProjectId = project.id!;
-	showProjectDropdown = false;
-	showModuleDropdown = false; // Închide dropdown-ul de module
-	console.log('Project selected:', project.name, 'Module:', project.module_type);
-}
 
-function getSelectedModuleName() {
-	const module = modules.find(m => m.id === selectedModule);
-	return module ? module.name : 'Selectează modul';
-}
 
-function getSelectedProjectName() {
-	return selectedProject || 'Selectează proiect'
-}
 
 function getAvailableProjects() {
 	const filteredProjects = projects.filter(p => p.module_type === selectedModule);
@@ -169,81 +129,39 @@ required
 <!-- Modul -->
 <div class="form-group">
 <label>Modul</label>
-<div class="dropdown">
-<button 
-	type="button"
-	class="dropdown-btn" 
-	onclick={(e) => {
-		e.stopPropagation();
-		console.log('Module dropdown clicked, current state:', showModuleDropdown);
-		showModuleDropdown = !showModuleDropdown;
-		console.log('Module dropdown new state:', showModuleDropdown);
-	}}
->
-{getSelectedModuleName()}
-<ChevronDown size={16} />
-</button>
-{#if showModuleDropdown}
-<div class="dropdown-menu" onclick={(e) => e.stopPropagation()}>
+<select bind:value={selectedModule} onchange={() => {
+	selectedProject = '';
+	selectedProjectId = 0;
+	console.log('Module selected:', selectedModule);
+}}>
+<option value="">Selectează modul</option>
 {#each modules as module}
-<button 
-	type="button"
-	class="dropdown-item" 
-	onclick={(e) => {
-		e.stopPropagation();
-		console.log('Module selected:', module);
-		selectModule(module);
-	}}
->
-{module.name}
-</button>
+<option value={module.id}>{module.name}</option>
 {/each}
-</div>
-{/if}
-</div>
+</select>
 </div>
 
 <!-- Proiect -->
 {#if selectedModule}
 <div class="form-group">
 <label>Proiect</label>
-<div class="dropdown">
-<button 
-	type="button"
-	class="dropdown-btn" 
-	onclick={(e) => {
-		e.stopPropagation();
-		console.log('Project dropdown clicked, current state:', showProjectDropdown);
-		showProjectDropdown = !showProjectDropdown;
-		console.log('Project dropdown new state:', showProjectDropdown);
-	}}
->
-{getSelectedProjectName()}
-<ChevronDown size={16} />
-</button>
-{#if showProjectDropdown}
-<div class="dropdown-menu" onclick={(e) => e.stopPropagation()}>
+<select bind:value={selectedProjectId} onchange={() => {
+	const project = getAvailableProjects().find(p => p.id === selectedProjectId);
+	if (project) {
+		selectedProject = project.name;
+		console.log('Project selected:', project.name, 'Module:', project.module_type);
+	}
+}}>
+<option value="">Selectează proiect</option>
 {#each getAvailableProjects() as project}
-<button 
-	type="button"
-	class="dropdown-item" 
-	onclick={(e) => {
-		e.stopPropagation();
-		console.log('Project selected:', project);
-		selectProject(project);
-	}}
->
-{project.name}
-</button>
+<option value={project.id}>{project.name}</option>
 {/each}
+</select>
 {#if getAvailableProjects().length === 0}
-<div class="dropdown-item disabled">
-	Nu există {selectedModule === 'proiecte' ? 'proiecte' : selectedModule === 'evom' ? 'EVOM-uri' : 'elemente operational'} pentru acest modul
+<div class="no-projects-message">
+Nu există {selectedModule === 'proiecte' ? 'proiecte' : selectedModule === 'evom' ? 'EVOM-uri' : 'elemente operational'} pentru acest modul
 </div>
 {/if}
-</div>
-{/if}
-</div>
 </div>
 {/if}
 
@@ -471,86 +389,13 @@ word-wrap: break-word;
 	background: transparent;
 }
 
-/* Stiluri pentru dropdown-uri funcționale */
-.dropdown {
-	position: relative;
-	width: 100%;
-}
-
-.dropdown-btn {
-	width: 100% !important;
-	height: 44px !important;
-	padding: 0.75rem 1rem !important;
-	border: 1px solid var(--color-inputBorder) !important;
-	border-radius: var(--border-radius-sm) !important;
-	background-color: var(--color-input) !important;
-	color: var(--color-text) !important;
-	font-size: 0.875rem !important;
-	font-family: inherit !important;
-	cursor: pointer !important;
-	display: flex !important;
-	justify-content: space-between !important;
-	align-items: center !important;
-	transition: var(--transition) !important;
-	box-sizing: border-box !important;
-	text-align: left !important;
-}
-
-.dropdown-btn:hover {
-	border-color: var(--color-inputFocus) !important;
-}
-
-.dropdown-btn:focus {
-	outline: none !important;
-	border-color: var(--color-inputFocus) !important;
-	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
-}
-
-.dropdown-menu {
-	position: absolute !important;
-	top: 100% !important;
-	left: 0 !important;
-	right: 0 !important;
-	background-color: var(--color-input) !important;
-	border: 1px solid var(--color-inputBorder) !important;
-	border-radius: var(--border-radius-sm) !important;
-	box-shadow: 0 4px 6px var(--color-shadow) !important;
-	z-index: 9999 !important;
-	max-height: 200px !important;
-	overflow-y: auto !important;
-	margin-top: 0.25rem !important;
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	width: 100% !important;
-	min-height: 50px !important;
-}
-
-.dropdown-item {
-	width: 100% !important;
-	padding: 0.75rem 1rem !important;
-	border: none !important;
-	background: none !important;
-	color: var(--color-text) !important;
-	text-align: left !important;
-	cursor: pointer !important;
-	font-size: 0.875rem !important;
-	font-family: inherit !important;
-	transition: var(--transition) !important;
-	white-space: nowrap !important;
-	overflow: hidden !important;
-	text-overflow: ellipsis !important;
-	box-sizing: border-box !important;
-	display: block !important;
-	min-height: 40px !important;
-}
-
-.dropdown-item:hover {
-	background-color: var(--color-surface) !important;
-}
-
-.dropdown-item:focus {
-	outline: none !important;
-	background-color: var(--color-surface) !important;
+.no-projects-message {
+	color: var(--color-textSecondary);
+	font-size: 0.875rem;
+	margin-top: 0.5rem;
+	padding: 0.5rem;
+	background: var(--color-surface);
+	border-radius: 4px;
+	text-align: center;
 }
 </style>

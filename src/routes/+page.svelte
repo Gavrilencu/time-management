@@ -411,54 +411,29 @@ class="toggle-btn"
 <!-- Selectare modul -->
 <div class="form-group">
 <label>Modul</label>
-<div class="dropdown">
-<button 
-class="dropdown-btn" 
-	onclick={() => showModuleDropdown = !showModuleDropdown}
->
-{getSelectedModuleName()}
-<ChevronDown size={16} />
-</button>
-{#if showModuleDropdown}
-<div class="dropdown-menu">
+<select bind:value={selectedModule} onchange={() => {
+	selectedProject = '';
+	console.log('Module selected:', selectedModule);
+}}>
+<option value="">Selectează modul</option>
 {#each modules as module}
-<button 
-class="dropdown-item" 
-		onclick={() => selectModule({ ...module, description: '', module_type: module.id, id: 0 } as unknown as Project)}
->
-{module.name}
-</button>
+<option value={module.id}>{module.name}</option>
 {/each}
-</div>
-{/if}
-</div>
+</select>
 </div>
 
 <!-- Selectare proiect -->
 {#if selectedModule}
 <div class="form-group">
 <label>Proiect</label>
-<div class="dropdown">
-<button 
-class="dropdown-btn" 
-		onclick={() => showProjectDropdown = !showProjectDropdown}
->
-{getSelectedProjectName()}
-<ChevronDown size={16} />
-</button>
-{#if showProjectDropdown}
-<div class="dropdown-menu">
+<select bind:value={selectedProject} onchange={() => {
+	console.log('Project selected:', selectedProject);
+}}>
+<option value="">Selectează proiect</option>
 {#each getAvailableProjects() as project}
-<button 
-class="dropdown-item" 
-		onclick={() => selectProject(project)}
->
-{project}
-</button>
+<option value={project}>{project}</option>
 {/each}
-</div>
-{/if}
-</div>
+</select>
 </div>
 {/if}
 
@@ -938,9 +913,6 @@ gap: 1rem;
 }
 
 /* Folosesc stilurile globale pentru input-uri */
-/* Stilurile sunt definite în app.css */
-
-/* Folosesc stilurile globale pentru dropdown */
 /* Stilurile sunt definite în app.css */
 
 .submit-btn {

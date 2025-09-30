@@ -281,82 +281,6 @@ select:disabled {
   opacity: 0.6;
 }
 
-/* Dropdown custom styling */
-.dropdown {
-  position: relative;
-  width: 100%;
-}
-
-.dropdown-btn {
-  width: 100%;
-  height: 44px;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-inputBorder);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-input);
-  color: var(--color-text);
-  font-size: 0.875rem;
-  font-family: inherit;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: var(--transition);
-  box-sizing: border-box;
-  text-align: left;
-}
-
-.dropdown-btn:hover {
-  border-color: var(--color-inputFocus);
-}
-
-.dropdown-btn:focus {
-  outline: none;
-  border-color: var(--color-inputFocus);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: var(--color-input);
-  border: 1px solid var(--color-inputBorder);
-  border-radius: var(--border-radius-sm);
-  box-shadow: 0 4px 6px var(--color-shadow);
-  z-index: 9999;
-  max-height: 200px;
-  overflow-y: auto;
-  margin-top: 0.25rem;
-}
-
-.dropdown-item {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: none;
-  background: none;
-  color: var(--color-text);
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-family: inherit;
-  transition: var(--transition);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
-.dropdown-item:hover {
-  background-color: var(--color-surface);
-}
-
-.dropdown-item:focus {
-  outline: none;
-  background-color: var(--color-surface);
-}
-
 /* Checkbox și radio buttons */
 input[type="checkbox"],
 input[type="radio"] {
@@ -397,7 +321,7 @@ input[type="radio"] {
   overflow: hidden;
 }
 
-/* Prevenire overflow pentru input-uri și dropdown-uri */
+/* Prevenire overflow pentru input-uri și select-uri */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -408,27 +332,10 @@ input[type="datetime-local"],
 input[type="url"],
 input[type="tel"],
 textarea,
-select,
-.dropdown-btn {
+select {
   max-width: 100%;
   box-sizing: border-box;
   overflow: hidden;
-}
-
-/* Prevenire overflow pentru dropdown menu */
-.dropdown-menu {
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.dropdown-item {
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* Prevenire overflow pentru grid-uri și containere */
@@ -488,8 +395,7 @@ select,
   input[type="url"],
   input[type="tel"],
   textarea,
-  select,
-  .dropdown-btn {
+  select {
     font-size: 16px; /* Previne zoom pe iOS */
   }
 }
