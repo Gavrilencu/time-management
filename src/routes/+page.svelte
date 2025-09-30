@@ -105,7 +105,6 @@ function updateDailyProgress() {
 }
 
 // Funcții pentru comentarii
-let loadedTaskComments = $state<Set<number>>(new Set());
 
 async function loadTaskComments(taskId: number) {
 	if (loadedTaskComments.has(taskId)) return; // Deja încărcate
@@ -517,13 +516,16 @@ Adaugă Task
 
 <!-- Formular pentru adăugare comentariu -->
 <div class="add-comment-form">
-	<input 
-		type="text" 
-		placeholder="Adaugă un comentariu..." 
-		value={taskCommentInputs.get(task.id!) || ''}
-		oninput={(e) => taskCommentInputs.set(task.id!, e.target.value)}
-		onkeydown={(e) => e.key === 'Enter' && addComment(task.id!, taskCommentInputs.get(task.id!) || '')}
-	/>
+<input 
+	type="text" 
+	placeholder="Adaugă un comentariu..." 
+	value={taskCommentInputs.get(task.id!) || ''}
+	oninput={(e) => {
+		const target = e.target as HTMLInputElement;
+		taskCommentInputs.set(task.id!, target.value);
+	}}
+	onkeydown={(e) => e.key === 'Enter' && addComment(task.id!, taskCommentInputs.get(task.id!) || '')}
+/>
 	<button onclick={() => addComment(task.id!, taskCommentInputs.get(task.id!) || '')}>Adaugă</button>
 </div>
 {:else}

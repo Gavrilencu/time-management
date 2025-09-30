@@ -11,7 +11,7 @@ import { currentUser } from '$lib/auth';
 let selectedDate = $state(new Date());
 let selectedModule = $state('');
 let selectedProject = $state('');
-let selectedProjectId = $state(0);
+let selectedProjectId = $state<number | string>('');
 let taskDescription = $state('');
 let taskHours = $state('');
 let projects: Project[] = $state([]);
@@ -48,7 +48,7 @@ async function loadProjects() {
 }
 
 async function addTask() {
-	if (!selectedModule || !selectedProject || !taskDescription || !taskHours) {
+	if (!selectedModule || !selectedProjectId || !taskDescription || !taskHours) {
 		notifications.warning('Câmpuri incomplete', 'Te rog completează toate câmpurile!');
 		return;
 	}
@@ -58,19 +58,22 @@ async function addTask() {
 
 		const taskData: TaskCreate = {
 			user_id: $currentUser?.id || 1,
-			project_id: selectedProjectId,
+			project_id: Number(selectedProjectId),
 			description: taskDescription,
 			hours: parseFloat(taskHours),
 			date: format(selectedDate, 'yyyy-MM-dd')
 		};
+
+		console.log('Creating task with data:', taskData);
 
 		await taskService.create(taskData);
 
 		// Reset form
 		taskDescription = '';
 		taskHours = '';
+		selectedModule = '';
 		selectedProject = '';
-		selectedProjectId = 0;
+		selectedProjectId = '';
 
 		notifications.success('Succes', 'Task adăugat cu succes!');
 	} catch (error) {
@@ -86,12 +89,15 @@ async function addTask() {
 
 
 function getAvailableProjects() {
+	if (!selectedModule) {
+		return [];
+	}
+	
 	const filteredProjects = projects.filter(p => p.module_type === selectedModule);
 	console.log('All projects:', projects);
 	console.log('Selected module:', selectedModule);
 	console.log('Available projects for module', selectedModule, ':', filteredProjects);
 	
-	// Returnează doar proiectele pentru modulul selectat
 	return filteredProjects;
 }
 </script>
@@ -128,11 +134,12 @@ required
 
 <!-- Modul -->
 <div class="form-group">
-<label>Modul</label>
-<select bind:value={selectedModule} onchange={() => {
+<label for="module-select">Modul</label>
+<select id="module-select" bind:value={selectedModule} onchange={() => {
 	selectedProject = '';
-	selectedProjectId = 0;
+	selectedProjectId = '';
 	console.log('Module selected:', selectedModule);
+	console.log('Available projects:', getAvailableProjects().length);
 }}>
 <option value="">Selectează modul</option>
 {#each modules as module}
@@ -144,12 +151,17 @@ required
 <!-- Proiect -->
 {#if selectedModule}
 <div class="form-group">
-<label>Proiect</label>
-<select bind:value={selectedProjectId} onchange={() => {
-	const project = getAvailableProjects().find(p => p.id === selectedProjectId);
-	if (project) {
-		selectedProject = project.name;
-		console.log('Project selected:', project.name, 'Module:', project.module_type);
+<label for="project-select">Proiect</label>
+<select id="project-select" bind:value={selectedProjectId} onchange={() => {
+	if (selectedProjectId) {
+		const project = getAvailableProjects().find(p => p.id === Number(selectedProjectId));
+		if (project) {
+			selectedProject = project.name;
+			console.log('Project selected:', project.name, 'Module:', project.module_type);
+		}
+	} else {
+		selectedProject = '';
+		console.log('Project deselected');
 	}
 }}>
 <option value="">Selectează proiect</option>
@@ -167,29 +179,31 @@ Nu există {selectedModule === 'proiecte' ? 'proiecte' : selectedModule === 'evo
 
 <!-- Descriere -->
 <div class="form-group">
-<label>Descriere Task</label>
+<label for="task-description">Descriere Task</label>
 <textarea 
-bind:value={taskDescription}
-placeholder="Descrie ce ai lucrat..."
-rows="4"
-required
+	id="task-description"
+	bind:value={taskDescription}
+	placeholder="Descrie ce ai lucrat..."
+	rows="4"
+	required
 ></textarea>
 </div>
 
 <!-- Ore -->
 <div class="form-group">
-<label>
+<label for="task-hours">
 <Clock size={16} />
 Ore lucrate
 </label>
 <input 
-type="number" 
-step="0.5" 
-min="0" 
-max="8"
-bind:value={taskHours}
-placeholder="Ex: 2.5"
-required
+	id="task-hours"
+	type="number" 
+	step="0.5" 
+	min="0" 
+	max="8"
+	bind:value={taskHours}
+	placeholder="Ex: 2.5"
+	required
 />
 </div>
 
@@ -210,11 +224,11 @@ required
 </div>
 <div class="preview-item">
 <span class="label">Modul:</span>
-<span class="value">{getSelectedModuleName()}</span>
+<span class="value">{modules.find(m => m.id === selectedModule)?.name || 'Nu este selectat'}</span>
 </div>
 <div class="preview-item">
 <span class="label">Proiect:</span>
-<span class="value">{getSelectedProjectName()}</span>
+<span class="value">{selectedProject || 'Nu este selectat'}</span>
 </div>
 <div class="preview-item">
 <span class="label">Descriere:</span>
@@ -377,16 +391,6 @@ font-size: 0.875rem;
 text-align: right;
 max-width: 60%;
 word-wrap: break-word;
-}
-
-.dropdown-item.disabled {
-	color: var(--color-textSecondary);
-	cursor: not-allowed;
-	opacity: 0.6;
-}
-
-.dropdown-item.disabled:hover {
-	background: transparent;
 }
 
 .no-projects-message {
