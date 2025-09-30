@@ -82,15 +82,15 @@ async function authenticateUser(kerberosData: { username: string; email: string;
 }
 
 	const menuItems = [
-		{ name: 'Dashboard', href: '/', icon: BarChart3 },
-		{ name: 'Calendar', href: '/calendar', icon: Calendar },
-		{ name: 'Timp Lucru', href: '/time-tracking', icon: Clock },
-		{ name: 'Adaugă Task', href: '/add-task', icon: Plus },
-		{ name: 'Setări', href: '/settings', icon: Settings }
+		{ name: 'Dashboard', href: '/time-monitoring/', icon: BarChart3 },
+		{ name: 'Calendar', href: '/time-monitoring/calendar', icon: Calendar },
+		{ name: 'Timp Lucru', href: '/time-monitoring/time-tracking', icon: Clock },
+		{ name: 'Adaugă Task', href: '/time-monitoring/add-task', icon: Plus },
+		{ name: 'Setări', href: '/time-monitoring/settings', icon: Settings }
 	];
 
 	// Adaugă Admin doar pentru utilizatorii cu rol de admin
-	const adminMenuItem = { name: 'Admin', href: '/admin', icon: Users };
+	const adminMenuItem = { name: 'Admin', href: '/time-monitoring/admin', icon: Users };
 	
 	// Funcție pentru a obține meniul complet bazat pe rol
 	function getMenuItems() {
@@ -102,10 +102,10 @@ async function authenticateUser(kerberosData: { username: string; email: string;
 	}
 
 function logout() {
-clearCurrentUser();
-// TODO: Implementează logout Kerberos real
-kerberosLogout();
-goto('/login');
+	clearCurrentUser();
+	// TODO: Implementează logout Kerberos real
+	kerberosLogout();
+	goto('/time-monitoring/login');
 }
 
 ////test
@@ -279,30 +279,30 @@ min-height: 100vh;
 }
 
 .sidebar {
-width: 280px;
-background: white;
-border-right: 1px solid #e5e7eb;
-display: flex;
-flex-direction: column;
-position: fixed;
-height: 100vh;
-left: 0;
-top: 0;
-z-index: 1000;
+	width: 280px;
+	background-color: var(--color-sidebar);
+	border-right: 1px solid var(--color-border);
+	display: flex;
+	flex-direction: column;
+	position: fixed;
+	height: 100vh;
+	left: 0;
+	top: 0;
+	z-index: 1000;
 }
 
 .sidebar-header {
-padding: 1.5rem;
-border-bottom: 1px solid #e5e7eb;
+	padding: 1.5rem;
+	border-bottom: 1px solid var(--color-border);
 }
 
 .sidebar-header .logo {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-font-weight: 700;
-font-size: 1.25rem;
-color: #1f2937;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-weight: 700;
+	font-size: 1.25rem;
+	color: var(--color-text);
 }
 
 .sidebar-nav {
@@ -311,85 +311,85 @@ padding: 1rem 0;
 }
 
 .nav-item {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-padding: 0.75rem 1.5rem;
-color: #6b7280;
-text-decoration: none;
-transition: all 0.2s;
-border-left: 3px solid transparent;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 0.75rem 1.5rem;
+	color: var(--color-sidebarText);
+	text-decoration: none;
+	transition: all 0.2s;
+	border-left: 3px solid transparent;
 }
 
 .nav-item:hover {
-background-color: #f9fafb;
-color: #374151;
+	background-color: var(--color-surface);
+	color: var(--color-text);
 }
 
 .nav-item.active {
-background-color: #eff6ff;
-color: #2563eb;
-border-left-color: #2563eb;
+	background-color: var(--color-primary);
+	color: white;
+	border-left-color: var(--color-primary);
 }
 
 .sidebar-footer {
-padding: 1.5rem;
-border-top: 1px solid #e5e7eb;
+	padding: 1.5rem;
+	border-top: 1px solid var(--color-border);
 }
 
 .user-info {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-margin-bottom: 1rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
 }
 
 .user-avatar {
-width: 40px;
-height: 40px;
-background: #667eea;
-color: white;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: 600;
+	width: 40px;
+	height: 40px;
+	background: var(--color-primary);
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 600;
 }
 
 .user-details {
-display: flex;
-flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .user-name {
-font-weight: 600;
-color: #1f2937;
-font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--color-text);
+	font-size: 0.875rem;
 }
 
 .user-email {
-color: #6b7280;
-font-size: 0.75rem;
+	color: var(--color-textSecondary);
+	font-size: 0.75rem;
 }
 
 .logout-btn {
-width: 100%;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 0.5rem;
-padding: 0.75rem;
-background: #f3f4f6;
-border: none;
-border-radius: 8px;
-color: #6b7280;
-cursor: pointer;
-transition: all 0.2s;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.75rem;
+	background: var(--color-buttonSecondary);
+	border: none;
+	border-radius: 8px;
+	color: var(--color-text);
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .logout-btn:hover {
-background: #e5e7eb;
-color: #374151;
+	background: var(--color-border);
+	color: var(--color-text);
 }
 
 .main-content {
@@ -538,30 +538,7 @@ background: var(--color-error);
 opacity: 0.9;
 }
 
-/* Stiluri pentru input-uri și form-uri */
-input, textarea, select {
-background-color: var(--color-input);
-color: var(--color-text);
-border: 1px solid var(--color-inputBorder);
-border-radius: 6px;
-padding: 0.75rem;
-font-size: 0.875rem;
-transition: border-color 0.2s ease;
-box-sizing: border-box;
-width: 100%;
-max-width: 100%;
-}
-
-input:focus, textarea:focus, select:focus {
-outline: none;
-border-color: var(--color-inputFocus);
-box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-input::placeholder, textarea::placeholder {
-color: var(--color-textSecondary);
-opacity: 0.7;
-}
+/* Stiluri pentru input-uri și form-uri - folosesc stilurile globale din app.css */
 
 /* Butoane */
 button {

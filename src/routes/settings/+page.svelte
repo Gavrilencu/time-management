@@ -420,52 +420,29 @@ margin: 0;
 }
 
 .form-group {
-margin-bottom: 1rem;
+	margin-bottom: 1rem;
 }
 
 .form-group label {
-display: block;
-font-weight: 500;
-color: var(--color-text);
-margin-bottom: 0.5rem;
+	display: block;
+	font-weight: 500;
+	color: var(--color-text);
+	margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group select {
-width: 100%;
-padding: 0.75rem;
-border: 1px solid var(--color-border);
-border-radius: 6px;
-font-size: 0.875rem;
-transition: border-color 0.2s;
-background-color: var(--color-background);
-color: var(--color-text);
-box-sizing: border-box;
-max-width: 100%;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-outline: none;
-border-color: var(--color-primary);
-box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.form-group input::placeholder {
-color: var(--color-textSecondary);
-opacity: 0.7;
-}
+/* Folosesc stilurile globale pentru input-uri și select */
+/* Stilurile sunt definite în app.css */
 
 .checkbox-label {
-display: flex !important;
-align-items: center;
-gap: 0.5rem;
-cursor: pointer;
+	display: flex !important;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
 }
 
 .checkbox-label input[type="checkbox"] {
-width: auto;
-margin: 0;
+	width: auto;
+	margin: 0;
 }
 
 .action-btn {

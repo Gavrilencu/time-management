@@ -673,81 +673,22 @@ gap: 1rem;
 }
 
 .form-group {
-display: flex;
-flex-direction: column;
-gap: 0.5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 }
 
 .form-group label {
-font-weight: 500;
-color: #374151;
-font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--color-text);
+	font-size: 0.875rem;
 }
 
-.form-group input {
-padding: 0.75rem;
-border: 1px solid #d1d5db;
-border-radius: 6px;
-font-size: 0.875rem;
-transition: border-color 0.2s;
-}
+/* Folosesc stilurile globale pentru input-uri */
+/* Stilurile sunt definite în app.css */
 
-.form-group input:focus {
-outline: none;
-border-color: #2563eb;
-box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.dropdown {
-position: relative;
-}
-
-.dropdown-btn {
-width: 100%;
-padding: 0.75rem;
-border: 1px solid #d1d5db;
-border-radius: 6px;
-background: white;
-cursor: pointer;
-display: flex;
-justify-content: space-between;
-align-items: center;
-font-size: 0.875rem;
-transition: border-color 0.2s;
-}
-
-.dropdown-btn:hover {
-border-color: #9ca3af;
-}
-
-.dropdown-menu {
-position: absolute;
-top: 100%;
-left: 0;
-right: 0;
-background: white;
-border: 1px solid #d1d5db;
-border-radius: 6px;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-z-index: 10;
-max-height: 200px;
-overflow-y: auto;
-}
-
-.dropdown-item {
-width: 100%;
-padding: 0.75rem;
-border: none;
-background: none;
-text-align: left;
-cursor: pointer;
-font-size: 0.875rem;
-transition: background 0.2s;
-}
-
-.dropdown-item:hover {
-background: #f3f4f6;
-}
+/* Folosesc stilurile globale pentru dropdown */
+/* Stilurile sunt definite în app.css */
 
 .submit-btn {
 display: flex;

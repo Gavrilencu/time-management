@@ -1298,25 +1298,14 @@ async function updateProject() {
 	.form-group label {
 		display: block;
 		font-weight: 500;
-		color: #374151;
+		color: var(--color-text);
 		margin-bottom: 0.5rem;
 	}
 
+	/* Folosesc stilurile globale pentru input-uri și textarea */
 	.form-group input,
 	.form-group textarea {
-		width: 100%;
-		padding: 0.75rem;
-		border: 1px solid #d1d5db;
-		border-radius: 6px;
-		font-size: 0.875rem;
-		transition: border-color 0.2s;
-	}
-
-	.form-group input:focus,
-	.form-group textarea:focus {
-		outline: none;
-		border-color: #2563eb;
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+		/* Stilurile sunt definite în app.css */
 	}
 
 	.modal-footer {
@@ -1540,23 +1529,13 @@ async function updateProject() {
 		display: block;
 		margin-bottom: 0.5rem;
 		font-weight: 500;
-		color: #374151;
+		color: var(--color-text);
 	}
 
+	/* Folosesc stilurile globale pentru input-uri și select */
 	.edit-form-group input,
 	.edit-form-group select {
-		width: 100%;
-		padding: 0.75rem;
-		border: 1px solid #d1d5db;
-		border-radius: 6px;
-		font-size: 0.875rem;
-	}
-
-	.edit-form-group input:focus,
-	.edit-form-group select:focus {
-		outline: none;
-		border-color: #2563eb;
-		box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+		/* Stilurile sunt definite în app.css */
 	}
 
 	.edit-modal-actions {

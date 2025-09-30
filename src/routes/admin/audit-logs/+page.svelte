@@ -430,7 +430,7 @@
 
 	.search-input input {
 		padding-left: 2.5rem;
-		width: 100%;
+		/* Folosesc stilurile globale pentru input-uri */
 	}
 
 	.filter-actions {

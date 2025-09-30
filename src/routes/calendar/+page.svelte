@@ -64,13 +64,13 @@ selectedDate = date;
 <div class="calendar-header">
 <h1>Calendar</h1>
 <div class="month-navigation">
-<button class="nav-btn" on:click={() => navigateMonth('prev')}>
-<ChevronLeft size={20} />
-</button>
-<h2>{format(currentDate, 'MMMM yyyy', { locale: ro })}</h2>
-<button class="nav-btn" on:click={() => navigateMonth('next')}>
-<ChevronRight size={20} />
-</button>
+		<button class="nav-btn" onclick={() => navigateMonth('prev')}>
+			<ChevronLeft size={20} />
+		</button>
+		<h2>{format(currentDate, 'MMMM yyyy', { locale: ro })}</h2>
+		<button class="nav-btn" onclick={() => navigateMonth('next')}>
+			<ChevronRight size={20} />
+		</button>
 </div>
 </div>
 
@@ -85,13 +85,14 @@ selectedDate = date;
 <div class="day-header">Duminică</div>
 
 {#each getDaysInMonth() as day}
-<div 
-class="calendar-day" 
-class:other-month={!isSameMonth(day, currentDate)}
-class:today={isToday(day)}
-class:selected={isSameDay(day, selectedDate)}
-on:click={() => selectDate(day)}
->
+	<button 
+		class="calendar-day" 
+		class:other-month={!isSameMonth(day, currentDate)}
+		class:today={isToday(day)}
+		class:selected={isSameDay(day, selectedDate)}
+		onclick={() => selectDate(day)}
+		type="button"
+	>
 <div class="day-number">{format(day, 'd')}</div>
 <div class="day-tasks">
 {#each getTasksForDate(day) as task}
@@ -101,10 +102,10 @@ on:click={() => selectDate(day)}
 </div>
 {/each}
 </div>
-<div class="day-total">
-{getTotalHoursForDate(day) > 0 ? getTotalHoursForDate(day) + 'h' : ''}
-</div>
-</div>
+		<div class="day-total">
+			{getTotalHoursForDate(day) > 0 ? getTotalHoursForDate(day) + 'h' : ''}
+		</div>
+	</button>
 {/each}
 </div>
 </div>
@@ -148,10 +149,10 @@ margin-bottom: 2rem;
 }
 
 .calendar-header h1 {
-font-size: 2rem;
-font-weight: 700;
-color: #1f2937;
-margin: 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .month-navigation {
@@ -161,33 +162,35 @@ gap: 1rem;
 }
 
 .month-navigation h2 {
-font-size: 1.5rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
-min-width: 200px;
-text-align: center;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
+	min-width: 200px;
+	text-align: center;
 }
 
 .nav-btn {
-background: #f3f4f6;
-border: none;
-border-radius: 6px;
-padding: 0.5rem;
-cursor: pointer;
-transition: background 0.2s;
+	background: var(--color-buttonSecondary);
+	border: none;
+	border-radius: 6px;
+	padding: 0.5rem;
+	cursor: pointer;
+	transition: background 0.2s;
+	color: var(--color-text);
 }
 
 .nav-btn:hover {
-background: #e5e7eb;
+	background: var(--color-border);
 }
 
 .calendar-container {
-background: white;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-overflow: hidden;
-margin-bottom: 2rem;
+	background: var(--color-card);
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+	overflow: hidden;
+	margin-bottom: 2rem;
 }
 
 .calendar-grid {
@@ -196,83 +199,96 @@ grid-template-columns: repeat(7, 1fr);
 }
 
 .day-header {
-background: #f9fafb;
-padding: 1rem;
-text-align: center;
-font-weight: 600;
-color: #374151;
-border-bottom: 1px solid #e5e7eb;
+	background: var(--color-tableHeader);
+	padding: 1rem;
+	text-align: center;
+	font-weight: 600;
+	color: var(--color-text);
+	border-bottom: 1px solid var(--color-tableBorder);
 }
 
 .calendar-day {
-min-height: 120px;
-padding: 0.75rem;
-border-right: 1px solid #e5e7eb;
-border-bottom: 1px solid #e5e7eb;
-cursor: pointer;
-transition: background 0.2s;
-position: relative;
+	min-height: 120px;
+	padding: 0.75rem;
+	border-right: 1px solid var(--color-tableBorder);
+	border-bottom: 1px solid var(--color-tableBorder);
+	cursor: pointer;
+	transition: background 0.2s;
+	position: relative;
+	background: var(--color-tableRow);
+	color: var(--color-text);
+	border-left: none;
+	border-top: none;
+	width: 100%;
+	text-align: left;
+	display: flex;
+	flex-direction: column;
 }
 
 .calendar-day:hover {
-background: #f9fafb;
+	background: var(--color-surface);
 }
 
 .calendar-day.other-month {
-background: #f9fafb;
-color: #9ca3af;
+	background: var(--color-surface);
+	color: var(--color-textSecondary);
 }
 
 .calendar-day.today {
-background: #eff6ff;
+	background: var(--color-badge);
+	color: var(--color-badgeText);
 }
 
 .calendar-day.selected {
-background: #dbeafe;
-border: 2px solid #2563eb;
+	background: var(--color-primary);
+	color: white;
+	border: 2px solid var(--color-primary);
 }
 
 .day-number {
-font-weight: 600;
-margin-bottom: 0.5rem;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+	color: var(--color-text);
 }
 
 .day-tasks {
-margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .task-item {
-display: flex;
-align-items: center;
-gap: 0.25rem;
-background: #f3f4f6;
-padding: 0.25rem 0.5rem;
-border-radius: 4px;
-margin-bottom: 0.25rem;
-font-size: 0.75rem;
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	background: var(--color-buttonSecondary);
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	margin-bottom: 0.25rem;
+	font-size: 0.75rem;
+	color: var(--color-text);
 }
 
 .day-total {
-position: absolute;
-bottom: 0.5rem;
-right: 0.5rem;
-font-size: 0.75rem;
-font-weight: 600;
-color: #059669;
+	position: absolute;
+	bottom: 0.5rem;
+	right: 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	color: var(--color-success);
 }
 
 .selected-day-info {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .selected-day-info h3 {
-font-size: 1.25rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0 0 1rem 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
 }
 
 .tasks-list {
@@ -282,63 +298,64 @@ gap: 0.75rem;
 }
 
 .task-detail {
-display: flex;
-align-items: center;
-gap: 1rem;
-padding: 0.75rem;
-background: #f9fafb;
-border-radius: 6px;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem;
+	background: var(--color-surface);
+	border-radius: 6px;
 }
 
 .task-hours {
-background: #d1fae5;
-color: #065f46;
-padding: 0.25rem 0.5rem;
-border-radius: 4px;
-font-weight: 600;
-font-size: 0.875rem;
-min-width: 60px;
-text-align: center;
+	background: var(--color-success);
+	color: white;
+	padding: 0.25rem 0.5rem;
+	border-radius: 4px;
+	font-weight: 600;
+	font-size: 0.875rem;
+	min-width: 60px;
+	text-align: center;
 }
 
 .task-description {
-color: #374151;
-font-weight: 500;
-flex: 1;
+	color: var(--color-text);
+	font-weight: 500;
+	flex: 1;
 }
 
 .task-title {
-font-weight: 500;
-margin-bottom: 0.25rem;
+	font-weight: 500;
+	margin-bottom: 0.25rem;
+	color: var(--color-text);
 }
 
 .task-meta {
-display: flex;
-gap: 1rem;
-font-size: 0.75rem;
-color: #6b7280;
+	display: flex;
+	gap: 1rem;
+	font-size: 0.75rem;
+	color: var(--color-textSecondary);
 }
 
 .project-name {
-color: #2563eb;
-font-weight: 500;
+	color: var(--color-primary);
+	font-weight: 500;
 }
 
 .user-name {
-color: #059669;
-font-weight: 500;
+	color: var(--color-success);
+	font-weight: 500;
 }
 
 .loading {
-text-align: center;
-padding: 2rem;
-color: #6b7280;
+	text-align: center;
+	padding: 2rem;
+	color: var(--color-textSecondary);
 }
 
 .no-tasks {
-color: #6b7280;
-text-align: center;
-padding: 2rem;
-margin: 0;
+	color: var(--color-textSecondary);
+	text-align: center;
+	padding: 2rem;
+	margin: 0;
 }
 </style>
