@@ -14,7 +14,7 @@ import tempfile
 import configparser
 from decimal import Decimal
 
-app = FastAPI(title="KPI Time Tracker API", version="1.0.0", root_path="/time-monitoring/api")
+app = FastAPI(title="KPI Time Tracker API", version="1.0.0")
 
 # Funcție pentru a converti tipurile Decimal în float pentru JSON
 def convert_decimals_to_float(data):
@@ -291,7 +291,7 @@ def log_audit_event(user_id: int, action: str, entity_type: str, entity_id: int 
 # API Endpoints
 
 # Utilizatori
-@app.get("/api/users", response_model=List[User])
+@app.get("/time-monitoring/api/users", response_model=List[User])
 async def get_users():
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -300,7 +300,7 @@ async def get_users():
     conn.close()
     return users
 
-@app.get("/api/users/email/{email}", response_model=User)
+@app.get("/time-monitoring/api/users/email/{email}", response_model=User)
 async def get_user_by_email(email: str):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -313,7 +313,7 @@ async def get_user_by_email(email: str):
     
     return user
 
-@app.post("/api/users", response_model=User)
+@app.post("/time-monitoring/api/users", response_model=User)
 async def create_user(user: User, request: Request):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -344,7 +344,7 @@ async def create_user(user: User, request: Request):
     user.id = user_id
     return user
 
-@app.put("/api/users/{user_id}", response_model=User)
+@app.put("/time-monitoring/api/users/{user_id}", response_model=User)
 async def update_user(user_id: int, user: User):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -368,7 +368,7 @@ async def update_user(user_id: int, user: User):
     user.id = user_id
     return user
 
-@app.delete("/api/users/{user_id}")
+@app.delete("/time-monitoring/api/users/{user_id}")
 async def delete_user(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -381,7 +381,7 @@ async def delete_user(user_id: int):
     return {"message": "User deleted successfully"}
 
 # Proiecte
-@app.get("/api/projects", response_model=List[Project])
+@app.get("/time-monitoring/api/projects", response_model=List[Project])
 async def get_projects():
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -390,7 +390,7 @@ async def get_projects():
     conn.close()
     return projects
 
-@app.get("/api/projects/module/{module_type}", response_model=List[Project])
+@app.get("/time-monitoring/api/projects/module/{module_type}", response_model=List[Project])
 async def get_projects_by_module(module_type: str):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -399,7 +399,7 @@ async def get_projects_by_module(module_type: str):
     conn.close()
     return projects
 
-@app.post("/api/projects", response_model=Project)
+@app.post("/time-monitoring/api/projects", response_model=Project)
 async def create_project(project: Project):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -411,7 +411,7 @@ async def create_project(project: Project):
     project.id = project_id
     return project
 
-@app.delete("/api/projects/{project_id}")
+@app.delete("/time-monitoring/api/projects/{project_id}")
 async def delete_project(project_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -424,7 +424,7 @@ async def delete_project(project_id: int):
     return {"message": "Project deleted successfully"}
 
 # Task-uri
-@app.get("/api/tasks", response_model=List[dict])
+@app.get("/time-monitoring/api/tasks", response_model=List[dict])
 async def get_tasks():
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -439,7 +439,7 @@ async def get_tasks():
     conn.close()
     return tasks
 
-@app.get("/api/tasks/department/{department}")
+@app.get("/time-monitoring/api/tasks/department/{department}")
 async def get_department_tasks(department: str):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -455,7 +455,7 @@ async def get_department_tasks(department: str):
     conn.close()
     return tasks
 
-@app.get("/api/tasks/user/{user_id}")
+@app.get("/time-monitoring/api/tasks/user/{user_id}")
 async def get_user_tasks(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -471,7 +471,7 @@ async def get_user_tasks(user_id: int):
     conn.close()
     return tasks
 
-@app.get("/api/tasks/date/{date}")
+@app.get("/time-monitoring/api/tasks/date/{date}")
 async def get_tasks_by_date(date: str):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -487,7 +487,7 @@ async def get_tasks_by_date(date: str):
     conn.close()
     return tasks
 
-@app.post("/api/tasks", response_model=Task)
+@app.post("/time-monitoring/api/tasks", response_model=Task)
 async def create_task(task: TaskCreate):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -519,7 +519,7 @@ async def create_task(task: TaskCreate):
     
     return Task(id=task_id, **task.dict())
 
-@app.delete("/api/tasks/{task_id}")
+@app.delete("/time-monitoring/api/tasks/{task_id}")
 async def delete_task(task_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -545,7 +545,7 @@ async def delete_task(task_id: int):
     return {"message": "Task deleted successfully"}
 
 # Comentarii Task-uri
-@app.get("/api/tasks/{task_id}/comments", response_model=List[TaskComment])
+@app.get("/time-monitoring/api/tasks/{task_id}/comments", response_model=List[TaskComment])
 async def get_task_comments(task_id: int):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -560,7 +560,7 @@ async def get_task_comments(task_id: int):
     conn.close()
     return comments
 
-@app.post("/api/tasks/{task_id}/comments", response_model=TaskComment)
+@app.post("/time-monitoring/api/tasks/{task_id}/comments", response_model=TaskComment)
 async def create_task_comment(task_id: int, comment: TaskCommentCreate, request: Request):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -594,7 +594,7 @@ async def create_task_comment(task_id: int, comment: TaskCommentCreate, request:
     
     return TaskComment(id=comment_id, **comment.dict())
 
-@app.delete("/api/comments/{comment_id}")
+@app.delete("/time-monitoring/api/comments/{comment_id}")
 async def delete_task_comment(comment_id: int, request: Request):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -627,7 +627,7 @@ async def delete_task_comment(comment_id: int, request: Request):
     return {"message": "Comment deleted successfully"}
 
 # Audit Logs
-@app.get("/api/audit-logs", response_model=List[AuditLog])
+@app.get("/time-monitoring/api/audit-logs", response_model=List[AuditLog])
 async def get_audit_logs(skip: int = 0, limit: int = 100, user_id: Optional[int] = None):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -651,7 +651,7 @@ async def get_audit_logs(skip: int = 0, limit: int = 100, user_id: Optional[int]
     conn.close()
     return logs
 
-@app.get("/api/audit-logs/stats")
+@app.get("/time-monitoring/api/audit-logs/stats")
 async def get_audit_stats():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -689,7 +689,7 @@ async def get_audit_stats():
     }
 
 # Statistici
-@app.get("/api/stats/overview")
+@app.get("/time-monitoring/api/stats/overview")
 async def get_overview_stats():
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -736,7 +736,7 @@ async def get_overview_stats():
         "average_hours_per_user": total_hours / total_users if total_users > 0 else 0
     }
 
-@app.get("/api/stats/daily/{date}")
+@app.get("/time-monitoring/api/stats/daily/{date}")
 async def get_daily_stats(date: str):
     conn = get_db_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -764,7 +764,7 @@ async def get_daily_stats(date: str):
     }
 
 # Export endpoints
-@app.get("/api/export/json")
+@app.get("/time-monitoring/api/export/json")
 async def export_json():
     """Export all data as JSON"""
     try:
@@ -810,7 +810,7 @@ async def export_json():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
 
-@app.get("/api/export/xml")
+@app.get("/time-monitoring/api/export/xml")
 async def export_xml():
     """Export all data as XML"""
     try:
@@ -874,7 +874,7 @@ async def export_xml():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
 
-@app.get("/api/export/excel")
+@app.get("/time-monitoring/api/export/excel")
 async def export_excel():
     """Export all data as Excel file"""
     try:

@@ -413,23 +413,24 @@ margin-bottom: 2rem;
 }
 
 .dashboard-header h1 {
-font-size: 2rem;
-font-weight: 700;
-color: #1f2937;
-margin: 0 0 0.5rem 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
 }
 
 .dashboard-header p {
-color: #6b7280;
-margin: 0;
+	color: var(--color-textSecondary);
+	margin: 0;
 }
 
 .daily-progress {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-margin-bottom: 2rem;
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+	margin-bottom: 2rem;
 }
 
 .progress-header {
@@ -440,10 +441,10 @@ margin-bottom: 1rem;
 }
 
 .progress-header h2 {
-font-size: 1.25rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .progress-stats {
@@ -498,10 +499,11 @@ margin-bottom: 2rem;
 }
 
 .calendar-section {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .calendar-header {
@@ -512,10 +514,10 @@ margin-bottom: 1rem;
 }
 
 .calendar-header h3 {
-font-size: 1.125rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .nav-btn {
@@ -629,10 +631,11 @@ border-top: 1px solid #e5e7eb;
 }
 
 .form-section {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .form-header {
@@ -643,10 +646,10 @@ margin-bottom: 1rem;
 }
 
 .form-header h3 {
-font-size: 1.125rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .toggle-btn {
@@ -710,17 +713,18 @@ background: #047857;
 }
 
 .tasks-section {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .tasks-section h3 {
-font-size: 1.125rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0 0 1rem 0;
+	font-size: 1.125rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
 }
 
 .tasks-list {

@@ -268,15 +268,15 @@ margin-bottom: 2rem;
 }
 
 .page-header h1 {
-font-size: 2rem;
-font-weight: 700;
-color: #1f2937;
-margin: 0 0 0.5rem 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
 }
 
 .page-header p {
-color: #6b7280;
-margin: 0;
+	color: var(--color-textSecondary);
+	margin: 0;
 }
 
 .tracking-grid {
@@ -293,11 +293,12 @@ gap: 1.5rem;
 }
 
 .timer-card {
-background: white;
-padding: 2rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-text-align: center;
+	background: var(--color-card);
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+	text-align: center;
 }
 
 .timer-display {
@@ -313,10 +314,10 @@ color: #2563eb;
 }
 
 .time {
-font-size: 3rem;
-font-weight: 700;
-color: #1f2937;
-font-family: 'Courier New', monospace;
+	font-size: 3rem;
+	font-weight: 700;
+	color: var(--color-text);
+	font-family: 'Courier New', monospace;
 }
 
 .timer-controls {
@@ -365,10 +366,11 @@ background: #dc2626;
 }
 
 .task-form {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .form-group {
@@ -386,10 +388,11 @@ box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 /* Stilurile sunt definite în app.css */
 
 .stats-section {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .stats-header {
@@ -400,10 +403,10 @@ margin-bottom: 1.5rem;
 }
 
 .stats-header h3 {
-font-size: 1.25rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .stats-grid {
@@ -421,22 +424,22 @@ border-radius: 8px;
 }
 
 .stat-value {
-font-size: 1.5rem;
-font-weight: 700;
-color: #1f2937;
-margin-bottom: 0.25rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin-bottom: 0.25rem;
 }
 
 .stat-label {
-font-size: 0.875rem;
-color: #6b7280;
+	font-size: 0.875rem;
+	color: var(--color-textSecondary);
 }
 
 .weekly-chart h4 {
-font-size: 1rem;
-font-weight: 600;
-color: #374151;
-margin: 0 0 1rem 0;
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
 }
 
 .chart-bars {
@@ -475,17 +478,18 @@ color: #1f2937;
 }
 
 .recent-tasks {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .recent-tasks h3 {
-font-size: 1.25rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0 0 1rem 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
 }
 
 .tasks-list {

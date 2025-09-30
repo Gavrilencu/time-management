@@ -803,27 +803,28 @@ async function updateProject() {
 		margin-bottom: 2rem;
 	}
 
-	.admin-header h1 {
-		font-size: 2rem;
-		font-weight: 700;
-		color: #1f2937;
-		margin: 0 0 0.5rem 0;
-	}
+.admin-header h1 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
+}
 
-	.admin-header p {
-		color: #6b7280;
-		margin: 0;
-	}
+.admin-header p {
+	color: var(--color-textSecondary);
+	margin: 0;
+}
 
-	.admin-tabs {
-		display: flex;
-		gap: 0.5rem;
-		margin-bottom: 2rem;
-		background: white;
-		padding: 0.5rem;
-		border-radius: 12px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	}
+.admin-tabs {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 2rem;
+	background: var(--color-card);
+	padding: 0.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+}
 
 	.tab-btn {
 		display: flex;
@@ -849,12 +850,13 @@ async function updateProject() {
 		color: white;
 	}
 
-	.admin-content {
-		background: white;
-		border-radius: 12px;
-		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-		padding: 2rem;
-	}
+.admin-content {
+	background: var(--color-card);
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+	padding: 2rem;
+}
 
 	.stats-grid {
 		display: grid;
@@ -883,24 +885,24 @@ async function updateProject() {
 		justify-content: center;
 	}
 
-	.stat-value {
-		font-size: 1.5rem;
-		font-weight: 700;
-		color: #1f2937;
-		margin-bottom: 0.25rem;
-	}
+.stat-value {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin-bottom: 0.25rem;
+}
 
-	.stat-label {
-		font-size: 0.875rem;
-		color: #6b7280;
-	}
+.stat-label {
+	font-size: 0.875rem;
+	color: var(--color-textSecondary);
+}
 
-	.recent-activity h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: #1f2937;
-		margin: 0 0 1rem 0;
-	}
+.recent-activity h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
+}
 
 	.activity-list {
 		display: flex;
@@ -962,12 +964,12 @@ async function updateProject() {
 		margin-bottom: 1.5rem;
 	}
 
-	.section-header h3 {
-		font-size: 1.25rem;
-		font-weight: 600;
-		color: #1f2937;
-		margin: 0;
-	}
+.section-header h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
+}
 
 	.add-btn {
 		display: flex;

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000/time-monitoring/api";
+const API_URL = "http://localhost:8000";
 
 // Interfețe TypeScript
 export interface User {
@@ -74,13 +74,13 @@ export interface TaskCreate {
 // Utilizatori
 export const userService = {
 	async getAll(): Promise<User[]> {
-		const response = await fetch(`${API_URL}/api/users`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/users`);
 		if (!response.ok) throw new Error('Failed to fetch users');
 		return response.json();
 	},
 
 	async getByEmail(email: string): Promise<User> {
-		const response = await fetch(`${API_URL}/api/users/email/${encodeURIComponent(email)}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/users/email/${encodeURIComponent(email)}`);
 		if (!response.ok) {
 			if (response.status === 404) {
 				throw new Error('User not found');
@@ -91,7 +91,7 @@ export const userService = {
 	},
 
 	async create(user: User): Promise<User> {
-		const response = await fetch(`${API_URL}/api/users`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/users`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(user)
@@ -101,7 +101,7 @@ export const userService = {
 	},
 
 	async update(id: number, user: User): Promise<User> {
-		const response = await fetch(`${API_URL}/api/users/${id}`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/users/${id}`, {
 			method: 'PUT',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(user)
@@ -111,7 +111,7 @@ export const userService = {
 	},
 
 	async delete(id: number): Promise<void> {
-		const response = await fetch(`${API_URL}/api/users/${id}`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/users/${id}`, {
 			method: 'DELETE'
 		});
 		if (!response.ok) throw new Error('Failed to delete user');
@@ -121,19 +121,19 @@ export const userService = {
 // Proiecte
 export const projectService = {
 	async getAll(): Promise<Project[]> {
-		const response = await fetch(`${API_URL}/api/projects`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/projects`);
 		if (!response.ok) throw new Error('Failed to fetch projects');
 		return response.json();
 	},
 
 	async getByModule(moduleType: string): Promise<Project[]> {
-		const response = await fetch(`${API_URL}/api/projects/module/${moduleType}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/projects/module/${moduleType}`);
 		if (!response.ok) throw new Error('Failed to fetch projects by module');
 		return response.json();
 	},
 
 	async create(project: Project): Promise<Project> {
-		const response = await fetch(`${API_URL}/api/projects`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/projects`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(project)
@@ -143,7 +143,7 @@ export const projectService = {
 	},
 
 	async delete(id: number): Promise<void> {
-		const response = await fetch(`${API_URL}/api/projects/${id}`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/projects/${id}`, {
 			method: 'DELETE'
 		});
 		if (!response.ok) throw new Error('Failed to delete project');
@@ -153,31 +153,31 @@ export const projectService = {
 // Task-uri
 export const taskService = {
 	async getAll(): Promise<Task[]> {
-		const response = await fetch(`${API_URL}/api/tasks`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks`);
 		if (!response.ok) throw new Error('Failed to fetch tasks');
 		return response.json();
 	},
 
 	async getByUser(userId: number): Promise<Task[]> {
-		const response = await fetch(`${API_URL}/api/tasks/user/${userId}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/user/${userId}`);
 		if (!response.ok) throw new Error('Failed to fetch user tasks');
 		return response.json();
 	},
 
 	async getByDepartment(department: string): Promise<Task[]> {
-		const response = await fetch(`${API_URL}/api/tasks/department/${encodeURIComponent(department)}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/department/${encodeURIComponent(department)}`);
 		if (!response.ok) throw new Error('Failed to fetch department tasks');
 		return response.json();
 	},
 
 	async getByDate(date: string): Promise<Task[]> {
-		const response = await fetch(`${API_URL}/api/tasks/date/${date}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/date/${date}`);
 		if (!response.ok) throw new Error('Failed to fetch tasks by date');
 		return response.json();
 	},
 
 	async create(task: TaskCreate): Promise<Task> {
-		const response = await fetch(`${API_URL}/api/tasks`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(task)
@@ -187,7 +187,7 @@ export const taskService = {
 	},
 
 	async delete(id: number): Promise<void> {
-		const response = await fetch(`${API_URL}/api/tasks/${id}`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/${id}`, {
 			method: 'DELETE'
 		});
 		if (!response.ok) throw new Error('Failed to delete task');
@@ -197,13 +197,13 @@ export const taskService = {
 // Statistici
 export const statsService = {
 	async getOverview(): Promise<any> {
-		const response = await fetch(`${API_URL}/api/stats/overview`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/stats/overview`);
 		if (!response.ok) throw new Error('Failed to fetch overview stats');
 		return response.json();
 	},
 
 	async getDaily(date: string): Promise<any> {
-		const response = await fetch(`${API_URL}/api/stats/daily/${date}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/stats/daily/${date}`);
 		if (!response.ok) throw new Error('Failed to fetch daily stats');
 		return response.json();
 	}
@@ -211,19 +211,19 @@ export const statsService = {
 
 export const exportService = {
 	async exportJSON(): Promise<any> {
-		const response = await fetch(`${API_URL}/api/export/json`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/export/json`);
 		if (!response.ok) throw new Error('Failed to export JSON');
 		return response.json();
 	},
 
 	async exportXML(): Promise<any> {
-		const response = await fetch(`${API_URL}/api/export/xml`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/export/xml`);
 		if (!response.ok) throw new Error('Failed to export XML');
 		return response.json();
 	},
 
 	async exportExcel(): Promise<Blob> {
-		const response = await fetch(`${API_URL}/api/export/excel`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/export/excel`);
 		if (!response.ok) throw new Error('Failed to export Excel');
 		return response.blob();
 	}
@@ -232,13 +232,13 @@ export const exportService = {
 // Comentarii Task-uri
 export const commentService = {
 	async getTaskComments(taskId: number): Promise<TaskComment[]> {
-		const response = await fetch(`${API_URL}/api/tasks/${taskId}/comments`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/${taskId}/comments`);
 		if (!response.ok) throw new Error('Failed to fetch task comments');
 		return response.json();
 	},
 
 	async createComment(comment: TaskCommentCreate): Promise<TaskComment> {
-		const response = await fetch(`${API_URL}/api/tasks/${comment.task_id}/comments`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/tasks/${comment.task_id}/comments`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(comment)
@@ -248,7 +248,7 @@ export const commentService = {
 	},
 
 	async deleteComment(commentId: number): Promise<void> {
-		const response = await fetch(`${API_URL}/api/comments/${commentId}`, {
+		const response = await fetch(`${API_URL}/time-monitoring/api/comments/${commentId}`, {
 			method: 'DELETE'
 		});
 		if (!response.ok) throw new Error('Failed to delete comment');
@@ -264,13 +264,13 @@ export const auditService = {
 		});
 		if (userId) params.append('user_id', userId.toString());
 		
-		const response = await fetch(`${API_URL}/api/audit-logs?${params}`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/audit-logs?${params}`);
 		if (!response.ok) throw new Error('Failed to fetch audit logs');
 		return response.json();
 	},
 
 	async getAuditStats(): Promise<any> {
-		const response = await fetch(`${API_URL}/api/audit-logs/stats`);
+		const response = await fetch(`${API_URL}/time-monitoring/api/audit-logs/stats`);
 		if (!response.ok) throw new Error('Failed to fetch audit stats');
 		return response.json();
 	}

@@ -379,15 +379,15 @@ margin-bottom: 2rem;
 }
 
 .page-header h1 {
-font-size: 2rem;
-font-weight: 700;
-color: #1f2937;
-margin: 0 0 0.5rem 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
 }
 
 .page-header p {
-color: #6b7280;
-margin: 0;
+	color: var(--color-textSecondary);
+	margin: 0;
 }
 
 .settings-grid {
@@ -535,12 +535,13 @@ border-color: #2563eb;
 }
 
 .settings-actions {
-display: flex;
-justify-content: center;
-padding: 2rem;
-background: white;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: center;
+	padding: 2rem;
+	background: var(--color-card);
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .save-btn {

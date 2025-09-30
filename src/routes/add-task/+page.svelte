@@ -263,15 +263,15 @@ margin-bottom: 2rem;
 }
 
 .page-header h1 {
-font-size: 2rem;
-font-weight: 700;
-color: #1f2937;
-margin: 0 0 0.5rem 0;
+	font-size: 2rem;
+	font-weight: 700;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
 }
 
 .page-header p {
-color: #6b7280;
-margin: 0;
+	color: var(--color-textSecondary);
+	margin: 0;
 }
 
 .form-container {
@@ -288,10 +288,11 @@ gap: 1rem;
 }
 
 .form-card {
-background: white;
-padding: 2rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: var(--color-card);
+	padding: 2rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
 }
 
 .form-header {
@@ -302,10 +303,10 @@ margin-bottom: 2rem;
 }
 
 .form-header h2 {
-font-size: 1.5rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0;
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0;
 }
 
 .form-group {
@@ -355,18 +356,19 @@ cursor: not-allowed;
 }
 
 .preview-card {
-background: white;
-padding: 1.5rem;
-border-radius: 12px;
-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-height: fit-content;
+	background: var(--color-card);
+	padding: 1.5rem;
+	border-radius: 12px;
+	box-shadow: 0 1px 3px var(--color-shadow);
+	border: 1px solid var(--color-cardBorder);
+	height: fit-content;
 }
 
 .preview-card h3 {
-font-size: 1.25rem;
-font-weight: 600;
-color: #1f2937;
-margin: 0 0 1rem 0;
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+	margin: 0 0 1rem 0;
 }
 
 .preview-content {

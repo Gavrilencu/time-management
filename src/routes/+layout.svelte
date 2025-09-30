@@ -10,6 +10,7 @@ import { notifications } from '$lib/notifications';
 import { getKerberosUser, kerberosLogout } from '$lib/kerberos';
 import { currentUser, isAuthenticated, authLoading, setCurrentUser, clearCurrentUser, setAuthLoading } from '$lib/auth';
 import { currentTheme } from '$lib/themes';
+import '../app.css';
 
 let { children } = $props();
 
@@ -393,11 +394,11 @@ padding: 1rem 0;
 }
 
 .main-content {
-flex: 1;
-margin-left: 280px;
-padding: 2rem;
-background-color: #f8fafc;
-min-height: 100vh;
+	flex: 1;
+	margin-left: 280px;
+	padding: 2rem;
+	background-color: var(--color-background);
+	min-height: 100vh;
 }
 
 .auth-error {
