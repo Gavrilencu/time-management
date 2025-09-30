@@ -1,0 +1,799 @@
+2025-09-30 15:08:08,084 - main - INFO - MySQL configuration loaded
+2025-09-30 15:08:29,600 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:08:33,061 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:09:11,502 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:09:11,543 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:09:11,548 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:09:11,629 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:09:26,807 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:09:26,854 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:09:26,857 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:09:26,915 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:09:26,917 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 15:10:10,287 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:10:10,315 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:10:10,318 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:10:10,359 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:10:10,359 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 15:10:48,841 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:10:48,841 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:10:48,877 - __main__ - INFO - Demo user created
+2025-09-30 15:10:48,879 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:11:44,650 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:11:44,650 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:11:44,652 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:12:59,083 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:12:59,107 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:12:59,111 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:12:59,162 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:14:11,135 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:14:11,135 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:14:11,153 - __main__ - INFO - Demo user created
+2025-09-30 15:14:11,155 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:14:15,263 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:14:15,263 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:14:15,263 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:14:53,924 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 15:14:55,772 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:14:55,801 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:14:55,804 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:14:55,843 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:16:14,482 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:16:14,482 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:16:14,484 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:16:24,868 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:16:24,871 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:16:24,875 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:16:32,791 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 15:16:35,321 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:16:35,362 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:16:35,369 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:16:35,415 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:17:10,462 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:17:10,463 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:17:10,466 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:18:28,724 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 15:23:05,727 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:23:05,758 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:23:05,761 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:23:05,822 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:23:35,194 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:23:35,194 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:23:35,194 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:23:39,274 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:23:39,274 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:23:39,274 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:23:43,357 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:23:43,357 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:23:43,359 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:23:49,401 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 15:23:49,433 - __main__ - INFO - Starting Time Management API server
+2025-09-30 15:23:49,438 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 15:23:49,480 - __main__ - INFO - Starting Time Management API
+2025-09-30 15:24:08,279 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:08,279 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:08,280 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:12,349 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:12,350 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:12,351 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:16,406 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:16,406 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:16,406 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:20,476 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:20,476 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:20,476 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:24,578 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:24,579 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:24,580 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:28,784 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:28,784 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:28,784 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:32,871 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:32,871 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:32,872 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:36,907 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:36,908 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:36,909 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:40,965 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:40,965 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:40,967 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:45,032 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:45,033 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:45,033 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:49,091 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:49,092 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:49,094 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:53,188 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:53,188 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:53,188 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:24:57,261 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:24:57,261 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:24:57,262 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:01,280 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:01,280 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:01,280 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:05,303 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:05,305 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:05,306 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:09,377 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:09,395 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:09,398 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:13,458 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:13,458 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:13,461 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:17,548 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:17,549 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:17,550 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:21,619 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:21,620 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:21,621 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:27,950 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:27,950 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:27,951 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:32,008 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:32,009 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:32,010 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:36,099 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:36,099 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:36,101 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:40,175 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:40,179 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:40,184 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:44,299 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:44,300 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:44,302 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:48,388 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:48,389 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:48,391 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:52,449 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:52,449 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:52,452 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:25:56,507 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:25:56,508 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:25:56,508 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:00,557 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:00,558 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:00,560 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:04,645 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:04,645 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:04,646 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:08,734 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:08,735 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:08,740 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:12,801 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:12,815 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:12,817 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:16,861 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:16,902 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:16,932 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:21,025 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:21,071 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:21,153 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:25,275 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:25,275 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:25,275 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:29,335 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:29,335 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:29,335 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:33,417 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:33,417 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:33,417 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:37,479 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:37,479 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:37,479 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:41,563 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:41,563 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:41,563 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:45,634 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:45,635 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:45,636 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:49,667 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:49,667 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:49,667 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:53,717 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:53,717 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:53,719 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:26:57,837 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:26:57,841 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:26:57,842 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:01,942 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:01,943 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:01,945 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:05,992 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:05,992 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:05,992 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:10,077 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:10,078 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:10,079 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:14,132 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:14,135 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:14,137 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:18,239 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:18,239 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:18,239 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:22,308 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:22,309 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:22,310 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:26,385 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:26,386 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:26,387 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:30,465 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:30,465 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:30,465 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:34,549 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:34,550 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:34,553 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:38,622 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:38,622 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:38,622 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:42,698 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:42,699 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:42,700 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:46,730 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:46,730 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:46,730 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:50,808 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:50,809 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:50,810 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:54,874 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:54,875 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:54,876 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:27:58,956 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:27:58,956 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:27:58,959 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:03,013 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:03,014 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:03,017 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:07,055 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:07,055 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:07,055 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:11,125 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:11,126 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:11,127 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:15,191 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:15,192 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:15,193 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:19,237 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:19,237 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:19,237 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:23,282 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:23,283 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:23,283 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:27,338 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:27,339 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:27,340 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:31,396 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:31,396 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:31,396 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:35,474 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:35,474 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:35,474 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:39,552 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:39,552 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:39,553 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:43,611 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:43,611 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:43,611 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:47,691 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:47,692 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:47,693 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:51,753 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:51,769 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:51,769 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:55,868 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:55,869 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:55,871 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:28:59,936 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:28:59,936 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:28:59,936 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:04,015 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:04,015 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:04,015 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:08,054 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:08,054 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:08,054 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:12,101 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:12,102 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:12,103 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:16,155 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:16,157 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:16,161 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:20,260 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:20,261 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:20,262 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:24,296 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:24,297 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:24,300 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:28,332 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:28,333 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:28,334 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:32,385 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:32,385 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:32,385 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:36,474 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:36,475 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:36,475 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:40,532 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:40,532 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:40,533 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:44,581 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:44,581 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:44,581 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:48,670 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:48,670 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:48,672 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:52,773 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:52,773 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:52,775 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:29:56,865 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:29:56,865 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:29:56,865 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:00,981 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:00,982 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:00,983 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:05,018 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:05,020 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:05,021 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:09,087 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:09,087 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:09,089 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:13,126 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:13,128 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:13,130 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:17,193 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:17,194 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:17,196 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:21,251 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:21,252 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:21,258 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:25,355 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:25,355 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:25,355 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:29,426 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:29,427 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:29,429 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:33,505 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:33,505 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:33,507 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:37,569 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:37,570 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:37,571 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:41,648 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:41,648 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:41,648 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:45,743 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:45,743 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:45,746 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:49,795 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:49,796 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:49,797 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:53,817 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:53,817 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:53,819 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:30:57,890 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:30:57,890 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:30:57,890 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:01,944 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:01,945 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:01,945 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:05,998 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:05,998 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:05,999 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:10,050 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:10,051 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:10,052 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:14,104 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:14,105 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:14,106 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:18,194 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:18,194 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:18,196 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:22,273 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:22,274 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:22,275 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:26,350 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:26,350 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:26,352 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:30,441 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:30,442 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:30,445 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:34,544 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:34,545 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:34,546 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:38,622 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:38,623 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:38,624 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:42,720 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:42,726 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:42,730 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:46,791 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:46,792 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:46,793 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:50,856 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:50,857 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:50,859 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:54,933 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:54,933 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:54,934 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:31:58,983 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:31:58,983 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:31:58,984 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:03,064 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:03,065 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:03,065 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:07,158 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:07,158 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:07,159 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:11,224 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:11,224 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:11,226 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:15,300 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:15,301 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:15,302 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:19,361 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:19,361 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:19,362 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:23,425 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:23,426 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:23,427 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:27,509 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:27,510 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:27,511 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:31,589 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:31,590 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:31,591 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:35,667 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:35,667 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:35,669 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:39,725 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:39,726 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:39,727 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:43,805 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:43,806 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:43,807 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:47,901 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:47,902 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:47,904 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:51,993 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:51,994 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:51,995 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:32:56,048 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:32:56,049 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:32:56,050 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:00,120 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:00,121 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:00,122 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:04,181 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:04,182 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:04,183 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:08,270 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:08,271 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:08,272 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:12,324 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:12,325 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:12,326 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:16,410 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:16,410 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:16,411 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:20,490 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:20,491 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:20,492 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:24,559 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:24,559 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:24,560 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:28,622 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:28,622 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:28,624 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:32,728 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:32,729 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:32,730 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:36,793 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:36,794 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:36,795 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:40,886 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:40,886 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:40,887 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:44,949 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:44,950 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:44,951 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:49,036 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:49,036 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:49,038 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:53,092 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:53,092 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:53,094 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:33:57,205 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:33:57,206 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:33:57,206 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:01,302 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:01,303 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:01,304 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:05,387 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:05,387 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:05,389 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:09,492 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:09,492 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:09,493 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:13,574 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:13,574 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:13,576 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:17,655 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:17,655 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:17,657 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:21,727 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:21,727 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:21,729 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:25,819 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:25,819 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:25,821 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:29,896 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:29,896 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:29,898 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:33,996 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:33,997 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:33,998 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:38,103 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:38,103 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:38,104 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:42,169 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:42,170 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:42,171 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:46,258 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:46,259 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:46,259 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:50,353 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:50,354 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:50,355 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:34:54,427 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:34:54,428 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:34:54,429 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:54:46,498 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:54:46,499 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:54:46,500 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:54:50,569 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:54:50,569 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:54:50,571 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:54:54,636 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:54:54,637 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:54:54,638 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:54:58,736 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:54:58,737 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:54:58,738 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:02,799 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:02,799 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:02,799 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:06,886 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:06,886 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:06,886 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:10,949 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:10,949 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:10,950 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:15,047 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:15,047 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:15,049 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:19,100 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:19,100 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:19,101 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:23,131 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:23,132 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:23,132 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:27,223 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:27,223 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:27,223 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:31,297 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:31,297 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:31,298 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:35,369 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:35,369 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:35,369 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:39,482 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:39,482 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:39,483 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:43,551 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:43,552 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:43,553 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:55:54,019 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:55:54,048 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:55:54,132 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:01,433 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:01,434 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:01,435 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:05,495 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:05,496 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:05,497 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:09,546 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:09,547 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:09,548 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:13,606 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:13,606 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:13,606 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:17,677 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:17,677 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:17,677 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:21,713 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:21,713 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:21,713 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:25,767 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:25,767 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:25,768 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:29,842 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:29,847 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:29,848 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:33,940 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:33,941 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:33,943 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:38,007 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:38,007 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:38,009 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:42,102 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:42,109 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:42,126 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:46,155 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:46,155 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:46,157 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:50,233 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:50,233 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:50,235 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:54,290 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:54,290 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:54,290 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:56:58,350 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:56:58,351 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:56:58,352 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:02,408 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:02,408 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:02,408 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:06,494 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:06,494 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:06,494 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:10,545 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:10,546 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:10,547 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:14,613 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:14,613 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:14,614 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:22,421 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:22,422 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:22,423 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:26,475 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:26,475 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:26,475 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:30,515 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:30,516 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:30,517 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:34,580 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:34,580 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:34,581 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:38,630 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:38,630 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:38,631 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:42,685 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:42,686 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:42,687 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:46,744 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:46,744 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:46,744 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:50,766 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:50,766 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:50,766 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:54,835 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:54,836 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:54,838 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:58,905 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:57:58,905 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:57:58,907 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:57:58,912 - asyncio - ERROR - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Users\Dev\AppData\Local\Programs\Python\Python311\Lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\Dev\AppData\Local\Programs\Python\Python311\Lib\asyncio\proactor_events.py", line 162, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] Удаленный хост принудительно разорвал существующее подключение
+2025-09-30 15:58:02,989 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:02,989 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:02,989 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:07,054 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:07,056 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:07,058 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:11,136 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:11,136 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:11,136 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:15,208 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:15,209 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:15,211 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:19,259 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:19,259 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:19,260 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:23,320 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:23,320 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:23,320 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:27,361 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:27,361 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:27,361 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:31,456 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:31,456 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:31,456 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:40,174 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:40,174 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:40,175 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:44,226 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:44,226 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:44,226 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:48,274 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:48,275 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:48,275 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:52,322 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:52,322 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:52,322 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:58:56,388 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:58:56,388 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:58:56,389 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:00,452 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:00,453 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:00,453 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:04,490 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:04,491 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:04,491 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:08,544 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:08,545 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:08,545 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:12,566 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:12,566 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:12,566 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:16,621 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:16,623 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:16,624 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:20,658 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:20,658 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:20,658 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:24,713 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:24,713 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:24,713 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:28,783 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:28,783 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:28,783 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 15:59:32,820 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 15:59:32,820 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 15:59:32,820 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:01:19,916 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:01:19,917 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:01:19,917 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:01:38,246 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:01:38,247 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:01:38,247 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:01:42,330 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:01:42,330 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:01:42,330 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:01:46,387 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:01:46,388 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:01:46,390 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:02:29,643 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:02:29,643 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:02:29,644 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:02:41,572 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:02:41,572 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:02:41,575 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:03:18,311 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:03:18,312 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:03:18,313 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:03:27,467 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:03:27,467 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:03:27,469 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:04:01,901 - __main__ - WARNING - MySQL connection failed: (2003, "Can't connect to MySQL server on 'localhost' ([WinError 10061] Подключение не установлено, т.к. конечный компьютер отверг запрос на подключение)")
+2025-09-30 16:04:01,901 - __main__ - INFO - Falling back to SQLite database
+2025-09-30 16:04:01,904 - __main__ - INFO - SQLite database initialized with demo data
+2025-09-30 16:05:21,063 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 16:05:21,113 - __main__ - INFO - Starting Time Management API server
+2025-09-30 16:05:21,119 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 16:05:21,179 - __main__ - INFO - Starting Time Management API
+2025-09-30 16:05:22,094 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 16:05:22,137 - __main__ - INFO - Starting Time Management API server
+2025-09-30 16:05:22,143 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 16:05:22,209 - __main__ - INFO - Starting Time Management API
+2025-09-30 16:05:22,210 - __main__ - INFO - Shutting down Time Management API
+2025-09-30 16:05:51,459 - __main__ - INFO - MySQL configuration loaded
+2025-09-30 16:05:51,500 - __main__ - INFO - Starting Time Management API server
+2025-09-30 16:05:51,505 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-09-30 16:05:51,591 - __main__ - INFO - Starting Time Management API
+2025-09-30 16:10:46,329 - __main__ - INFO - Shutting down Time Management API

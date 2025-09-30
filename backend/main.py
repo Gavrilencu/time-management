@@ -43,7 +43,7 @@ app = FastAPI(
 )
 
 # Configurare CORS pentru producție
-cors_origins = os.getenv('CORS_ORIGINS', 'http://localhost:5175').split(',')
+cors_origins = os.getenv('CORS_ORIGINS', 'http://localhost:5176').split(',')
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -85,8 +85,8 @@ class User(BaseModel):
     id: Optional[int] = None
     name: str
     email: str
-    role: str
-    department: str
+    role: str = "User"  # Valoare implicită
+    department: str = "IT"  # Valoare implicită
     total_hours: Optional[float] = 0.0
 
 class Project(BaseModel):
@@ -141,9 +141,13 @@ class AuditLog(BaseModel):
     created_at: Optional[str] = None
     user_name: Optional[str] = None
 
-# Inițializare bază de date MySQL
+# Inițializare bază de date MySQL (opțional)
 def init_db():
     try:
+        if MYSQL_CONFIG is None:
+            logger.info("MySQL config not available, skipping MySQL initialization")
+            return
+            
         print(f"Conectare la MySQL: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
         print(f"Utilizator: {MYSQL_CONFIG['user']}")
         print(f"Baza de date: {MYSQL_CONFIG['database']}")
@@ -293,18 +297,24 @@ def load_mysql_config():
     
     return mysql_config
 
-# Configurare MySQL
-MYSQL_CONFIG = load_mysql_config()
+# Configurare MySQL (obligatoriu)
+try:
+    MYSQL_CONFIG = load_mysql_config()
+    logger.info("MySQL configuration loaded")
+except FileNotFoundError:
+    logger.error("MySQL config file not found. MySQL is required for this application.")
+    MYSQL_CONFIG = None
 
 # Funcție pentru conexiunea la MySQL
 def get_db_connection():
+    """Conectare la baza de date MySQL"""
     try:
         # Folosește variabilele de mediu pentru producție
         if os.getenv('NODE_ENV') == 'production':
             connection = pymysql.connect(
                 host=os.getenv('DB_HOST', 'localhost'),
-                user=os.getenv('DB_USER', 'root'),
-                password=os.getenv('DB_PASSWORD', ''),
+                user=os.getenv('DB_USER', 'kpi_user'),
+                password=os.getenv('DB_PASSWORD', 'kpi_password_2024'),
                 database=os.getenv('DB_NAME', 'kpi_tracker'),
                 port=int(os.getenv('DB_PORT', 3306)),
                 charset='utf8mb4',
@@ -312,34 +322,163 @@ def get_db_connection():
             )
         else:
             # Configurație pentru dezvoltare
+            if MYSQL_CONFIG is None:
+                raise FileNotFoundError("MySQL config not available")
             connection = pymysql.connect(**MYSQL_CONFIG)
         
         return connection
-    except pymysql.Error as e:
-        logger.error(f"Error connecting to MySQL: {e}")
-        if os.getenv('NODE_ENV') == 'production':
-            logger.error(f"Production config: {os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}")
-        else:
-            logger.error(f"Development config: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
-        raise HTTPException(status_code=500, detail=f"MySQL connection failed: {str(e)}")
+    except (pymysql.Error, FileNotFoundError) as e:
+        logger.error(f"MySQL connection failed: {e}")
+        logger.error("MySQL is required for this application. Please ensure MySQL is running and configured correctly.")
+        raise Exception(f"Cannot connect to MySQL database: {e}")
+
+# Inițializare bază de date MySQL
+def init_mysql_db():
+    """Inițializează baza de date MySQL cu tabelele necesare"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Tabel utilizatori
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                role VARCHAR(50) NOT NULL,
+                department VARCHAR(100) NOT NULL,
+                total_hours DECIMAL(10,2) DEFAULT 0.00,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Tabel proiecte
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS projects (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                module_type VARCHAR(50) NOT NULL,
+                status VARCHAR(50) DEFAULT 'active',
+                total_hours DECIMAL(10,2) DEFAULT 0.00,
+                visibility_type VARCHAR(50) DEFAULT 'all',
+                visible_departments JSON,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Tabel task-uri
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                project_id INT NOT NULL,
+                description TEXT NOT NULL,
+                hours DECIMAL(5,2) NOT NULL,
+                date DATE NOT NULL,
+                status VARCHAR(50) DEFAULT 'pending',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id),
+                FOREIGN KEY (project_id) REFERENCES projects (id)
+            )
+        """)
+        
+        # Tabel comentarii task-uri
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS task_comments (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                task_id INT NOT NULL,
+                user_id INT NOT NULL,
+                comment TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (task_id) REFERENCES tasks (id),
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        """)
+        
+        # Tabel audit logs
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS audit_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                action VARCHAR(100) NOT NULL,
+                table_name VARCHAR(100) NOT NULL,
+                record_id INT NOT NULL,
+                old_values JSON,
+                new_values JSON,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        """)
+        
+        # Adaugă demo user dacă nu există
+        cursor.execute("SELECT COUNT(*) FROM users WHERE email = %s", ("demo@company.com",))
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("""
+                INSERT INTO users (name, email, role, department, total_hours)
+                VALUES (%s, %s, %s, %s, %s)
+            """, ("Demo User", "demo@company.com", "Admin", "IT", 0.0))
+            logger.info("Demo user created")
+        
+        # Adaugă demo proiecte dacă nu există
+        demo_projects = [
+            ("Website Redesign", "Redesign complet al website-ului companiei", "proiecte"),
+            ("Mobile App", "Dezvoltare aplicație mobilă", "proiecte"),
+            ("EVOM Training", "Training pentru echipă", "evom"),
+            ("Server Maintenance", "Mentenanță servere", "operational")
+        ]
+        
+        for name, desc, module_type in demo_projects:
+            cursor.execute("SELECT COUNT(*) FROM projects WHERE name = %s", (name,))
+            if cursor.fetchone()[0] == 0:
+                cursor.execute("""
+                    INSERT INTO projects (name, description, module_type, visibility_type)
+                    VALUES (%s, %s, %s, %s)
+                """, (name, desc, module_type, "all"))
+        
+        conn.commit()
+        conn.close()
+        logger.info("MySQL database initialized with demo data")
+        
+    except Exception as e:
+        logger.error(f"Error initializing MySQL database: {e}")
+        raise
 
 def update_user_hours(user_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT SUM(hours) FROM tasks WHERE user_id = %s", (user_id,))
-    result = cursor.fetchone()
-    total_hours = result[0] if result[0] is not None else 0.0
-    cursor.execute("UPDATE users SET total_hours = %s WHERE id = %s", (total_hours, user_id))
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor.execute("SELECT SUM(hours) FROM tasks WHERE user_id = ?", (user_id,))
+        result = cursor.fetchone()
+        total_hours = result[0] if result[0] is not None else 0.0
+        cursor.execute("UPDATE users SET total_hours = ? WHERE id = ?", (total_hours, user_id))
+    else:
+        cursor.execute("SELECT SUM(hours) FROM tasks WHERE user_id = %s", (user_id,))
+        result = cursor.fetchone()
+        total_hours = result[0] if result[0] is not None else 0.0
+        cursor.execute("UPDATE users SET total_hours = %s WHERE id = %s", (total_hours, user_id))
+    
     conn.commit()
     conn.close()
 
 def update_project_hours(project_id: int):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT SUM(hours) FROM tasks WHERE project_id = %s", (project_id,))
-    result = cursor.fetchone()
-    total_hours = result[0] if result[0] is not None else 0.0
-    cursor.execute("UPDATE projects SET total_hours = %s WHERE id = %s", (total_hours, project_id))
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor.execute("SELECT SUM(hours) FROM tasks WHERE project_id = ?", (project_id,))
+        result = cursor.fetchone()
+        total_hours = result[0] if result[0] is not None else 0.0
+        cursor.execute("UPDATE projects SET total_hours = ? WHERE id = ?", (total_hours, project_id))
+    else:
+        cursor.execute("SELECT SUM(hours) FROM tasks WHERE project_id = %s", (project_id,))
+        result = cursor.fetchone()
+        total_hours = result[0] if result[0] is not None else 0.0
+        cursor.execute("UPDATE projects SET total_hours = %s WHERE id = %s", (total_hours, project_id))
+    
     conn.commit()
     conn.close()
 
@@ -367,18 +506,35 @@ def log_audit_event(user_id: int, action: str, entity_type: str, entity_id: int 
 @app.get("/time-monitoring/api/users", response_model=List[User])
 async def get_users():
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT * FROM users ORDER BY name")
-    users = cursor.fetchall()
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users ORDER BY name")
+        users = [dict(row) for row in cursor.fetchall()]
+    else:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users ORDER BY name")
+        users = cursor.fetchall()
+    
     conn.close()
     return users
 
 @app.get("/time-monitoring/api/users/email/{email}", response_model=User)
 async def get_user_by_email(email: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    user = cursor.fetchone()
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+        user_row = cursor.fetchone()
+        user = dict(user_row) if user_row else None
+    else:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+    
     conn.close()
     
     if not user:
@@ -391,14 +547,30 @@ async def create_user(user: User, request: Request):
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    # Folosește valorile implicite dacă nu sunt furnizate
+    role = user.role if user.role else "User"
+    department = user.department if user.department else "IT"
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        # Verifică dacă email-ul există deja
+        cursor.execute("SELECT id FROM users WHERE email = ?", (user.email,))
+        if cursor.fetchone():
+            conn.close()
+            raise HTTPException(status_code=400, detail="Email already exists")
+        
+        cursor.execute("INSERT INTO users (name, email, role, department) VALUES (?, ?, ?, ?)", 
+                       (user.name, user.email, role, department))
+        user_id = cursor.lastrowid
+    else:
     # Verifică dacă email-ul există deja
-    cursor.execute("SELECT id FROM users WHERE email = %s", (user.email,))
+        cursor.execute("SELECT id FROM users WHERE email = %s", (user.email,))
     if cursor.fetchone():
         conn.close()
         raise HTTPException(status_code=400, detail="Email already exists")
     
     cursor.execute("INSERT INTO users (name, email, role, department) VALUES (%s, %s, %s, %s)", 
-                   (user.name, user.email, user.role, user.department))
+                   (user.name, user.email, role, department))
     user_id = cursor.lastrowid
     conn.commit()
     conn.close()
@@ -415,6 +587,8 @@ async def create_user(user: User, request: Request):
     )
     
     user.id = user_id
+    user.role = role
+    user.department = department
     return user
 
 @app.put("/time-monitoring/api/users/{user_id}", response_model=User)
@@ -466,14 +640,22 @@ async def get_departments():
 @app.get("/time-monitoring/api/projects", response_model=List[Project])
 async def get_projects():
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT * FROM projects ORDER BY module_type, name")
-    projects = cursor.fetchall()
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM projects ORDER BY module_type, name")
+        projects = [dict(row) for row in cursor.fetchall()]
+    else:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM projects ORDER BY module_type, name")
+        projects = cursor.fetchall()
+    
     conn.close()
     
     # Convertim JSON string-urile înapoi în liste Python
     for project in projects:
-        if project['visible_departments']:
+        if project.get('visible_departments'):
             try:
                 project['visible_departments'] = json.loads(project['visible_departments'])
             except (json.JSONDecodeError, TypeError):
@@ -486,22 +668,29 @@ async def get_projects():
 @app.get("/time-monitoring/api/projects/department/{department}", response_model=List[Project])
 async def get_projects_for_department(department: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
     
-    # Obținem proiectele care sunt vizibile pentru departamentul specificat
-    cursor.execute("""
-        SELECT * FROM projects 
-        WHERE visibility_type = 'all' 
-           OR (visibility_type = 'specific_departments' AND JSON_CONTAINS(visible_departments, %s))
-        ORDER BY module_type, name
-    """, (json.dumps(department),))
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor = conn.cursor()
+        # Pentru SQLite, folosim o abordare simplificată
+        cursor.execute("SELECT * FROM projects ORDER BY module_type, name")
+        projects = [dict(row) for row in cursor.fetchall()]
+    else:
+        cursor = conn.cursor()
+        # Obținem proiectele care sunt vizibile pentru departamentul specificat
+        cursor.execute("""
+            SELECT * FROM projects 
+            WHERE visibility_type = 'all' 
+               OR (visibility_type = 'specific_departments' AND JSON_CONTAINS(visible_departments, %s))
+            ORDER BY module_type, name
+        """, (json.dumps(department),))
+        projects = cursor.fetchall()
     
-    projects = cursor.fetchall()
     conn.close()
     
     # Convertim JSON string-urile înapoi în liste Python
     for project in projects:
-        if project['visible_departments']:
+        if project.get('visible_departments'):
             try:
                 project['visible_departments'] = json.loads(project['visible_departments'])
             except (json.JSONDecodeError, TypeError):
@@ -514,9 +703,17 @@ async def get_projects_for_department(department: str):
 @app.get("/time-monitoring/api/projects/module/{module_type}", response_model=List[Project])
 async def get_projects_by_module(module_type: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
-    cursor.execute("SELECT * FROM projects WHERE module_type = %s ORDER BY name", (module_type,))
-    projects = cursor.fetchall()
+    
+    # Verifică tipul de conexiune
+    if isinstance(conn, sqlite3.Connection):
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM projects WHERE module_type = ? ORDER BY name", (module_type,))
+        projects = [dict(row) for row in cursor.fetchall()]
+    else:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM projects WHERE module_type = %s ORDER BY name", (module_type,))
+        projects = cursor.fetchall()
+    
     conn.close()
     return projects
 
@@ -581,7 +778,7 @@ async def delete_project(project_id: int):
 @app.get("/time-monitoring/api/tasks", response_model=List[dict])
 async def get_tasks():
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
         FROM tasks t
@@ -602,7 +799,7 @@ async def get_tasks():
 @app.get("/time-monitoring/api/tasks/department/{department}")
 async def get_department_tasks(department: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
         FROM tasks t
@@ -624,7 +821,7 @@ async def get_department_tasks(department: str):
 @app.get("/time-monitoring/api/tasks/user/{user_id}")
 async def get_user_tasks(user_id: int):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT t.*, p.name as project_name, p.module_type, u.department as user_department
         FROM tasks t
@@ -646,7 +843,7 @@ async def get_user_tasks(user_id: int):
 @app.get("/time-monitoring/api/tasks/date/{date}")
 async def get_tasks_by_date(date: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT t.*, u.name as user_name, p.name as project_name, p.module_type
         FROM tasks t
@@ -699,7 +896,7 @@ async def create_task(task: TaskCreate):
 
 async def get_task_by_id(task_id: int):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
         FROM tasks t
@@ -766,7 +963,7 @@ async def delete_task(task_id: int):
 @app.get("/time-monitoring/api/tasks/{task_id}/comments", response_model=List[TaskComment])
 async def get_task_comments(task_id: int):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT tc.*, u.name as user_name
         FROM task_comments tc
@@ -818,7 +1015,7 @@ async def create_task_comment(task_id: int, comment: TaskCommentCreate, request:
     
     # Returnează comentariul creat cu datele complete
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     cursor.execute("""
         SELECT tc.*, u.name as user_name
         FROM task_comments tc
@@ -870,7 +1067,7 @@ async def delete_task_comment(comment_id: int, request: Request):
 @app.get("/time-monitoring/api/audit-logs", response_model=List[AuditLog])
 async def get_audit_logs(skip: int = 0, limit: int = 100, user_id: Optional[int] = None):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     
     query = """
         SELECT al.*, u.name as user_name
@@ -1002,7 +1199,7 @@ async def get_overview_stats():
 @app.get("/time-monitoring/api/stats/daily/{date}")
 async def get_daily_stats(date: str):
     conn = get_db_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor = conn.cursor()
     
     cursor.execute("""
         SELECT u.name, SUM(t.hours) as daily_hours
@@ -1032,7 +1229,7 @@ async def export_json():
     """Export all data as JSON"""
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
         
         # Get all data
         cursor.execute("SELECT * FROM users ORDER BY name")
@@ -1078,7 +1275,7 @@ async def export_xml():
     """Export all data as XML"""
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
         
         # Get all data
         cursor.execute("SELECT * FROM users ORDER BY name")
@@ -1142,7 +1339,7 @@ async def export_excel():
     """Export all data as Excel file"""
     try:
         conn = get_db_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
         
         # Get all data
         cursor.execute("SELECT * FROM users ORDER BY name")
@@ -1206,5 +1403,6 @@ async def export_excel():
         raise HTTPException(status_code=500, detail=f"Export failed: {str(e)}")
 
 if __name__ == "__main__":
-    init_db()
+    # Nu inițializa MySQL la pornire - va folosi SQLite fallback
+    logger.info("Starting Time Management API server")
     uvicorn.run(app, host="0.0.0.0", port=8000)
