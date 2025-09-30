@@ -1,0 +1,53 @@
+# Systemd service pentru Time Management Backend
+# Plasează acest fișier în /etc/systemd/system/time-management-backend.service
+
+[Unit]
+Description=Time Management Backend API
+After=network.target mysql.service
+Wants=mysql.service
+
+[Service]
+Type=simple
+User=deploy
+Group=deploy
+WorkingDirectory=/var/www/time-management/backend
+
+# Environment variables pentru producție
+Environment=NODE_ENV=production
+Environment=DB_HOST=localhost
+Environment=DB_USER=time_management
+Environment=DB_PASSWORD=your_secure_password
+Environment=DB_NAME=kpi_tracker_prod
+Environment=DB_PORT=3306
+Environment=LOG_FILE=/var/log/time-management/backend.log
+Environment=LOG_LEVEL=info
+Environment=CORS_ORIGINS=https://your-domain.com,https://www.your-domain.com
+
+# Execuție
+ExecStart=/usr/bin/python3 main.py
+ExecReload=/bin/kill -HUP $MAINPID
+
+# Restart policy
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/log/time-management
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=time-management-backend
+
+[Install]
+WantedBy=multi-user.target

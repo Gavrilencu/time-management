@@ -534,7 +534,7 @@ async function deleteUser(userId: number) {
 			<div class="items-section">
 				<div class="section-header">
 					<h3>Proiecte</h3>
-					<button class="add-btn" onclick={() => { newItem.type = "proiecte"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.module_type = "proiecte"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă Proiect
 					</button>
@@ -572,7 +572,7 @@ async function deleteUser(userId: number) {
 			<div class="items-section">
 				<div class="section-header">
 					<h3>EVOM-uri</h3>
-					<button class="add-btn" onclick={() => { newItem.type = "evom"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.module_type = "evom"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă EVOM
 					</button>
@@ -610,7 +610,7 @@ async function deleteUser(userId: number) {
 			<div class="items-section">
 				<div class="section-header">
 					<h3>Operational</h3>
-					<button class="add-btn" onclick={() => { newItem.type = "operational"; showAddModal = true; }}>
+					<button class="add-btn" onclick={() => { newItem.module_type = "operational"; showAddModal = true; }}>
 						<Plus size={16} />
 						Adaugă Operational
 					</button>
@@ -694,7 +694,7 @@ async function deleteUser(userId: number) {
 		<div class="modal-overlay" onclick={() => showAddModal = false}>
 			<div class="modal-content" onclick={(e) => e.stopPropagation()}>
 				<div class="modal-header">
-					<h3>Adaugă {newItem.type === "proiecte" ? "Proiect" : newItem.type === "evom" ? "EVOM" : "Operational"}</h3>
+					<h3>Adaugă {newItem.module_type === "proiecte" ? "Proiect" : newItem.module_type === "evom" ? "EVOM" : "Operational"}</h3>
 					<button class="close-btn" onclick={() => showAddModal = false}>×</button>
 				</div>
 				<div class="modal-body">

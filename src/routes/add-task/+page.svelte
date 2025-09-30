@@ -26,8 +26,25 @@ const modules = [
 ];
 
 onMount(() => {
-loadProjects();
+	loadProjects();
+	
+	// Adaugă event listener pentru a închide dropdown-urile când se face click în afara lor
+	document.addEventListener('click', handleOutsideClick);
+	
+	return () => {
+		document.removeEventListener('click', handleOutsideClick);
+	};
 });
+
+function handleOutsideClick(event: MouseEvent) {
+	const target = event.target as HTMLElement;
+	
+	// Verifică dacă click-ul este în afara dropdown-urilor
+	if (!target.closest('.dropdown')) {
+		showModuleDropdown = false;
+		showProjectDropdown = false;
+	}
+}
 
 async function loadProjects() {
 	try {
@@ -49,59 +66,63 @@ async function loadProjects() {
 }
 
 async function addTask() {
-if (!selectedModule || !selectedProject || !taskDescription || !taskHours) {
-notifications.warning('Câmpuri incomplete', 'Te rog completează toate câmpurile!');
-return;
-}
+	if (!selectedModule || !selectedProject || !taskDescription || !taskHours) {
+		notifications.warning('Câmpuri incomplete', 'Te rog completează toate câmpurile!');
+		return;
+	}
 
-try {
-loading = true;
+	try {
+		loading = true;
 
-const taskData: TaskCreate = {
-user_id: $currentUser?.id || 1,
-project_id: selectedProjectId,
-description: taskDescription,
-hours: parseFloat(taskHours),
-date: format(selectedDate, 'yyyy-MM-dd')
-};
+		const taskData: TaskCreate = {
+			user_id: $currentUser?.id || 1,
+			project_id: selectedProjectId,
+			description: taskDescription,
+			hours: parseFloat(taskHours),
+			date: format(selectedDate, 'yyyy-MM-dd')
+		};
 
-await taskService.create(taskData);
+		await taskService.create(taskData);
 
-// Reset form
-taskDescription = '';
-taskHours = '';
-selectedModule = '';
-selectedProject = '';
-selectedProjectId = 0;
+		// Reset form
+		taskDescription = '';
+		taskHours = '';
+		selectedProject = '';
+		selectedProjectId = 0;
 
-notifications.success('Succes', 'Task adăugat cu succes!');
-} catch (error) {
-console.error('Error adding task:', error);
-notifications.error('Eroare', 'Eroare la adăugarea task-ului!');
-} finally {
-loading = false;
-}
+		notifications.success('Succes', 'Task adăugat cu succes!');
+	} catch (error) {
+		console.error('Error adding task:', error);
+		notifications.error('Eroare', 'Eroare la adăugarea task-ului!');
+	} finally {
+		loading = false;
+	}
 }
 
 function selectModule(module: { id: string; name: string }) {
-selectedModule = module.id;
-selectedProject = '';
-selectedProjectId = 0;
-showModuleDropdown = false;
+	selectedModule = module.id;
+	selectedProject = '';
+	selectedProjectId = 0;
+	showModuleDropdown = false;
+	showProjectDropdown = false; // Închide dropdown-ul de proiecte
+	console.log('Module selected:', module.id, 'Available projects:', getAvailableProjects().length);
 }
 
 function selectProject(project: Project) {
-selectedProject = project.name;
-selectedProjectId = project.id!;
-showProjectDropdown = false;
+	selectedProject = project.name;
+	selectedProjectId = project.id!;
+	showProjectDropdown = false;
+	showModuleDropdown = false; // Închide dropdown-ul de module
+	console.log('Project selected:', project.name, 'Module:', project.module_type);
 }
 
 function getSelectedModuleName() {
-return modules.find(m => m.id === selectedModule)?.name || 'Selectează modul';
+	const module = modules.find(m => m.id === selectedModule);
+	return module ? module.name : 'Selectează modul';
 }
 
 function getSelectedProjectName() {
-return selectedProject || 'Selectează proiect';
+	return selectedProject || 'Selectează proiect'
 }
 
 function getAvailableProjects() {
@@ -110,12 +131,7 @@ function getAvailableProjects() {
 	console.log('Selected module:', selectedModule);
 	console.log('Available projects for module', selectedModule, ':', filteredProjects);
 	
-	// Dacă nu sunt proiecte pentru modulul selectat, returnează toate proiectele pentru debugging
-	if (filteredProjects.length === 0) {
-		console.log('No projects found for module, returning all projects for debugging');
-		return projects;
-	}
-	
+	// Returnează doar proiectele pentru modulul selectat
 	return filteredProjects;
 }
 </script>
@@ -133,7 +149,10 @@ function getAvailableProjects() {
 <h2>Detalii Task</h2>
 </div>
 
-	<form onsubmit={addTask}>
+	<form onsubmit={(e) => {
+		e.preventDefault();
+		addTask();
+	}}>
 <!-- Data -->
 <div class="form-group">
 <label>
@@ -152,20 +171,29 @@ required
 <label>Modul</label>
 <div class="dropdown">
 <button 
-type="button"
-class="dropdown-btn" 
-		onclick={() => showModuleDropdown = !showModuleDropdown}
+	type="button"
+	class="dropdown-btn" 
+	onclick={(e) => {
+		e.stopPropagation();
+		console.log('Module dropdown clicked, current state:', showModuleDropdown);
+		showModuleDropdown = !showModuleDropdown;
+		console.log('Module dropdown new state:', showModuleDropdown);
+	}}
 >
 {getSelectedModuleName()}
 <ChevronDown size={16} />
 </button>
 {#if showModuleDropdown}
-<div class="dropdown-menu">
+<div class="dropdown-menu" onclick={(e) => e.stopPropagation()}>
 {#each modules as module}
 <button 
-type="button"
-class="dropdown-item" 
-		onclick={() => selectModule(module)}
+	type="button"
+	class="dropdown-item" 
+	onclick={(e) => {
+		e.stopPropagation();
+		console.log('Module selected:', module);
+		selectModule(module);
+	}}
 >
 {module.name}
 </button>
@@ -181,27 +209,36 @@ class="dropdown-item"
 <label>Proiect</label>
 <div class="dropdown">
 <button 
-type="button"
-class="dropdown-btn" 
-		onclick={() => showProjectDropdown = !showProjectDropdown}
+	type="button"
+	class="dropdown-btn" 
+	onclick={(e) => {
+		e.stopPropagation();
+		console.log('Project dropdown clicked, current state:', showProjectDropdown);
+		showProjectDropdown = !showProjectDropdown;
+		console.log('Project dropdown new state:', showProjectDropdown);
+	}}
 >
 {getSelectedProjectName()}
 <ChevronDown size={16} />
 </button>
 {#if showProjectDropdown}
-<div class="dropdown-menu">
+<div class="dropdown-menu" onclick={(e) => e.stopPropagation()}>
 {#each getAvailableProjects() as project}
 <button 
-type="button"
-class="dropdown-item" 
-		onclick={() => selectProject(project)}
+	type="button"
+	class="dropdown-item" 
+	onclick={(e) => {
+		e.stopPropagation();
+		console.log('Project selected:', project);
+		selectProject(project);
+	}}
 >
 {project.name}
 </button>
 {/each}
 {#if getAvailableProjects().length === 0}
 <div class="dropdown-item disabled">
-Nu sunt proiecte disponibile pentru acest modul
+	Nu există {selectedModule === 'proiecte' ? 'proiecte' : selectedModule === 'evom' ? 'EVOM-uri' : 'elemente operational'} pentru acest modul
 </div>
 {/if}
 </div>
@@ -432,5 +469,88 @@ word-wrap: break-word;
 
 .dropdown-item.disabled:hover {
 	background: transparent;
+}
+
+/* Stiluri pentru dropdown-uri funcționale */
+.dropdown {
+	position: relative;
+	width: 100%;
+}
+
+.dropdown-btn {
+	width: 100% !important;
+	height: 44px !important;
+	padding: 0.75rem 1rem !important;
+	border: 1px solid var(--color-inputBorder) !important;
+	border-radius: var(--border-radius-sm) !important;
+	background-color: var(--color-input) !important;
+	color: var(--color-text) !important;
+	font-size: 0.875rem !important;
+	font-family: inherit !important;
+	cursor: pointer !important;
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	transition: var(--transition) !important;
+	box-sizing: border-box !important;
+	text-align: left !important;
+}
+
+.dropdown-btn:hover {
+	border-color: var(--color-inputFocus) !important;
+}
+
+.dropdown-btn:focus {
+	outline: none !important;
+	border-color: var(--color-inputFocus) !important;
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+.dropdown-menu {
+	position: absolute !important;
+	top: 100% !important;
+	left: 0 !important;
+	right: 0 !important;
+	background-color: var(--color-input) !important;
+	border: 1px solid var(--color-inputBorder) !important;
+	border-radius: var(--border-radius-sm) !important;
+	box-shadow: 0 4px 6px var(--color-shadow) !important;
+	z-index: 9999 !important;
+	max-height: 200px !important;
+	overflow-y: auto !important;
+	margin-top: 0.25rem !important;
+	display: block !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	width: 100% !important;
+	min-height: 50px !important;
+}
+
+.dropdown-item {
+	width: 100% !important;
+	padding: 0.75rem 1rem !important;
+	border: none !important;
+	background: none !important;
+	color: var(--color-text) !important;
+	text-align: left !important;
+	cursor: pointer !important;
+	font-size: 0.875rem !important;
+	font-family: inherit !important;
+	transition: var(--transition) !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	box-sizing: border-box !important;
+	display: block !important;
+	min-height: 40px !important;
+}
+
+.dropdown-item:hover {
+	background-color: var(--color-surface) !important;
+}
+
+.dropdown-item:focus {
+	outline: none !important;
+	background-color: var(--color-surface) !important;
 }
 </style>

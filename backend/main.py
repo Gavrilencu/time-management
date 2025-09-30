@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
 from typing import List, Optional
@@ -13,8 +14,50 @@ import pandas as pd
 import tempfile
 import configparser
 from decimal import Decimal
+import logging
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="KPI Time Tracker API", version="1.0.0")
+# Configurare logging pentru producție
+logging.basicConfig(
+    level=logging.INFO if os.getenv('NODE_ENV') == 'production' else logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(os.getenv('LOG_FILE', 'app.log')),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    logger.info("Starting Time Management API")
+    yield
+    # Shutdown
+    logger.info("Shutting down Time Management API")
+
+app = FastAPI(
+    title="KPI Time Tracker API", 
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# Configurare CORS pentru producție
+cors_origins = os.getenv('CORS_ORIGINS', 'http://localhost:5175').split(',')
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
+
+# Middleware pentru securitate în producție
+if os.getenv('NODE_ENV') == 'production':
+    app.add_middleware(
+        TrustedHostMiddleware,
+        allowed_hosts=["your-domain.com", "*.your-domain.com"]
+    )
 
 # Funcție pentru a converti tipurile Decimal în float pentru JSON
 def convert_decimals_to_float(data):
@@ -256,15 +299,28 @@ MYSQL_CONFIG = load_mysql_config()
 # Funcție pentru conexiunea la MySQL
 def get_db_connection():
     try:
-        connection = pymysql.connect(**MYSQL_CONFIG)
+        # Folosește variabilele de mediu pentru producție
+        if os.getenv('NODE_ENV') == 'production':
+            connection = pymysql.connect(
+                host=os.getenv('DB_HOST', 'localhost'),
+                user=os.getenv('DB_USER', 'root'),
+                password=os.getenv('DB_PASSWORD', ''),
+                database=os.getenv('DB_NAME', 'kpi_tracker'),
+                port=int(os.getenv('DB_PORT', 3306)),
+                charset='utf8mb4',
+                autocommit=True
+            )
+        else:
+            # Configurație pentru dezvoltare
+            connection = pymysql.connect(**MYSQL_CONFIG)
+        
         return connection
     except pymysql.Error as e:
-        print(f"❌ Error connecting to MySQL: {e}")
-        print(f"🔧 Configurare folosită: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
-        print("🔧 Verifică:")
-        print("   1. MySQL Server rulează")
-        print("   2. Credențialele sunt corecte în mysql_config.ini")
-        print("   3. Baza de date există")
+        logger.error(f"Error connecting to MySQL: {e}")
+        if os.getenv('NODE_ENV') == 'production':
+            logger.error(f"Production config: {os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}")
+        else:
+            logger.error(f"Development config: {MYSQL_CONFIG['host']}:{MYSQL_CONFIG['port']}")
         raise HTTPException(status_code=500, detail=f"MySQL connection failed: {str(e)}")
 
 def update_user_hours(user_id: int):

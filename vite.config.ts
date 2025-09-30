@@ -1,31 +1,30 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	plugins: [sveltekit()],
 	base: '/time-management/',
 	
-	// Optimizări pentru performanță
+	// Configurație pentru dezvoltare
 	server: {
 		port: 5175,
 		host: true,
-		// Optimizări pentru viteza de dezvoltare
 		fs: {
 			allow: ['..']
 		}
 	},
 	
-	// Optimizări pentru build
+	// Configurație pentru producție
 	build: {
 		target: 'esnext',
-		minify: 'terser',
-		sourcemap: false,
+		minify: mode === 'production' ? 'terser' : false,
+		sourcemap: mode === 'development',
 		rollupOptions: {
 			output: {
 				manualChunks: {
 					vendor: ['svelte'],
 					icons: ['lucide-svelte'],
-					utils: ['date-fns']
+					utils: ['date-fns', 'date-fns/locale']
 				}
 			}
 		},
@@ -44,6 +43,6 @@ export default defineConfig({
 	
 	// Configurare pentru viteza de încărcare
 	define: {
-		__DEV__: JSON.stringify(process.env.NODE_ENV === 'development')
+		__DEV__: JSON.stringify(mode === 'development')
 	}
-});
+}));
