@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from pydantic import BaseModel
@@ -14,7 +14,7 @@ import tempfile
 import configparser
 from decimal import Decimal
 
-app = FastAPI(title="KPI Time Tracker API", version="1.0.0")
+app = FastAPI(title="KPI Time Tracker API", version="1.0.0", root_path="/time-monitoring/api")
 
 # Funcție pentru a converti tipurile Decimal în float pentru JSON
 def convert_decimals_to_float(data):
@@ -69,6 +69,32 @@ class TaskCreate(BaseModel):
     description: str
     hours: float
     date: str
+
+class TaskComment(BaseModel):
+    id: Optional[int] = None
+    task_id: int
+    user_id: int
+    comment: str
+    created_at: Optional[str] = None
+    user_name: Optional[str] = None
+
+class TaskCommentCreate(BaseModel):
+    task_id: int
+    user_id: int
+    comment: str
+
+class AuditLog(BaseModel):
+    id: Optional[int] = None
+    user_id: Optional[int] = None
+    action: str
+    entity_type: str
+    entity_id: Optional[int] = None
+    old_values: Optional[dict] = None
+    new_values: Optional[dict] = None
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
+    created_at: Optional[str] = None
+    user_name: Optional[str] = None
 
 # Inițializare bază de date MySQL
 def init_db():
@@ -134,6 +160,38 @@ def init_db():
             )
         """)
         print("Tabel 'tasks' creat/verificat")
+
+        # Tabel comentarii task-uri
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS task_comments (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                task_id INT NOT NULL,
+                user_id INT NOT NULL,
+                comment TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (task_id) REFERENCES tasks (id) ON DELETE CASCADE,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        """)
+        print("Tabel 'task_comments' creat/verificat")
+
+        # Tabel audit logs
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS audit_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT,
+                action VARCHAR(100) NOT NULL,
+                entity_type VARCHAR(50) NOT NULL,
+                entity_id INT,
+                old_values JSON,
+                new_values JSON,
+                ip_address VARCHAR(45),
+                user_agent TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+            )
+        """)
+        print("Tabel 'audit_logs' creat/verificat")
 
         conn.commit()
         conn.close()
@@ -212,6 +270,24 @@ def update_project_hours(project_id: int):
     conn.commit()
     conn.close()
 
+def log_audit_event(user_id: int, action: str, entity_type: str, entity_id: int = None, 
+                   old_values: dict = None, new_values: dict = None, 
+                   ip_address: str = None, user_agent: str = None):
+    """Log audit event to database"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        INSERT INTO audit_logs (user_id, action, entity_type, entity_id, old_values, new_values, ip_address, user_agent)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    """, (user_id, action, entity_type, entity_id, 
+          json.dumps(old_values) if old_values else None,
+          json.dumps(new_values) if new_values else None,
+          ip_address, user_agent))
+    
+    conn.commit()
+    conn.close()
+
 # API Endpoints
 
 # Utilizatori
@@ -238,7 +314,7 @@ async def get_user_by_email(email: str):
     return user
 
 @app.post("/api/users", response_model=User)
-async def create_user(user: User):
+async def create_user(user: User, request: Request):
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -253,6 +329,18 @@ async def create_user(user: User):
     user_id = cursor.lastrowid
     conn.commit()
     conn.close()
+    
+    # Log audit event
+    log_audit_event(
+        user_id=user_id,
+        action="CREATE_USER",
+        entity_type="user",
+        entity_id=user_id,
+        new_values=user.dict(),
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
+    )
+    
     user.id = user_id
     return user
 
@@ -455,6 +543,150 @@ async def delete_task(task_id: int):
     update_project_hours(project_id)
     
     return {"message": "Task deleted successfully"}
+
+# Comentarii Task-uri
+@app.get("/api/tasks/{task_id}/comments", response_model=List[TaskComment])
+async def get_task_comments(task_id: int):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("""
+        SELECT tc.*, u.name as user_name
+        FROM task_comments tc
+        JOIN users u ON tc.user_id = u.id
+        WHERE tc.task_id = %s
+        ORDER BY tc.created_at ASC
+    """, (task_id,))
+    comments = cursor.fetchall()
+    conn.close()
+    return comments
+
+@app.post("/api/tasks/{task_id}/comments", response_model=TaskComment)
+async def create_task_comment(task_id: int, comment: TaskCommentCreate, request: Request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Verifică dacă task-ul există
+    cursor.execute("SELECT id FROM tasks WHERE id = %s", (task_id,))
+    if not cursor.fetchone():
+        conn.close()
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    # Creează comentariul
+    cursor.execute("""
+        INSERT INTO task_comments (task_id, user_id, comment)
+        VALUES (%s, %s, %s)
+    """, (task_id, comment.user_id, comment.comment))
+    
+    comment_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    
+    # Log audit event
+    log_audit_event(
+        user_id=comment.user_id,
+        action="CREATE_COMMENT",
+        entity_type="task_comment",
+        entity_id=comment_id,
+        new_values={"task_id": task_id, "comment": comment.comment},
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
+    )
+    
+    return TaskComment(id=comment_id, **comment.dict())
+
+@app.delete("/api/comments/{comment_id}")
+async def delete_task_comment(comment_id: int, request: Request):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Obține detaliile comentariului înainte de ștergere
+    cursor.execute("SELECT user_id, task_id, comment FROM task_comments WHERE id = %s", (comment_id,))
+    comment = cursor.fetchone()
+    if not comment:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Comment not found")
+    
+    user_id, task_id, comment_text = comment
+    
+    # Șterge comentariul
+    cursor.execute("DELETE FROM task_comments WHERE id = %s", (comment_id,))
+    conn.commit()
+    conn.close()
+    
+    # Log audit event
+    log_audit_event(
+        user_id=user_id,
+        action="DELETE_COMMENT",
+        entity_type="task_comment",
+        entity_id=comment_id,
+        old_values={"task_id": task_id, "comment": comment_text},
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent")
+    )
+    
+    return {"message": "Comment deleted successfully"}
+
+# Audit Logs
+@app.get("/api/audit-logs", response_model=List[AuditLog])
+async def get_audit_logs(skip: int = 0, limit: int = 100, user_id: Optional[int] = None):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    
+    query = """
+        SELECT al.*, u.name as user_name
+        FROM audit_logs al
+        LEFT JOIN users u ON al.user_id = u.id
+    """
+    params = []
+    
+    if user_id:
+        query += " WHERE al.user_id = %s"
+        params.append(user_id)
+    
+    query += " ORDER BY al.created_at DESC LIMIT %s OFFSET %s"
+    params.extend([limit, skip])
+    
+    cursor.execute(query, params)
+    logs = cursor.fetchall()
+    conn.close()
+    return logs
+
+@app.get("/api/audit-logs/stats")
+async def get_audit_stats():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Total logs
+    cursor.execute("SELECT COUNT(*) FROM audit_logs")
+    total_logs = cursor.fetchone()[0]
+    
+    # Logs by action
+    cursor.execute("""
+        SELECT action, COUNT(*) as count
+        FROM audit_logs
+        GROUP BY action
+        ORDER BY count DESC
+    """)
+    action_stats = cursor.fetchall()
+    
+    # Logs by user
+    cursor.execute("""
+        SELECT u.name, COUNT(al.id) as count
+        FROM audit_logs al
+        LEFT JOIN users u ON al.user_id = u.id
+        GROUP BY al.user_id, u.name
+        ORDER BY count DESC
+        LIMIT 10
+    """)
+    user_stats = cursor.fetchall()
+    
+    conn.close()
+    
+    return {
+        "total_logs": total_logs,
+        "action_stats": [{"action": row[0], "count": row[1]} for row in action_stats],
+        "user_stats": [{"user": row[0] or "Unknown", "count": row[1]} for row in user_stats]
+    }
 
 # Statistici
 @app.get("/api/stats/overview")

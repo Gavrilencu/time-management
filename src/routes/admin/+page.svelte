@@ -362,6 +362,14 @@ async function updateProject() {
 			<Clock size={20} />
 			Task-uri
 		</button>
+		<button 
+			class="tab-btn" 
+			class:active={activeTab === "audit"}
+			onclick={() => activeTab = "audit"}
+		>
+			<Eye size={20} />
+			Audit Logs
+		</button>
 	</div>
 
 	<!-- Content -->
@@ -611,6 +619,24 @@ async function updateProject() {
 							<div class="task-date">{format(new Date(task.date), "dd MMM yyyy", { locale: ro })}</div>
 						</div>
 					{/each}
+				</div>
+			</div>
+
+		{:else if activeTab === "audit"}
+			<div class="audit-section">
+				<div class="section-header">
+					<h3>Audit Logs</h3>
+					<p>Monitorizare activitate și securitate</p>
+				</div>
+				<div class="audit-redirect">
+					<div class="audit-card">
+						<Eye size={48} />
+						<h4>Audit Logs Complet</h4>
+						<p>Accesează pagina dedicată pentru audit logs cu filtre avansate și statistici detaliate.</p>
+						<button class="audit-btn" onclick={() => window.location.href = '/admin/audit-logs'}>
+							Accesează Audit Logs
+						</button>
+					</div>
 				</div>
 			</div>
 		{/if}
@@ -1634,5 +1660,62 @@ async function updateProject() {
 
 	.delete-btn:hover {
 		background: #b91c1c;
+	}
+
+	/* Audit section styles */
+	.audit-section {
+		text-align: center;
+	}
+
+	.audit-redirect {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		min-height: 400px;
+	}
+
+	.audit-card {
+		background: #f9fafb;
+		border: 1px solid #e5e7eb;
+		border-radius: 12px;
+		padding: 3rem 2rem;
+		max-width: 500px;
+		text-align: center;
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+	}
+
+	.audit-card svg {
+		color: #2563eb;
+		margin-bottom: 1rem;
+	}
+
+	.audit-card h4 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: #1f2937;
+		margin: 0 0 1rem 0;
+	}
+
+	.audit-card p {
+		color: #6b7280;
+		margin: 0 0 2rem 0;
+		line-height: 1.6;
+	}
+
+	.audit-btn {
+		background: #2563eb;
+		color: white;
+		border: none;
+		border-radius: 8px;
+		padding: 0.75rem 2rem;
+		font-weight: 500;
+		cursor: pointer;
+		transition: background 0.2s;
+		font-size: 1rem;
+	}
+
+	.audit-btn:hover {
+		background: #1d4ed8;
+		transform: translateY(-1px);
 	}
 </style>

@@ -1,7 +1,34 @@
 <!-- 
 Exemple de componente cu teme extinse
 Aceste componente folosesc variabilele CSS din sistemul de teme
+Demonstrează toate cele 6 teme disponibile
 -->
+
+<script>
+	import { currentTheme, themes } from './themes.js';
+	
+	let showModal = false;
+	
+	function setTheme(themeName) {
+		currentTheme.setTheme(themeName);
+	}
+</script>
+
+<!-- Selector de teme -->
+<div class="theme-selector">
+	<h2>Selectează Tema:</h2>
+	<div class="theme-buttons">
+		{#each Object.entries(themes) as [key, theme]}
+			<button 
+				class="theme-button {$currentTheme === key ? 'active' : ''}"
+				onclick={() => setTheme(key)}
+				style="background-color: {theme.colors.primary}; color: {theme.colors.background};"
+			>
+				{theme.label}
+			</button>
+		{/each}
+	</div>
+</div>
 
 <!-- Componenta Card -->
 <div class="card">
@@ -144,6 +171,47 @@ Aceste componente folosesc variabilele CSS din sistemul de teme
 
 <style>
 /* Stiluri pentru componentele de exemplu */
+
+.theme-selector {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+
+.theme-selector h2 {
+  margin: 0 0 1rem 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.theme-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.theme-button {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.theme-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+.theme-button.active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
 
 .card-actions {
   display: flex;

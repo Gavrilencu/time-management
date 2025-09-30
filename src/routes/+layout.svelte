@@ -35,33 +35,50 @@ setAuthLoading(false);
 }
 }
 
-async function authenticateUser(kerberosData: { username: string; email: string; displayName: string; department: string }) {
-try {
-// Optimizare: verifică direct utilizatorul după email în loc să încarci toți utilizatorii
-let user;
-try {
-user = await userService.getByEmail(kerberosData.email);
-} catch (error) {
-// Utilizatorul nu există, îl creez
-user = await userService.create({
-name: kerberosData.displayName,
-email: kerberosData.email,
-role: 'User', // Rol default
-department: kerberosData.department
-});
-notifications.success('Utilizator creat', `Bun venit, ${kerberosData.displayName}!`);
-}
+async function authenticateUser(kerberosData: { username: string; email: string; displayName: string; department: string; domain?: string; groups?: string[] }) {
+	try {
+		// Optimizare: verifică direct utilizatorul după email în loc să încarci toți utilizatorii
+		let user;
+		try {
+			user = await userService.getByEmail(kerberosData.email);
+			
+			// Actualizează informațiile utilizatorului cu datele Kerberos
+			if (user.name !== kerberosData.displayName || user.department !== kerberosData.department) {
+				user = await userService.update(user.id!, {
+					...user,
+					name: kerberosData.displayName,
+					department: kerberosData.department
+				});
+			}
+		} catch (error) {
+			// Utilizatorul nu există, îl creez
+			user = await userService.create({
+				name: kerberosData.displayName,
+				email: kerberosData.email,
+				role: 'User', // Rol default
+				department: kerberosData.department
+			});
+			notifications.success('Utilizator creat', `Bun venit, ${kerberosData.displayName}!`);
+		}
 
-if (user) {
-setCurrentUser(user);
-if (user.name !== kerberosData.displayName) {
-notifications.info('Bun venit', `Salut, ${user.name}!`);
-}
-}
-} catch (error) {
-console.error('Error authenticating user:', error);
-notifications.error('Eroare autentificare', 'Eroare la autentificarea utilizatorului!');
-}
+		if (user) {
+			setCurrentUser(user);
+			
+			// Afișează informații suplimentare despre autentificare
+			const welcomeMessage = `Autentificat prin Kerberos: ${kerberosData.username}`;
+			if (kerberosData.domain) {
+				console.log(`Domain: ${kerberosData.domain}`);
+			}
+			if (kerberosData.groups && kerberosData.groups.length > 0) {
+				console.log(`Groups: ${kerberosData.groups.join(', ')}`);
+			}
+			
+			notifications.info('Autentificare reușită', welcomeMessage);
+		}
+	} catch (error) {
+		console.error('Error authenticating user:', error);
+		notifications.error('Eroare autentificare', 'Eroare la autentificarea utilizatorului!');
+	}
 }
 
 	const menuItems = [
@@ -197,7 +214,9 @@ Logout
 margin: 0;
 padding: 0;
 font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-background-color: #f8fafc;
+background-color: var(--color-background);
+color: var(--color-text);
+transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .auth-container {

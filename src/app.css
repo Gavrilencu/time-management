@@ -1,0 +1,483 @@
+/* Global CSS pentru toate temele */
+:root {
+  /* Variabile CSS de bază pentru toate temele */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
+  --border-radius: 8px;
+  --border-radius-sm: 4px;
+  --border-radius-lg: 12px;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --transition: all 0.2s ease;
+}
+
+/* Reset și stiluri de bază */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: var(--transition);
+}
+
+/* Stiluri pentru toate componentele */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-cardBorder);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+  box-shadow: 0 2px 4px var(--color-shadow);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 4px 8px var(--color-shadowHover);
+}
+
+.card h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+}
+
+/* Butoane */
+button {
+  background-color: var(--color-button);
+  color: var(--color-background);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 2.5rem;
+}
+
+button:hover {
+  background-color: var(--color-buttonHover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+button.secondary {
+  background-color: var(--color-buttonSecondary);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+button.secondary:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* Badge-uri */
+.badge {
+  display: inline-block;
+  background-color: var(--color-badge);
+  color: var(--color-badgeText);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+}
+
+/* Progress bar */
+.progress-bar {
+  background-color: var(--color-progress);
+  border-radius: var(--border-radius-sm);
+  height: 0.5rem;
+  overflow: hidden;
+  margin: var(--spacing-sm) 0;
+}
+
+.progress-fill {
+  background-color: var(--color-progressFill);
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+/* Tabele */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-table);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.data-table th {
+  background-color: var(--color-tableHeader);
+  color: var(--color-text);
+  padding: var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-tableBorder);
+}
+
+.data-table td {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-tableBorder);
+  color: var(--color-text);
+}
+
+.data-table tr:hover {
+  background-color: var(--color-surface);
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-modalOverlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--color-modal);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px var(--color-shadowHover);
+}
+
+.modal-content h2 {
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--color-text);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-content p {
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+}
+
+/* Form-uri */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-inputBorder);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--color-input);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  transition: var(--transition);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-inputFocus);
+  box-shadow: 0 0 0 2px var(--color-inputFocus);
+}
+
+.form-group input::placeholder {
+  color: var(--color-textSecondary);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--color-navbar);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.navbar-brand h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: var(--color-navbarText);
+  font-weight: 700;
+}
+
+.navbar-menu a {
+  color: var(--color-textSecondary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition);
+}
+
+.navbar-menu a:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: var(--color-sidebar);
+  padding: var(--spacing-lg);
+  border-right: 1px solid var(--color-border);
+  min-height: 100vh;
+}
+
+.sidebar-header h2 {
+  margin: 0 0 var(--spacing-lg) 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-sidebarText);
+  text-decoration: none;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+}
+
+/* Grid */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+}
+
+.grid-item {
+  /* Grid item styling */
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: var(--spacing-sm) 0;
+}
+
+.stat-label {
+  color: var(--color-textSecondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.progress-text {
+  margin-top: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--color-textSecondary);
+  text-align: center;
+  font-weight: 500;
+}
+
+.progress-label {
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .navbar-menu {
+    gap: var(--spacing-md);
+  }
+  
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .theme-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Stiluri pentru accesibilitate */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Stiluri pentru contrast înalt */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  button {
+    border: 2px solid var(--color-text);
+  }
+  
+  .badge {
+    border-width: 2px;
+  }
+}
+
+/* Stiluri pentru vizibilitate optimă a textului */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p, span, div {
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+label {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Stiluri pentru text pe fundal colorat */
+.badge {
+  color: var(--color-badgeText);
+  font-weight: 600;
+}
+
+button {
+  color: white;
+  font-weight: 500;
+}
+
+button.secondary {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* Stiluri pentru input-uri */
+input, textarea, select {
+  color: var(--color-text);
+  background-color: var(--color-input);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-textSecondary);
+  opacity: 0.8;
+}
+
+/* Stiluri pentru tabele */
+th {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+td {
+  color: var(--color-text);
+}
+
+/* Stiluri pentru link-uri */
+a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Stiluri pentru focus visible */
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Stiluri pentru text selection */
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* Stiluri pentru scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--border-radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-textSecondary);
+}

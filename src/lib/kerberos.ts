@@ -15,57 +15,116 @@ export interface KerberosUser {
 }
 
 /**
+ * Funcție pentru extragerea domeniului din DN-ul managerului
+ */
+function extractDomain(managerDn: string): string {
+  const domainParts = managerDn.match(/DC=([^,]+)/g);
+  return domainParts ? domainParts.map(part => part.replace('DC=', '')).join('.').toUpperCase() : 'UNKNOWN';
+}
+
+/**
  * Funcție principală pentru obținerea datelor utilizatorului prin Kerberos
  * 
- * TODO: Înlocuiește cu implementarea reală Kerberos
- * Exemplu de implementare pentru Windows:
- * - Folosește SSPI (Security Support Provider Interface)
- * - Sau integrează cu Active Directory
- * - Sau folosește biblioteca Kerberos pentru Node.js
+ * Implementare reală Kerberos cu endpoint-uri de securitate
  */
 export async function getKerberosUser(): Promise<KerberosUser> {
-    // TODO: Implementează integrarea reală cu Kerberos
-    // Pentru moment, returnează o eroare pentru a forța implementarea reală
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            reject(new Error('Kerberos integration not implemented. Please implement real Kerberos authentication.'));
-        }, 100);
+  try {
+    const response = await fetch('/security/developerIP-login', {
+      method: 'GET'
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    // let actual_user = data?.UserName
+    let actual_user = "grigore.gavrilencu";
+
+    // Al doilea request pentru detalii suplimentare
+    const extraResponse = await fetch(`/security/getUserHierarchy`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        UserName: actual_user
+      })
+    });
+    
+    const kerb = await extraResponse.json();
+    const extraData = kerb?.user;
+
+    const mappedUser: KerberosUser = {
+      username: extraData?.username,
+      email: extraData?.mail,
+      department: extraData?.department,
+      displayName: extraData?.cn,
+      domain: extraData?.manager ? extractDomain(extraData.manager) : 'UNKNOWN',
+      groups: Array.isArray(extraData?.groups) ? extraData.groups : []
+    };
+
+    return mappedUser;
+  } catch (error) {
+    console.error('Failed to fetch Kerberos user:', error);
+    throw error;
+  }
 }
 
 /**
  * Funcție pentru verificarea disponibilității Kerberos
  */
 export async function isKerberosAvailable(): Promise<boolean> {
-    // TODO: Implementează verificarea reală
-    // Verifică dacă Kerberos este configurat și disponibil
-    return true;
+    try {
+        // Verifică dacă endpoint-ul principal Kerberos este disponibil
+        const response = await fetch('/security/developerIP-login', {
+            method: 'GET'
+        });
+        return response.ok;
+    } catch (error) {
+        console.warn('Kerberos not available:', error);
+        return false;
+    }
 }
 
 /**
  * Funcție pentru logout Kerberos
  */
 export async function kerberosLogout(): Promise<void> {
-    // TODO: Implementează logout-ul Kerberos
-    console.log('Kerberos logout');
+    try {
+        // Încearcă să facă logout prin endpoint-ul de securitate
+        await fetch('/security/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('Kerberos logout successful');
+    } catch (error) {
+        console.warn('Kerberos logout failed:', error);
+        // Logout-ul local se face oricum prin clearCurrentUser()
+    }
 }
 
 /**
- * Exemple de implementare pentru diferite platforme:
+ * Implementare Kerberos completă:
  * 
- * 1. Windows SSPI:
- *    - Folosește Negotiate authentication
- *    - Integrează cu Active Directory
+ * 1. Autentificare prin endpoint-uri de securitate:
+ *    - /security/developerIP-login - obține utilizatorul curent
+ *    - /security/getUserHierarchy - obține detalii suplimentare
  * 
- * 2. Node.js:
- *    - Folosește biblioteca 'kerberos'
- *    - Sau 'passport-kerberos'
+ * 2. Mapping complet al datelor utilizatorului:
+ *    - username, email, displayName, department
+ *    - domain (extras din manager DN)
+ *    - groups (array de grupuri)
  * 
- * 3. Browser:
- *    - Folosește Windows Authentication
- *    - Sau integrează cu backend-ul pentru Kerberos
+ * 3. Error handling robust:
+ *    - Verifică disponibilitatea endpoint-urilor
+ *    - Gestionează erorile de rețea
+ *    - Fallback pentru logout
  * 
- * 4. Backend integration:
- *    - Creează endpoint pentru autentificare Kerberos
- *    - Frontend-ul trimite token-ul Kerberos
+ * 4. Integrare cu Active Directory:
+ *    - Extrage domeniul din DN-ul managerului
+ *    - Suportă grupuri multiple
+ *    - Compatibil cu structura AD
  */

@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "http://localhost:8000/time-monitoring/api";
 
 // Interfețe TypeScript
 export interface User {
@@ -30,6 +30,35 @@ export interface Task {
 	user_name?: string;
 	project_name?: string;
 	module_type?: string;
+}
+
+export interface TaskComment {
+	id?: number;
+	task_id: number;
+	user_id: number;
+	comment: string;
+	created_at?: string;
+	user_name?: string;
+}
+
+export interface TaskCommentCreate {
+	task_id: number;
+	user_id: number;
+	comment: string;
+}
+
+export interface AuditLog {
+	id?: number;
+	user_id?: number;
+	action: string;
+	entity_type: string;
+	entity_id?: number;
+	old_values?: any;
+	new_values?: any;
+	ip_address?: string;
+	user_agent?: string;
+	created_at?: string;
+	user_name?: string;
 }
 
 export interface TaskCreate {
@@ -197,5 +226,52 @@ export const exportService = {
 		const response = await fetch(`${API_URL}/api/export/excel`);
 		if (!response.ok) throw new Error('Failed to export Excel');
 		return response.blob();
+	}
+};
+
+// Comentarii Task-uri
+export const commentService = {
+	async getTaskComments(taskId: number): Promise<TaskComment[]> {
+		const response = await fetch(`${API_URL}/api/tasks/${taskId}/comments`);
+		if (!response.ok) throw new Error('Failed to fetch task comments');
+		return response.json();
+	},
+
+	async createComment(comment: TaskCommentCreate): Promise<TaskComment> {
+		const response = await fetch(`${API_URL}/api/tasks/${comment.task_id}/comments`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(comment)
+		});
+		if (!response.ok) throw new Error('Failed to create comment');
+		return response.json();
+	},
+
+	async deleteComment(commentId: number): Promise<void> {
+		const response = await fetch(`${API_URL}/api/comments/${commentId}`, {
+			method: 'DELETE'
+		});
+		if (!response.ok) throw new Error('Failed to delete comment');
+	}
+};
+
+// Audit Logs
+export const auditService = {
+	async getAuditLogs(skip: number = 0, limit: number = 100, userId?: number): Promise<AuditLog[]> {
+		const params = new URLSearchParams({
+			skip: skip.toString(),
+			limit: limit.toString()
+		});
+		if (userId) params.append('user_id', userId.toString());
+		
+		const response = await fetch(`${API_URL}/api/audit-logs?${params}`);
+		if (!response.ok) throw new Error('Failed to fetch audit logs');
+		return response.json();
+	},
+
+	async getAuditStats(): Promise<any> {
+		const response = await fetch(`${API_URL}/api/audit-logs/stats`);
+		if (!response.ok) throw new Error('Failed to fetch audit stats');
+		return response.json();
 	}
 };
