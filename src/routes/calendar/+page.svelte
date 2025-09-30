@@ -171,17 +171,18 @@ gap: 1rem;
 }
 
 .nav-btn {
-	background: var(--color-buttonSecondary);
-	border: none;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
 	border-radius: 6px;
 	padding: 0.5rem;
 	cursor: pointer;
-	transition: background 0.2s;
+	transition: var(--transition);
 	color: var(--color-text);
 }
 
 .nav-btn:hover {
-	background: var(--color-border);
+	background: var(--color-buttonSecondary);
+	border-color: var(--color-primary);
 }
 
 .calendar-container {

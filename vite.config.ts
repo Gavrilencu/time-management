@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-	base: '/time-monitoring/',
+	base: '/time-management/',
 	
 	// Optimizări pentru performanță
 	server: {
@@ -18,7 +18,7 @@ export default defineConfig({
 	// Optimizări pentru build
 	build: {
 		target: 'esnext',
-		minify: 'esbuild',
+		minify: 'terser',
 		sourcemap: false,
 		rollupOptions: {
 			output: {
@@ -28,17 +28,13 @@ export default defineConfig({
 					utils: ['date-fns']
 				}
 			}
-		}
+		},
+		chunkSizeWarningLimit: 1000
 	},
 	
 	// Optimizări pentru cache
 	optimizeDeps: {
-		include: [
-			'lucide-svelte',
-			'date-fns',
-			'svelte'
-		],
-		exclude: []
+		include: ['lucide-svelte', 'date-fns', 'date-fns/locale']
 	},
 	
 	// Configurare pentru viteza de dezvoltare

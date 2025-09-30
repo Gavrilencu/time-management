@@ -17,7 +17,7 @@ const config = {
 			strict: true
 		}),
 		paths: {
-			base: '/time-monitoring'
+			base: '/time-management'
 		},
 		
 		// Optimizări pentru performanță

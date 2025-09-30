@@ -64,7 +64,7 @@
 	});
 
 	function goHome() {
-		goto('/time-monitoring/');
+		goto('/time-management/');
 	}
 
 	function goBack() {
@@ -147,11 +147,11 @@
 		<div class="error-footer">
 			<p>Dacă problema persistă, contactează echipa de suport tehnic.</p>
 			<div class="footer-links">
-				<button onclick={() => goto('/time-monitoring/login')}>Autentificare</button>
+				<button onclick={() => goto('/time-management/login')}>Autentificare</button>
 				<span>•</span>
 				<button onclick={() => window.open('mailto:support@company.com')}>Suport</button>
 				<span>•</span>
-				<button onclick={() => goto('/time-monitoring/onboarding')}>Prima utilizare</button>
+				<button onclick={() => goto('/time-management/onboarding')}>Prima utilizare</button>
 			</div>
 		</div>
 	</div>

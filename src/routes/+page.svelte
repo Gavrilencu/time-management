@@ -2,19 +2,22 @@
 	import { onMount } from 'svelte';
 	import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
 	import { ro } from 'date-fns/locale';
-	import { Calendar, Clock, Plus, ChevronDown, ChevronUp, Trash2, Edit3 } from 'lucide-svelte';
-	import { projectService, taskService, type Project, type Task, type TaskCreate } from '$lib/api';
+	import { Calendar, Clock, Plus, ChevronDown, ChevronUp, Trash2, Edit3, MessageCircle } from 'lucide-svelte';
+	import { projectService, taskService, commentService, departmentService, type Project, type Task, type TaskCreate, type TaskComment } from '$lib/api';
 import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 
 // Starea aplicației
 let selectedDate = $state<Date>(new Date());
-let selectedModule = $state('');
+let selectedModule = $state('proiecte');
 let selectedProject = $state('');
 let taskDescription = $state('');
 let taskHours = $state('');
+let newComment = $state('');
 let showAddForm = $state(false);
+let showEditTaskModal = $state(false);
+let editingTask: Task | null = $state(null);
 let showModuleDropdown = $state(false);
 let showProjectDropdown = $state(false);
 
@@ -27,6 +30,7 @@ let modules = $state<Array<{id: string, name: string, projects: string[]}>>([
 
 let allProjects: Project[] = $state([]);
 let tasks: Task[] = $state([]);
+let taskComments: TaskComment[] = $state([]);
 let dailyProgress = $state(0); // ore lucrate în ziua curentă
 const maxDailyHours = 8;
 
@@ -41,24 +45,34 @@ loadDataInBackground();
 });
 
 async function loadDataInBackground() {
-try {
-// Încarcă proiectele mai întâi (mai importante pentru UI)
-allProjects = await projectService.getAll();
-updateModules();
-
-// Apoi încarcă task-urile în background
-if ($currentUser?.department) {
-// Încarcă task-urile filtrate pe departament
-tasks = await taskService.getByDepartment($currentUser.department);
-} else {
-// Fallback la toate task-urile dacă nu are departament
-tasks = await taskService.getAll();
-}
-updateDailyProgress();
-} catch (error) {
-console.error('Error loading data:', error);
-notifications.error('Eroare încărcare', 'Eroare la încărcarea datelor!');
-}
+	try {
+		// Încarcă proiectele filtrate pe departamentul utilizatorului curent
+		let projectsPromise;
+		if ($currentUser?.department) {
+			projectsPromise = projectService.getByDepartment($currentUser.department);
+		} else {
+			projectsPromise = projectService.getAll();
+		}
+		
+		// Încarcă task-urile în paralel cu proiectele
+		let tasksPromise;
+		if ($currentUser?.department) {
+			tasksPromise = taskService.getByDepartment($currentUser.department);
+		} else {
+			tasksPromise = taskService.getAll();
+		}
+		
+		// Așteaptă ambele promise-uri să se rezolve
+		const [projects, tasksData] = await Promise.all([projectsPromise, tasksPromise]);
+		
+		allProjects = projects;
+		tasks = tasksData;
+		updateModules();
+		updateDailyProgress();
+	} catch (error) {
+		console.error('Error loading data:', error);
+		notifications.error('Eroare încărcare', 'Eroare la încărcarea datelor!');
+	}
 }
 
 function updateModules() {
@@ -80,10 +94,85 @@ await loadDataInBackground();
 }
 
 function updateDailyProgress() {
-const today = format(selectedDate, 'yyyy-MM-dd');
-dailyProgress = tasks
-.filter(task => task.date === today)
-.reduce((total, task) => total + (task.hours || 0), 0);
+	const today = format(selectedDate, 'yyyy-MM-dd');
+	dailyProgress = tasks
+		.filter(task => task.date === today)
+		.reduce((total, task) => total + (task.hours || 0), 0);
+}
+
+// Funcții pentru comentarii
+let loadedTaskComments = $state<Set<number>>(new Set());
+
+async function loadTaskComments(taskId: number) {
+	if (loadedTaskComments.has(taskId)) return; // Deja încărcate
+	
+	try {
+		const comments = await commentService.getTaskComments(taskId);
+		taskComments = [...taskComments, ...comments];
+		loadedTaskComments.add(taskId);
+	} catch (error) {
+		console.error('Error loading comments:', error);
+		notifications.error('Eroare comentarii', 'Eroare la încărcarea comentariilor!');
+	}
+}
+
+async function addComment(taskId: number, commentText: string) {
+	if (!commentText.trim() || !$currentUser?.id) return;
+	
+	try {
+		await commentService.createComment({
+			task_id: taskId,
+			user_id: $currentUser.id,
+			comment: commentText.trim()
+		});
+		await loadTaskComments(taskId);
+		notifications.success('Comentariu adăugat', 'Comentariul a fost adăugat cu succes!');
+	} catch (error) {
+		console.error('Error adding comment:', error);
+		notifications.error('Eroare comentariu', 'Eroare la adăugarea comentariului!');
+	}
+}
+
+function getTaskComments(taskId: number) {
+	return taskComments.filter(c => c.task_id === taskId);
+}
+
+// Funcții pentru editarea task-urilor
+function editTask(task: Task) {
+	editingTask = { ...task };
+	showEditTaskModal = true;
+}
+
+async function updateTask() {
+	if (!editingTask) return;
+
+	try {
+		// Actualizează task-ul prin API (doar câmpurile editabile)
+		await taskService.update(editingTask.id!, {
+			id: editingTask.id,
+			user_id: editingTask.user_id,
+			project_id: editingTask.project_id,
+			description: editingTask.description,
+			hours: editingTask.hours,
+			date: editingTask.date,
+			created_at: editingTask.created_at
+		});
+
+		// Reîncarcă datele
+		await loadDataInBackground();
+		
+		showEditTaskModal = false;
+		editingTask = null;
+		notifications.success('Succes', 'Task actualizat cu succes!');
+	} catch (error) {
+		console.error('Error updating task:', error);
+		notifications.error('Eroare', 'Eroare la actualizarea task-ului!');
+	}
+}
+
+function cancelEditTask() {
+	showEditTaskModal = false;
+	editingTask = null;
 }
 
 async function addTask() {
@@ -145,7 +234,7 @@ function getTasksForDate(date: Date) {
 }
 
 function getTotalHoursForDate(date: Date) {
-	return getTasksForDate(date).reduce((total, task) => total + task.hours, 0);
+	return getTasksForDate(date).reduce((total, task) => total + (task.hours || 0), 0);
 }
 
 function selectDate(date: Date) {
@@ -387,13 +476,43 @@ Adaugă Task
 </div>
 </div>
 <div class="task-actions">
-								<button class="action-btn edit" onclick={() => console.log('Edit', task.id)}>
+								<button class="action-btn" onclick={() => loadTaskComments(task.id!)}>
+									<MessageCircle size={16} />
+								</button>
+								<button class="action-btn edit" onclick={() => editTask(task)}>
 									<Edit3 size={16} />
 								</button>
 								<button class="action-btn delete" onclick={() => deleteTask(task.id!)}>
 									<Trash2 size={16} />
 								</button>
 </div>
+</div>
+
+<!-- Comentarii pentru task -->
+{#if getTaskComments(task.id!).length > 0}
+<div class="task-comments">
+<h4>Comentarii:</h4>
+{#each getTaskComments(task.id!) as comment}
+<div class="comment-item">
+<div class="comment-header">
+<span class="comment-author">{comment.user_name || 'Utilizator'}</span>
+<span class="comment-time">{comment.created_at ? format(new Date(comment.created_at), 'dd.MM.yyyy HH:mm') : 'N/A'}</span>
+</div>
+<p class="comment-text">{comment.comment}</p>
+</div>
+{/each}
+</div>
+{/if}
+
+<!-- Formular pentru adăugare comentariu -->
+<div class="add-comment-form">
+<input 
+	type="text" 
+	placeholder="Adaugă un comentariu..." 
+	bind:value={newComment}
+	onkeydown={(e) => e.key === 'Enter' && addComment(task.id!, newComment)}
+/>
+<button onclick={() => addComment(task.id!, newComment)}>Adaugă</button>
 </div>
 {:else}
 <div class="no-tasks">
@@ -402,8 +521,64 @@ Adaugă Task
 </div>
 {/each}
 </div>
+	</div>
 </div>
+
+<!-- Modal pentru editarea task-urilor -->
+{#if showEditTaskModal && editingTask}
+<div class="modal-overlay" onclick={cancelEditTask} role="dialog" aria-modal="true" aria-labelledby="edit-task-title">
+	<div class="modal-content" onclick={(e) => e.stopPropagation()}>
+		<div class="modal-header">
+			<h3 id="edit-task-title">Editează Task</h3>
+			<button class="close-btn" onclick={cancelEditTask} aria-label="Închide modal">×</button>
+		</div>
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="edit-task-description">Descriere Task</label>
+				<input 
+					id="edit-task-description"
+					type="text" 
+					bind:value={editingTask.description}
+					placeholder="Descrierea task-ului"
+				/>
+			</div>
+			<div class="form-group">
+				<label for="edit-task-hours">Ore lucrate</label>
+				<input 
+					id="edit-task-hours"
+					type="number" 
+					step="0.25"
+					min="0"
+					max="24"
+					bind:value={editingTask.hours}
+					placeholder="Numărul de ore"
+				/>
+			</div>
+			<div class="form-group">
+				<label for="edit-task-date">Data</label>
+				<input 
+					id="edit-task-date"
+					type="date" 
+					bind:value={editingTask.date}
+				/>
+			</div>
+			<div class="form-group">
+				<label for="edit-task-project">Proiect</label>
+				<input 
+					id="edit-task-project"
+					type="text" 
+					value={editingTask.project_name || 'N/A'}
+					disabled
+				/>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn-cancel" onclick={cancelEditTask}>Anulează</button>
+			<button class="btn-save" onclick={updateTask}>Salvează</button>
+		</div>
+	</div>
 </div>
+{/if}
 
 <style>
 .dashboard {
@@ -524,16 +699,18 @@ margin-bottom: 1rem;
 }
 
 .nav-btn {
-background: #f3f4f6;
-border: none;
-border-radius: 6px;
-padding: 0.5rem;
-cursor: pointer;
-transition: background 0.2s;
+	background: var(--color-surface);
+	border: 1px solid var(--color-border);
+	border-radius: 6px;
+	padding: 0.5rem;
+	cursor: pointer;
+	transition: var(--transition);
+	color: var(--color-text);
 }
 
 .nav-btn:hover {
-background: #e5e7eb;
+	background: var(--color-buttonSecondary);
+	border-color: var(--color-primary);
 }
 
 .calendar-grid {
@@ -616,7 +793,7 @@ gap: 0.5rem;
 
 .task-hours {
 	font-weight: 600;
-	color: var(--color-success);
+	color: var(--color-primary);
 	margin-right: 0.25rem;
 }
 
@@ -783,21 +960,21 @@ font-weight: 500;
 }
 
 .task-description {
-color: #1f2937;
-margin: 0 0 0.5rem 0;
-font-size: 0.875rem;
+	color: var(--color-text);
+	margin: 0 0 0.5rem 0;
+	font-size: 0.875rem;
 }
 
 .task-meta {
-display: flex;
-gap: 1rem;
-font-size: 0.75rem;
-color: #6b7280;
+	display: flex;
+	gap: 1rem;
+	font-size: 0.75rem;
+	color: var(--color-textSecondary);
 }
 
 .task-hours {
-font-weight: 600;
-color: #059669;
+	font-weight: 600;
+	color: var(--color-primary);
 }
 
 .task-actions {
@@ -838,7 +1015,192 @@ color: #6b7280;
 }
 
 .no-tasks p {
-margin: 1rem 0 0 0;
-font-size: 1.125rem;
+	margin: 1rem 0 0 0;
+	font-size: 1.125rem;
+}
+
+/* Stiluri pentru comentarii */
+.task-comments {
+	margin-top: 1rem;
+	padding: 1rem;
+	background: var(--color-surface);
+	border-radius: 8px;
+	border: 1px solid var(--color-border);
+}
+
+.task-comments h4 {
+	margin: 0 0 1rem 0;
+	color: var(--color-text);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+.comment-item {
+	margin-bottom: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.comment-item:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.comment-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.comment-author {
+	font-weight: 600;
+	color: var(--color-primary);
+	font-size: 0.75rem;
+}
+
+.comment-time {
+	color: var(--color-textSecondary);
+	font-size: 0.75rem;
+}
+
+.comment-text {
+	margin: 0;
+	color: var(--color-text);
+	font-size: 0.875rem;
+	line-height: 1.4;
+}
+
+.add-comment-form {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	padding: 1rem;
+	background: var(--color-surface);
+	border-radius: 8px;
+	border: 1px solid var(--color-border);
+}
+
+.add-comment-form input {
+	flex: 1;
+	padding: 0.5rem;
+	border: 1px solid var(--color-inputBorder);
+	border-radius: 4px;
+	background: var(--color-input);
+	color: var(--color-text);
+	font-size: 0.875rem;
+}
+
+.add-comment-form button {
+	padding: 0.5rem 1rem;
+	background: var(--color-primary);
+	color: white;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.875rem;
+	transition: var(--transition);
+}
+
+.add-comment-form button:hover {
+	background: var(--color-buttonHover);
+}
+
+/* Stiluri pentru modal */
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--color-modalOverlay);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	background: var(--color-modal);
+	border-radius: 12px;
+	box-shadow: 0 10px 25px var(--color-shadow);
+	max-width: 500px;
+	width: 90%;
+	max-height: 90vh;
+	overflow-y: auto;
+}
+
+.modal-header {
+	padding: 1.5rem 1.5rem 0 1.5rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.modal-header h3 {
+	margin: 0;
+	color: var(--color-text);
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+
+.close-btn {
+	background: none;
+	border: none;
+	font-size: 1.5rem;
+	color: var(--color-textSecondary);
+	cursor: pointer;
+	padding: 0.25rem;
+	border-radius: 4px;
+	transition: var(--transition);
+}
+
+.close-btn:hover {
+	background: var(--color-surface);
+	color: var(--color-text);
+}
+
+.modal-body {
+	padding: 1.5rem;
+}
+
+.modal-footer {
+	padding: 0 1.5rem 1.5rem 1.5rem;
+	display: flex;
+	gap: 1rem;
+	justify-content: flex-end;
+}
+
+.btn-cancel {
+	padding: 0.75rem 1.5rem;
+	background: var(--color-buttonSecondary);
+	color: var(--color-text);
+	border: 1px solid var(--color-border);
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: var(--transition);
+}
+
+.btn-cancel:hover {
+	background: var(--color-border);
+}
+
+.btn-save {
+	padding: 0.75rem 1.5rem;
+	background: var(--color-primary);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: var(--transition);
+}
+
+.btn-save:hover {
+	background: var(--color-buttonHover);
 }
 </style>

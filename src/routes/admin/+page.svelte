@@ -19,17 +19,21 @@ import {
 	Database,
 	Download,
 	FileText,
+	FolderOpen,
+	Briefcase,
+	Cog,
+	Activity,
 	FileSpreadsheet,
 	FileCode
 } from "lucide-svelte";
-	import { userService, projectService, taskService, statsService, exportService, type User, type Project, type Task } from '$lib/api';
+	import { userService, projectService, taskService, statsService, exportService, departmentService, type User, type Project, type Task } from '$lib/api';
 	import { notifications } from '$lib/notifications';
 
 	// Verifică autorizarea admin
 	onMount(() => {
 		if (!$currentUser || $currentUser.role !== 'Admin') {
 			notifications.error('Acces interzis', 'Nu ai permisiuni de administrator!');
-			goto('/time-monitoring/');
+			goto('/time-management/');
 			return;
 		}
 		loadAllDataInBackground();
@@ -40,6 +44,7 @@ import {
 	let users: User[] = $state([]);
 	let projects: Project[] = $state([]);
 	let allTasks: Task[] = $state([]);
+	let departments: string[] = $state([]);
 	let overviewStats = $state({
 	total_users: 0,
 	total_hours: 0,
@@ -52,7 +57,14 @@ import {
 	let showAddModal = $state(false);
 	let showEditModal = $state(false);
 	let editingUser: User | null = $state(null);
-	let newItem = $state({ name: "", type: "", description: "" });
+	let newItem = $state({ 
+		name: "", 
+		type: "", 
+		description: "",
+		module_type: "proiecte",
+		visibility_type: "all",
+		visible_departments: []
+	});
 	let exportLoading = $state(false);
 
 	async function loadAllDataInBackground() {
@@ -65,6 +77,7 @@ import {
 				loadUsers(),
 				loadProjects(),
 				loadTasks(),
+				loadDepartments(),
 				loadOverviewStats()
 			]);
 		} catch (error) {
@@ -75,6 +88,14 @@ import {
 	// Funcția veche pentru compatibilitate
 	async function loadAllData() {
 		await loadAllDataInBackground();
+	}
+
+	async function loadDepartments() {
+		try {
+			departments = await departmentService.getAll();
+		} catch (error) {
+			console.error('Error loading departments:', error);
+		}
 	}
 
 	async function loadUsers() {
@@ -110,26 +131,36 @@ import {
 	}
 
 async function addItem() {
-if (!newItem.name) {
-notifications.warning('Câmp incomplet', 'Te rog completează numele!');
-return;
-}
-
-		try {
-			await projectService.create({
-				name: newItem.name,
-				description: newItem.description,
-				module_type: newItem.type
-			});
-
-			await loadProjects();
-			newItem = { name: "", type: "", description: "" };
-			showAddModal = false;
-} catch (error) {
-console.error("Error adding item:", error);
-notifications.error('Eroare', 'Eroare la adăugarea elementului!');
-}
+	if (!newItem.name) {
+		notifications.warning('Câmp incomplet', 'Te rog completează numele!');
+		return;
 	}
+
+	try {
+		await projectService.create({
+			name: newItem.name,
+			description: newItem.description,
+			module_type: newItem.module_type,
+			visibility_type: newItem.visibility_type,
+			visible_departments: newItem.visible_departments
+		});
+
+		await loadProjects();
+		newItem = { 
+			name: "", 
+			type: "", 
+			description: "",
+			module_type: "proiecte",
+			visibility_type: "all",
+			visible_departments: []
+		};
+		showAddModal = false;
+		notifications.success('Succes', 'Element adăugat cu succes!');
+	} catch (error) {
+		console.error("Error adding item:", error);
+		notifications.error('Eroare', 'Eroare la adăugarea elementului!');
+	}
+}
 
 // Funcții pentru confirmarea ștergerii
 let showDeleteModal = $state(false);
@@ -351,7 +382,7 @@ async function deleteUser(userId: number) {
 			class:active={activeTab === "projects"}
 			onclick={() => activeTab = "projects"}
 		>
-			<Database size={20} />
+			<FolderOpen size={20} />
 			Proiecte
 		</button>
 		<button 
@@ -359,7 +390,7 @@ async function deleteUser(userId: number) {
 			class:active={activeTab === "evoms"}
 			onclick={() => activeTab = "evoms"}
 		>
-			<TrendingUp size={20} />
+			<Briefcase size={20} />
 			EVOM-uri
 		</button>
 		<button 
@@ -367,7 +398,7 @@ async function deleteUser(userId: number) {
 			class:active={activeTab === "operational"}
 			onclick={() => activeTab = "operational"}
 		>
-			<Settings size={20} />
+			<Activity size={20} />
 			Operational
 		</button>
 		<button 
@@ -675,6 +706,48 @@ async function deleteUser(userId: number) {
 						<label>Descriere</label>
 						<textarea bind:value={newItem.description} placeholder="Descrierea elementului" rows="3"></textarea>
 					</div>
+					<div class="form-group">
+						<label>Modul:</label>
+						<select bind:value={newItem.module_type}>
+							<option value="proiecte">Proiecte</option>
+							<option value="evom">EVOM</option>
+							<option value="operational">Operational</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Tip vizibilitate:</label>
+						<select bind:value={newItem.visibility_type}>
+							<option value="all">Toate departamentele</option>
+							<option value="specific_departments">Departamente specifice</option>
+							<option value="private">Privat (doar admin)</option>
+						</select>
+					</div>
+					{#if newItem.visibility_type === 'specific_departments'}
+					<div class="form-group">
+						<label>Departamente vizibile:</label>
+						<div class="department-checkboxes">
+							{#each departments as department}
+							<label class="checkbox-label">
+								<input 
+									type="checkbox" 
+									checked={newItem.visible_departments?.includes(department) || false}
+									onchange={(e) => {
+										if (!newItem.visible_departments) newItem.visible_departments = [];
+										if (e.target.checked) {
+											if (!newItem.visible_departments.includes(department)) {
+												newItem.visible_departments.push(department);
+											}
+										} else {
+											newItem.visible_departments = newItem.visible_departments.filter(d => d !== department);
+										}
+									}}
+								/>
+								<span>{department}</span>
+							</label>
+							{/each}
+						</div>
+					</div>
+					{/if}
 				</div>
 				<div class="modal-footer">
 					<button class="btn-cancel" onclick={() => showAddModal = false}>Anulează</button>
@@ -775,6 +848,40 @@ async function deleteUser(userId: number) {
 					<option value="operational">Operational</option>
 				</select>
 			</div>
+			<div class="edit-form-group">
+				<label for="edit-project-visibility">Tip vizibilitate:</label>
+				<select id="edit-project-visibility" bind:value={editingProject.visibility_type}>
+					<option value="all">Toate departamentele</option>
+					<option value="specific_departments">Departamente specifice</option>
+					<option value="private">Privat (doar admin)</option>
+				</select>
+			</div>
+			{#if editingProject.visibility_type === 'specific_departments'}
+			<div class="edit-form-group">
+				<label>Departamente vizibile:</label>
+				<div class="department-checkboxes">
+					{#each departments as department}
+					<label class="checkbox-label">
+						<input 
+							type="checkbox" 
+							checked={editingProject.visible_departments?.includes(department) || false}
+							onchange={(e) => {
+								if (!editingProject.visible_departments) editingProject.visible_departments = [];
+								if (e.target.checked) {
+									if (!editingProject.visible_departments.includes(department)) {
+										editingProject.visible_departments.push(department);
+									}
+								} else {
+									editingProject.visible_departments = editingProject.visible_departments.filter(d => d !== department);
+								}
+							}}
+						/>
+						<span>{department}</span>
+					</label>
+					{/each}
+				</div>
+			</div>
+			{/if}
 			<div class="edit-modal-actions">
 				<button class="cancel-btn" onclick={() => showEditProjectModal = false}>
 					Anulează
@@ -1747,5 +1854,38 @@ async function deleteUser(userId: number) {
 	.audit-btn:hover {
 		background: var(--color-buttonHover);
 		transform: translateY(-1px);
+	}
+
+	/* Stiluri pentru checkbox-uri departamente */
+	.department-checkboxes {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 0.5rem;
+		margin-top: 0.5rem;
+	}
+
+	.checkbox-label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		cursor: pointer;
+		padding: 0.25rem;
+		border-radius: 4px;
+		transition: background-color 0.2s;
+	}
+
+	.checkbox-label:hover {
+		background-color: var(--color-surface);
+	}
+
+	.checkbox-label input[type="checkbox"] {
+		margin: 0;
+		width: 16px;
+		height: 16px;
+	}
+
+	.checkbox-label span {
+		font-size: 0.875rem;
+		color: var(--color-text);
 	}
 </style>

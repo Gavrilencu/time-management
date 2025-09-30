@@ -3,13 +3,13 @@ import { onMount } from 'svelte';
 import { format } from 'date-fns';
 import { ro } from 'date-fns/locale';
 import { Plus, Calendar, Clock, ChevronDown } from 'lucide-svelte';
-import { projectService, taskService, type Project, type TaskCreate } from '$lib/api';
+	import { projectService, taskService, departmentService, type Project, type TaskCreate } from '$lib/api';
 import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 
 let selectedDate = $state(new Date());
-let selectedModule = $state('');
+let selectedModule = $state('proiecte');
 let selectedProject = $state('');
 let selectedProjectId = $state(0);
 let taskDescription = $state('');
@@ -30,14 +30,20 @@ loadProjects();
 });
 
 async function loadProjects() {
-try {
-loading = true;
-projects = await projectService.getAll();
-} catch (error) {
-console.error('Error loading projects:', error);
-} finally {
-loading = false;
-}
+	try {
+		loading = true;
+		// Încarcă proiectele filtrate pe departamentul utilizatorului curent
+		if ($currentUser?.department) {
+			projects = await projectService.getByDepartment($currentUser.department);
+		} else {
+			projects = await projectService.getAll();
+		}
+	} catch (error) {
+		console.error('Error loading projects:', error);
+		notifications.error('Eroare', 'Eroare la încărcarea proiectelor!');
+	} finally {
+		loading = false;
+	}
 }
 
 async function addTask() {

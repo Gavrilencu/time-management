@@ -40,7 +40,7 @@
 			
 			// Redirecționează la dashboard după 2 secunde
 			setTimeout(() => {
-				goto('/time-monitoring/');
+				goto('/time-management/');
 			}, 2000);
 		} catch (error) {
 			console.error('Error creating user:', error);
@@ -66,7 +66,7 @@
 				<CheckCircle size={24} />
 				<h3>Utilizatori existenți</h3>
 				<p>Aplicația are deja utilizatori configurați.</p>
-				<button class="btn-primary" onclick={() => goto('/time-monitoring/')}>
+				<button class="btn-primary" onclick={() => goto('/time-management/')}>
 					Continuă la Dashboard
 					<ArrowRight size={16} />
 				</button>

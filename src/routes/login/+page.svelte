@@ -15,7 +15,7 @@
 	onMount(() => {
 		// Nu redirecționa automat - permite utilizatorului să vadă pagina de login
 		// if ($isAuthenticated) {
-		// 	goto('/time-monitoring/');
+		// 	goto('/time-management/');
 		// }
 	});
 
@@ -29,7 +29,7 @@
 			await authenticateUser(kerberosData);
 			
 			// Redirecționează la dashboard după autentificare reușită
-			goto('/time-monitoring/');
+			goto('/time-management/');
 		} catch (error) {
 			console.error('Kerberos authentication failed:', error);
 			authError = 'Nu s-a putut autentifica utilizatorul prin Kerberos.';
@@ -168,7 +168,7 @@
 		<div class="login-footer">
 			<p>Dacă întâmpini probleme, contactează administratorul sistemului.</p>
 			<div class="footer-links">
-				<button onclick={() => goto('/time-monitoring/onboarding')}>Prima utilizare?</button>
+				<button onclick={() => goto('/time-management/onboarding')}>Prima utilizare?</button>
 				<span>•</span>
 				<button onclick={() => window.open('mailto:support@company.com')}>Suport tehnic</button>
 			</div>

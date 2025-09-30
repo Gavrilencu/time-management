@@ -83,15 +83,15 @@ async function authenticateUser(kerberosData: { username: string; email: string;
 }
 
 	const menuItems = [
-		{ name: 'Dashboard', href: '/time-monitoring/', icon: BarChart3 },
-		{ name: 'Calendar', href: '/time-monitoring/calendar', icon: Calendar },
-		{ name: 'Timp Lucru', href: '/time-monitoring/time-tracking', icon: Clock },
-		{ name: 'Adaugă Task', href: '/time-monitoring/add-task', icon: Plus },
-		{ name: 'Setări', href: '/time-monitoring/settings', icon: Settings }
+		{ name: 'Dashboard', href: '/time-management/', icon: BarChart3 },
+		{ name: 'Calendar', href: '/time-management/calendar', icon: Calendar },
+		{ name: 'Timp Lucru', href: '/time-management/time-tracking', icon: Clock },
+		{ name: 'Adaugă Task', href: '/time-management/add-task', icon: Plus },
+		{ name: 'Setări', href: '/time-management/settings', icon: Settings }
 	];
 
 	// Adaugă Admin doar pentru utilizatorii cu rol de admin
-	const adminMenuItem = { name: 'Admin', href: '/time-monitoring/admin', icon: Users };
+	const adminMenuItem = { name: 'Admin', href: '/time-management/admin', icon: Users };
 	
 	// Funcție pentru a obține meniul complet bazat pe rol
 	function getMenuItems() {
@@ -106,7 +106,7 @@ function logout() {
 	clearCurrentUser();
 	// TODO: Implementează logout Kerberos real
 	kerberosLogout();
-	goto('/time-monitoring/login');
+	goto('/time-management/login');
 }
 
 ////test

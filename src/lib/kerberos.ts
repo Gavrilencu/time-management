@@ -93,7 +93,7 @@ export async function isKerberosAvailable(): Promise<boolean> {
 export async function kerberosLogout(): Promise<void> {
     try {
         // Încearcă să facă logout prin endpoint-ul de securitate
-        await fetch('/time-monitoring/security/logout', {
+        await fetch('/security/logout', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,9 +110,9 @@ export async function kerberosLogout(): Promise<void> {
  * Implementare Kerberos completă:
  * 
  * 1. Autentificare prin serviciu extern de securitate:
- *    - /time-monitoring/security/developerIP-login - obține utilizatorul curent
- *    - /time-monitoring/security/getUserHierarchy - obține detalii suplimentare
- *    - /time-monitoring/security/logout - logout utilizator
+ *    - /security/developerIP-login - obține utilizatorul curent
+ *    - /security/getUserHierarchy - obține detalii suplimentare
+ *    - /security/logout - logout utilizator
  * 
  * 2. Mapping complet al datelor utilizatorului:
  *    - username, email, displayName, department

@@ -53,6 +53,8 @@ class Project(BaseModel):
     module_type: str  # "proiecte", "evom", "operational"
     status: str = "active"
     total_hours: Optional[float] = 0.0
+    visibility_type: str = "all"  # "all", "specific_departments", "private"
+    visible_departments: Optional[List[str]] = None
 
 class Task(BaseModel):
     id: Optional[int] = None
@@ -140,10 +142,25 @@ def init_db():
                 module_type VARCHAR(50) NOT NULL,
                 status VARCHAR(20) DEFAULT 'active',
                 total_hours DECIMAL(10,2) DEFAULT 0.0,
+                visibility_type VARCHAR(20) DEFAULT 'all',
+                visible_departments JSON DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
         print("Tabel 'projects' creat/verificat")
+        
+        # Migrație pentru a adăuga câmpurile de vizibilitate la tabelul existent
+        try:
+            cursor.execute("ALTER TABLE projects ADD COLUMN visibility_type VARCHAR(20) DEFAULT 'all'")
+            print("Câmp 'visibility_type' adăugat la tabelul 'projects'")
+        except pymysql.Error:
+            print("Câmp 'visibility_type' deja există în tabelul 'projects'")
+        
+        try:
+            cursor.execute("ALTER TABLE projects ADD COLUMN visible_departments JSON DEFAULT NULL")
+            print("Câmp 'visible_departments' adăugat la tabelul 'projects'")
+        except pymysql.Error:
+            print("Câmp 'visible_departments' deja există în tabelul 'projects'")
 
         # Tabel task-uri
         cursor.execute("""
@@ -381,6 +398,15 @@ async def delete_user(user_id: int):
     return {"message": "User deleted successfully"}
 
 # Proiecte
+@app.get("/time-monitoring/api/departments", response_model=List[str])
+async def get_departments():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != '' ORDER BY department")
+    departments = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return departments
+
 @app.get("/time-monitoring/api/projects", response_model=List[Project])
 async def get_projects():
     conn = get_db_connection()
@@ -388,6 +414,45 @@ async def get_projects():
     cursor.execute("SELECT * FROM projects ORDER BY module_type, name")
     projects = cursor.fetchall()
     conn.close()
+    
+    # Convertim JSON string-urile înapoi în liste Python
+    for project in projects:
+        if project['visible_departments']:
+            try:
+                project['visible_departments'] = json.loads(project['visible_departments'])
+            except (json.JSONDecodeError, TypeError):
+                project['visible_departments'] = []
+        else:
+            project['visible_departments'] = []
+    
+    return projects
+
+@app.get("/time-monitoring/api/projects/department/{department}", response_model=List[Project])
+async def get_projects_for_department(department: str):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    
+    # Obținem proiectele care sunt vizibile pentru departamentul specificat
+    cursor.execute("""
+        SELECT * FROM projects 
+        WHERE visibility_type = 'all' 
+           OR (visibility_type = 'specific_departments' AND JSON_CONTAINS(visible_departments, %s))
+        ORDER BY module_type, name
+    """, (json.dumps(department),))
+    
+    projects = cursor.fetchall()
+    conn.close()
+    
+    # Convertim JSON string-urile înapoi în liste Python
+    for project in projects:
+        if project['visible_departments']:
+            try:
+                project['visible_departments'] = json.loads(project['visible_departments'])
+            except (json.JSONDecodeError, TypeError):
+                project['visible_departments'] = []
+        else:
+            project['visible_departments'] = []
+    
     return projects
 
 @app.get("/time-monitoring/api/projects/module/{module_type}", response_model=List[Project])
@@ -403,9 +468,42 @@ async def get_projects_by_module(module_type: str):
 async def create_project(project: Project):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO projects (name, description, module_type, status) VALUES (%s, %s, %s, %s)", 
-                   (project.name, project.description, project.module_type, project.status))
+    
+    # Convertim visible_departments în JSON string pentru MySQL
+    visible_departments_json = None
+    if project.visible_departments:
+        visible_departments_json = json.dumps(project.visible_departments)
+    
+    cursor.execute("""
+        INSERT INTO projects (name, description, module_type, status, visibility_type, visible_departments) 
+        VALUES (%s, %s, %s, %s, %s, %s)
+    """, (project.name, project.description, project.module_type, project.status, 
+          project.visibility_type, visible_departments_json))
+    
     project_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    project.id = project_id
+    return project
+
+@app.put("/time-monitoring/api/projects/{project_id}", response_model=Project)
+async def update_project(project_id: int, project: Project):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Convertim visible_departments în JSON string pentru MySQL
+    visible_departments_json = None
+    if project.visible_departments:
+        visible_departments_json = json.dumps(project.visible_departments)
+    
+    cursor.execute("""
+        UPDATE projects 
+        SET name = %s, description = %s, module_type = %s, status = %s, 
+            visibility_type = %s, visible_departments = %s
+        WHERE id = %s
+    """, (project.name, project.description, project.module_type, project.status,
+          project.visibility_type, visible_departments_json, project_id))
+    
     conn.commit()
     conn.close()
     project.id = project_id
@@ -518,6 +616,46 @@ async def create_task(task: TaskCreate):
     update_project_hours(task.project_id)
     
     return Task(id=task_id, **task.dict())
+
+async def get_task_by_id(task_id: int):
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("""
+        SELECT t.*, u.name as user_name, u.department as user_department, p.name as project_name, p.module_type
+        FROM tasks t
+        JOIN users u ON t.user_id = u.id
+        JOIN projects p ON t.project_id = p.id
+        WHERE t.id = %s
+    """, (task_id,))
+    task = cursor.fetchone()
+    conn.close()
+    
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    return task
+
+@app.put("/time-monitoring/api/tasks/{task_id}", response_model=Task)
+async def update_task(task_id: int, task: Task):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        UPDATE tasks 
+        SET description = %s, hours = %s, date = %s
+        WHERE id = %s
+    """, (task.description, task.hours, task.date, task_id))
+    
+    if cursor.rowcount == 0:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    conn.commit()
+    conn.close()
+    
+    # Returnează task-ul actualizat cu informațiile complete
+    updated_task = await get_task_by_id(task_id)
+    return updated_task
 
 @app.delete("/time-monitoring/api/tasks/{task_id}")
 async def delete_task(task_id: int):
