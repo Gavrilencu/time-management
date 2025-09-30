@@ -4,6 +4,9 @@ import { format, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addMonths, su
 import { ro } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-svelte';
 import { taskService, type Task } from '$lib/api';
+import ModernCard from '$lib/components/ModernCard.svelte';
+import ModernButton from '$lib/components/ModernButton.svelte';
+import ModernInput from '$lib/components/ModernInput.svelte';
 
 let currentDate = $state(new Date());
 let selectedDate = $state(new Date());

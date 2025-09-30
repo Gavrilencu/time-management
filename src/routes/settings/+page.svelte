@@ -6,6 +6,9 @@ import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
 import { currentTheme, themes, type Theme } from '$lib/themes';
+import ModernCard from '$lib/components/ModernCard.svelte';
+import ModernButton from '$lib/components/ModernButton.svelte';
+import ModernInput from '$lib/components/ModernInput.svelte';
 
 let userSettings = $state({
 name: 'Utilizator',

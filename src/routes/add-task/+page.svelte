@@ -136,7 +136,7 @@
 	<div class="main-content">
 		<div class="content-grid">
 			<!-- Form Section -->
-			<ModernCard variant="elevated" class="form-section">
+			<ModernCard variant="elevated" className="form-section">
 				<div class="card-header">
 					<h2 class="card-title">Informații Task</h2>
 					<div class="form-progress">
@@ -286,7 +286,7 @@
 			
 			<!-- Preview Section -->
 			{#if showPreview}
-				<ModernCard variant="glass" class="preview-section">
+				<ModernCard variant="glass" className="preview-section">
 					<div class="card-header">
 						<h2 class="card-title">Previzualizare</h2>
 						<CheckCircle size={20} class="preview-icon" />

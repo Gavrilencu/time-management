@@ -11,6 +11,8 @@
 	export let animated: boolean = true;
 	export let rounded: boolean = true;
 	export let padding: 'none' | 'sm' | 'md' | 'lg' | 'xl' = 'md';
+	export let className: string = '';
+	export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 	
 	// Funcții pentru clasele CSS
 	function getVariantClasses() {
@@ -56,7 +58,12 @@
 	}
 	
 	function handleClick(event: MouseEvent) {
-		if (clickable) {
+		if (clickable && !loading) {
+			// Call the onclick prop if provided
+			if (onclick) {
+				onclick(event);
+			}
+			
 			// Emit click event
 			const customEvent = new CustomEvent('cardclick', {
 				detail: { event }
@@ -64,20 +71,24 @@
 			event.currentTarget?.dispatchEvent(customEvent);
 		}
 	}
+	
+	function handleKeydown(event: KeyboardEvent) {
+		if (clickable && !loading && (event.key === 'Enter' || event.key === ' ')) {
+			event.preventDefault();
+			handleClick(event as any);
+		}
+	}
 </script>
 
 <!-- Modern Card Component -->
 <div 
-	class="card {getVariantClasses()} {getSizeClasses()} {getPaddingClasses()} {getModifierClasses()}"
+	class="card {getVariantClasses()} {getSizeClasses()} {getPaddingClasses()} {getModifierClasses()} {className}"
 	role={clickable ? 'button' : 'article'}
-	tabindex={clickable ? '0' : undefined}
+	{...clickable ? { tabindex: 0 } : {}}
 	onclick={handleClick}
-	onkeydown={(e) => {
-		if (clickable && (e.key === 'Enter' || e.key === ' ')) {
-			e.preventDefault();
-			handleClick(e);
-		}
-	}}
+	onkeydown={handleKeydown}
+	aria-disabled={clickable ? false : undefined}
+	aria-busy={loading}
 >
 	{#if loading}
 		<div class="card-loading-overlay">

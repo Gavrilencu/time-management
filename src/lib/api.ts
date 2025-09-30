@@ -28,6 +28,7 @@ export interface Task {
 	description: string;
 	hours: number;
 	date: string;
+	status?: 'pending' | 'in_progress' | 'completed' | 'cancelled';
 	created_at?: string;
 	user_name?: string;
 	project_name?: string;

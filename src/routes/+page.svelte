@@ -19,7 +19,8 @@
 		Activity,
 		CheckCircle,
 		AlertCircle,
-		Info
+		Info,
+		ArrowLeft
 	} from 'lucide-svelte';
 	import ModernCard from '$lib/components/ModernCard.svelte';
 	import ModernButton from '$lib/components/ModernButton.svelte';
@@ -147,7 +148,7 @@
 	
 	<!-- Stats Grid -->
 	<div class="stats-grid">
-		<ModernCard variant="elevated" class="stat-card">
+		<ModernCard variant="elevated" className="stat-card">
 			<div class="stat-content">
 				<div class="stat-icon stat-icon-primary">
 					<Clock size={24} />
@@ -164,7 +165,7 @@
 			</div>
 		</ModernCard>
 		
-		<ModernCard variant="elevated" class="stat-card">
+		<ModernCard variant="elevated" className="stat-card">
 			<div class="stat-content">
 				<div class="stat-icon stat-icon-success">
 					<Calendar size={24} />
@@ -181,7 +182,7 @@
 			</div>
 		</ModernCard>
 		
-		<ModernCard variant="elevated" class="stat-card">
+		<ModernCard variant="elevated" className="stat-card">
 			<div class="stat-content">
 				<div class="stat-icon stat-icon-accent">
 					<Target size={24} />
@@ -198,7 +199,7 @@
 			</div>
 		</ModernCard>
 		
-		<ModernCard variant="elevated" class="stat-card">
+		<ModernCard variant="elevated" className="stat-card">
 			<div class="stat-content">
 				<div class="stat-icon stat-icon-warning">
 					<Activity size={24} />
@@ -219,7 +220,7 @@
 	<!-- Main Content Grid -->
 	<div class="main-grid">
 		<!-- Weekly Overview -->
-		<ModernCard variant="elevated" class="weekly-overview">
+		<ModernCard variant="elevated" className="weekly-overview">
 			<div class="card-header">
 				<h3 class="card-title">Prezentare Săptămânală</h3>
 				<div class="week-navigation">
@@ -241,7 +242,7 @@
 		</ModernCard>
 		
 		<!-- Recent Tasks -->
-		<ModernCard variant="elevated" class="recent-tasks">
+		<ModernCard variant="elevated" className="recent-tasks">
 			<div class="card-header">
 				<h3 class="card-title">Task-uri Recente</h3>
 				<ModernButton variant="secondary" size="sm" onclick={() => window.location.href = '/time-management/time-tracking'}>
@@ -273,7 +274,7 @@
 		</ModernCard>
 		
 		<!-- Projects Overview -->
-		<ModernCard variant="elevated" class="projects-overview">
+		<ModernCard variant="elevated" className="projects-overview">
 			<div class="card-header">
 				<h3 class="card-title">Proiecte Active</h3>
 				<ModernButton variant="secondary" size="sm" onclick={() => window.location.href = '/time-management/admin'}>
@@ -303,7 +304,7 @@
 		</ModernCard>
 		
 		<!-- Quick Actions -->
-		<ModernCard variant="gradient" class="quick-actions">
+		<ModernCard variant="gradient" className="quick-actions">
 			<div class="card-header">
 				<h3 class="card-title">Acțiuni Rapide</h3>
 			</div>

@@ -7,6 +7,9 @@ import { projectService, taskService, statsService, type Project, type Task } fr
 import { notifications } from '$lib/notifications';
 import { page } from '$app/stores';
 import { currentUser } from '$lib/auth';
+import ModernCard from '$lib/components/ModernCard.svelte';
+import ModernButton from '$lib/components/ModernButton.svelte';
+import ModernInput from '$lib/components/ModernInput.svelte';
 
 let isRunning = $state(false);
 let startTime: number | null = $state(null);

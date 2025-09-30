@@ -1,4 +1,4 @@
-<!-- Modern Design System Components -->
+<!-- Modern Button Component -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { currentTheme } from '$lib/themes';
@@ -13,6 +13,9 @@
 	export let glass: boolean = false;
 	export let gradient: boolean = false;
 	export let animated: boolean = true;
+	export let type: 'button' | 'submit' | 'reset' = 'button';
+	export let className: string = '';
+	export let onclick: ((event: MouseEvent) => void) | undefined = undefined;
 	
 	// Funcții pentru clasele CSS
 	function getVariantClasses() {
@@ -49,16 +52,45 @@
 		if (animated) classes.push('btn-animated');
 		return classes.join(' ');
 	}
+	
+	function handleClick(event: MouseEvent) {
+		if (disabled || loading) {
+			event.preventDefault();
+			return;
+		}
+		
+		// Call the onclick prop if provided
+		if (onclick) {
+			onclick(event);
+		}
+		
+		// Emit click event
+		const customEvent = new CustomEvent('click', {
+			detail: { event }
+		});
+		event.currentTarget?.dispatchEvent(customEvent);
+	}
+	
+	function handleKeydown(event: KeyboardEvent) {
+		if (disabled || loading) return;
+		
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			handleClick(event as any);
+		}
+	}
 </script>
 
 <!-- Modern Button Component -->
 <button 
-	class="btn {getVariantClasses()} {getSizeClasses()} {getModifierClasses()}"
+	class="btn {getVariantClasses()} {getSizeClasses()} {getModifierClasses()} {className}"
 	{disabled}
-	onclick
-	onkeydown
-	role="button"
+	{type}
+	onclick={handleClick}
+	onkeydown={handleKeydown}
 	tabindex="0"
+	aria-disabled={disabled}
+	aria-busy={loading}
 >
 	{#if loading}
 		<div class="btn-spinner"></div>

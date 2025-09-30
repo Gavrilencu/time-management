@@ -28,6 +28,9 @@ import {
 } from "lucide-svelte";
 	import { userService, projectService, taskService, statsService, exportService, departmentService, type User, type Project, type Task } from '$lib/api';
 	import { notifications } from '$lib/notifications';
+	import ModernCard from '$lib/components/ModernCard.svelte';
+	import ModernButton from '$lib/components/ModernButton.svelte';
+	import ModernInput from '$lib/components/ModernInput.svelte';
 
 	// Verifică autorizarea admin
 	onMount(() => {

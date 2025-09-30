@@ -4,6 +4,9 @@
 	import { userService } from '$lib/api';
 	import { notifications } from '$lib/notifications';
 	import { goto } from '$app/navigation';
+	import ModernCard from '$lib/components/ModernCard.svelte';
+	import ModernButton from '$lib/components/ModernButton.svelte';
+	import ModernInput from '$lib/components/ModernInput.svelte';
 
 	let formData = $state({
 		name: '',

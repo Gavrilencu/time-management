@@ -67,8 +67,26 @@
 		hasValue = inputElement?.value.length > 0;
 	}
 	
-	function handleInput() {
-		hasValue = inputElement?.value.length > 0;
+	function handleInput(event: Event) {
+		const target = event.target as HTMLInputElement;
+		hasValue = target.value.length > 0;
+		
+		// Emit input event
+		const customEvent = new CustomEvent('input', {
+			detail: { value: target.value, event }
+		});
+		event.currentTarget?.dispatchEvent(customEvent);
+	}
+	
+	function handleChange(event: Event) {
+		const target = event.target as HTMLInputElement;
+		hasValue = target.value.length > 0;
+		
+		// Emit change event
+		const customEvent = new CustomEvent('change', {
+			detail: { value: target.value, event }
+		});
+		event.currentTarget?.dispatchEvent(customEvent);
 	}
 	
 	// Reactive statements
@@ -107,8 +125,9 @@
 			onfocus={handleFocus}
 			onblur={handleBlur}
 			oninput={handleInput}
-			onclick
-			onkeydown
+			onchange={handleChange}
+			aria-invalid={error ? 'true' : 'false'}
+			aria-describedby={error ? `${inputId}-error` : helper ? `${inputId}-helper` : undefined}
 		/>
 		
 		{#if icon && iconPosition === 'right'}
@@ -125,19 +144,19 @@
 	</div>
 	
 	{#if helper && !error && !success}
-		<div class="input-helper">
+		<div class="input-helper" id="{inputId}-helper">
 			{helper}
 		</div>
 	{/if}
 	
 	{#if error}
-		<div class="input-error-message">
+		<div class="input-error-message" id="{inputId}-error">
 			{error}
 		</div>
 	{/if}
 	
 	{#if success}
-		<div class="input-success-message">
+		<div class="input-success-message" id="{inputId}-success">
 			{success}
 		</div>
 	{/if}

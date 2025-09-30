@@ -110,7 +110,10 @@
 	<div class="error-container">
 		<div class="error-header">
 			<div class="error-icon" style="color: {getErrorColor()}">
-				<svelte:component this={getErrorIcon()} size={80} />
+				{#if getErrorIcon()}
+					{@const IconComponent = getErrorIcon()}
+					<IconComponent size={80} />
+				{/if}
 			</div>
 			<div class="error-code">{errorCode}</div>
 			<h1 class="error-title">{errorMessage}</h1>
