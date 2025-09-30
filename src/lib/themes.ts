@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-export type Theme = 'light' | 'dark' | 'blue' | 'green' | 'purple' | 'orange';
+export type Theme = 'light' | 'dark' | 'blue' | 'green' | 'purple' | 'orange' | 'modern-light' | 'modern-dark';
 
 export interface ThemeConfig {
 	name: string;
@@ -42,6 +42,103 @@ export interface ThemeConfig {
 		progressFill: string;
 		shadow: string;
 		shadowHover: string;
+		// Culori moderne suplimentare
+		primaryLight?: string;
+		primaryDark?: string;
+		secondaryLight?: string;
+		secondaryDark?: string;
+		accentLight?: string;
+		accentDark?: string;
+		backgroundSecondary?: string;
+		backgroundTertiary?: string;
+		backgroundElevated?: string;
+		surfaceHover?: string;
+		surfaceActive?: string;
+		surfaceBorder?: string;
+		textTertiary?: string;
+		textInverse?: string;
+		textDisabled?: string;
+		borderLight?: string;
+		borderDark?: string;
+		borderFocus?: string;
+		shadowLight?: string;
+		shadowDark?: string;
+		shadowFocus?: string;
+		glass?: string;
+		glassBorder?: string;
+		gradient?: string;
+	};
+	
+	// Typography
+	typography?: {
+		fontFamily: string;
+		fontFamilyMono: string;
+		fontSize: {
+			xs: string;
+			sm: string;
+			base: string;
+			lg: string;
+			xl: string;
+			'2xl': string;
+			'3xl': string;
+			'4xl': string;
+		};
+		fontWeight: {
+			light: number;
+			normal: number;
+			medium: number;
+			semibold: number;
+			bold: number;
+		};
+		lineHeight: {
+			tight: number;
+			normal: number;
+			relaxed: number;
+		};
+	};
+	
+	// Spacing
+	spacing?: {
+		xs: string;
+		sm: string;
+		md: string;
+		lg: string;
+		xl: string;
+		'2xl': string;
+		'3xl': string;
+	};
+	
+	// Border Radius
+	borderRadius?: {
+		none: string;
+		sm: string;
+		md: string;
+		lg: string;
+		xl: string;
+		'2xl': string;
+		full: string;
+	};
+	
+	// Shadows
+	shadows?: {
+		none: string;
+		sm: string;
+		md: string;
+		lg: string;
+		xl: string;
+		'2xl': string;
+		inner: string;
+	};
+	
+	// Transitions
+	transitions?: {
+		fast: string;
+		normal: string;
+		slow: string;
+		ease: string;
+		easeIn: string;
+		easeOut: string;
+		easeInOut: string;
 	};
 }
 
@@ -129,6 +226,264 @@ export const themes: Record<Theme, ThemeConfig> = {
 			shadow: 'rgba(0, 0, 0, 0.3)',
 			shadowHover: 'rgba(0, 0, 0, 0.4)'
 		}
+	},
+	'modern-light': {
+		name: 'modern-light',
+		label: 'Modern Luminos',
+		colors: {
+			primary: '#3B82F6',
+			secondary: '#8B5CF6',
+			background: '#FFFFFF',
+			surface: '#F8FAFC',
+			text: '#0F172A',
+			textSecondary: '#475569',
+			border: '#E2E8F0',
+			accent: '#10B981',
+			success: '#10B981',
+			warning: '#F59E0B',
+			error: '#EF4444',
+			// Componente suplimentare
+			card: '#FFFFFF',
+			cardBorder: '#E2E8F0',
+			button: '#3B82F6',
+			buttonHover: '#2563EB',
+			buttonSecondary: '#F1F5F9',
+			input: '#FFFFFF',
+			inputBorder: '#D1D5DB',
+			inputFocus: '#3B82F6',
+			modal: '#FFFFFF',
+			modalOverlay: 'rgba(0, 0, 0, 0.5)',
+			sidebar: '#F8FAFC',
+			sidebarText: '#475569',
+			navbar: '#FFFFFF',
+			navbarText: '#0F172A',
+			table: '#FFFFFF',
+			tableHeader: '#F1F5F9',
+			tableRow: '#FFFFFF',
+			tableBorder: '#E2E8F0',
+			badge: '#DBEAFE',
+			badgeText: '#1E40AF',
+			progress: '#E2E8F0',
+			progressFill: '#3B82F6',
+			shadow: 'rgba(0, 0, 0, 0.1)',
+			shadowHover: 'rgba(0, 0, 0, 0.15)',
+			// Culori moderne suplimentare
+			primaryLight: '#DBEAFE',
+			primaryDark: '#1E40AF',
+			secondaryLight: '#EDE9FE',
+			secondaryDark: '#6D28D9',
+			accentLight: '#D1FAE5',
+			accentDark: '#047857',
+			backgroundSecondary: '#F8FAFC',
+			backgroundTertiary: '#F1F5F9',
+			backgroundElevated: '#FFFFFF',
+			surfaceHover: '#F8FAFC',
+			surfaceActive: '#F1F5F9',
+			surfaceBorder: '#E2E8F0',
+			textTertiary: '#94A3B8',
+			textInverse: '#FFFFFF',
+			textDisabled: '#CBD5E1',
+			borderLight: '#F1F5F9',
+			borderDark: '#CBD5E1',
+			borderFocus: '#3B82F6',
+			shadowLight: 'rgba(0, 0, 0, 0.05)',
+			shadowDark: 'rgba(0, 0, 0, 0.2)',
+			shadowFocus: 'rgba(59, 130, 246, 0.3)',
+			glass: 'rgba(255, 255, 255, 0.8)',
+			glassBorder: 'rgba(255, 255, 255, 0.2)',
+			gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		},
+		typography: {
+			fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+			fontFamilyMono: '"JetBrains Mono", "Fira Code", Consolas, monospace',
+			fontSize: {
+				xs: '0.75rem',
+				sm: '0.875rem',
+				base: '1rem',
+				lg: '1.125rem',
+				xl: '1.25rem',
+				'2xl': '1.5rem',
+				'3xl': '1.875rem',
+				'4xl': '2.25rem',
+			},
+			fontWeight: {
+				light: 300,
+				normal: 400,
+				medium: 500,
+				semibold: 600,
+				bold: 700,
+			},
+			lineHeight: {
+				tight: 1.25,
+				normal: 1.5,
+				relaxed: 1.75,
+			},
+		},
+		spacing: {
+			xs: '0.25rem',
+			sm: '0.5rem',
+			md: '1rem',
+			lg: '1.5rem',
+			xl: '2rem',
+			'2xl': '3rem',
+			'3xl': '4rem',
+		},
+		borderRadius: {
+			none: '0',
+			sm: '0.25rem',
+			md: '0.5rem',
+			lg: '0.75rem',
+			xl: '1rem',
+			'2xl': '1.5rem',
+			full: '9999px',
+		},
+		shadows: {
+			none: 'none',
+			sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+			md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+			lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+			xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+			'2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+			inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+		},
+		transitions: {
+			fast: '150ms',
+			normal: '250ms',
+			slow: '350ms',
+			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
+			easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+			easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
+			easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+		},
+	},
+	'modern-dark': {
+		name: 'modern-dark',
+		label: 'Modern Întunecat',
+		colors: {
+			primary: '#60A5FA',
+			secondary: '#A78BFA',
+			background: '#0F172A',
+			surface: '#1E293B',
+			text: '#F8FAFC',
+			textSecondary: '#CBD5E1',
+			border: '#334155',
+			accent: '#34D399',
+			success: '#34D399',
+			warning: '#FBBF24',
+			error: '#F87171',
+			// Componente suplimentare
+			card: '#1E293B',
+			cardBorder: '#334155',
+			button: '#3B82F6',
+			buttonHover: '#2563EB',
+			buttonSecondary: '#374151',
+			input: '#1E293B',
+			inputBorder: '#475569',
+			inputFocus: '#60A5FA',
+			modal: '#1E293B',
+			modalOverlay: 'rgba(0, 0, 0, 0.7)',
+			sidebar: '#1E293B',
+			sidebarText: '#F8FAFC',
+			navbar: '#0F172A',
+			navbarText: '#F8FAFC',
+			table: '#1E293B',
+			tableHeader: '#334155',
+			tableRow: '#1E293B',
+			tableBorder: '#475569',
+			badge: '#1E3A8A',
+			badgeText: '#93C5FD',
+			progress: '#374151',
+			progressFill: '#60A5FA',
+			shadow: 'rgba(0, 0, 0, 0.3)',
+			shadowHover: 'rgba(0, 0, 0, 0.4)',
+			// Culori moderne suplimentare
+			primaryLight: '#1E3A8A',
+			primaryDark: '#1E40AF',
+			secondaryLight: '#4C1D95',
+			secondaryDark: '#6D28D9',
+			accentLight: '#064E3B',
+			accentDark: '#047857',
+			backgroundSecondary: '#1E293B',
+			backgroundTertiary: '#334155',
+			backgroundElevated: '#1E293B',
+			surfaceHover: '#334155',
+			surfaceActive: '#475569',
+			surfaceBorder: '#334155',
+			textTertiary: '#94A3B8',
+			textInverse: '#0F172A',
+			textDisabled: '#64748B',
+			borderLight: '#475569',
+			borderDark: '#1E293B',
+			borderFocus: '#60A5FA',
+			shadowLight: 'rgba(0, 0, 0, 0.1)',
+			shadowDark: 'rgba(0, 0, 0, 0.5)',
+			shadowFocus: 'rgba(96, 165, 250, 0.3)',
+			glass: 'rgba(30, 41, 59, 0.8)',
+			glassBorder: 'rgba(255, 255, 255, 0.1)',
+			gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+		},
+		typography: {
+			fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+			fontFamilyMono: '"JetBrains Mono", "Fira Code", Consolas, monospace',
+			fontSize: {
+				xs: '0.75rem',
+				sm: '0.875rem',
+				base: '1rem',
+				lg: '1.125rem',
+				xl: '1.25rem',
+				'2xl': '1.5rem',
+				'3xl': '1.875rem',
+				'4xl': '2.25rem',
+			},
+			fontWeight: {
+				light: 300,
+				normal: 400,
+				medium: 500,
+				semibold: 600,
+				bold: 700,
+			},
+			lineHeight: {
+				tight: 1.25,
+				normal: 1.5,
+				relaxed: 1.75,
+			},
+		},
+		spacing: {
+			xs: '0.25rem',
+			sm: '0.5rem',
+			md: '1rem',
+			lg: '1.5rem',
+			xl: '2rem',
+			'2xl': '3rem',
+			'3xl': '4rem',
+		},
+		borderRadius: {
+			none: '0',
+			sm: '0.25rem',
+			md: '0.5rem',
+			lg: '0.75rem',
+			xl: '1rem',
+			'2xl': '1.5rem',
+			full: '9999px',
+		},
+		shadows: {
+			none: 'none',
+			sm: '0 1px 2px 0 rgba(0, 0, 0, 0.3)',
+			md: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
+			lg: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)',
+			xl: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)',
+			'2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+			inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.2)',
+		},
+		transitions: {
+			fast: '150ms',
+			normal: '250ms',
+			slow: '350ms',
+			ease: 'cubic-bezier(0.4, 0, 0.2, 1)',
+			easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+			easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
+			easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+		},
 	},
 	blue: {
 		name: 'blue',
@@ -302,7 +657,7 @@ export const themes: Record<Theme, ThemeConfig> = {
 
 // Store pentru tema curentă
 function createThemeStore() {
-	const { subscribe, set, update } = writable<Theme>('light');
+	const { subscribe, set, update } = writable<Theme>('modern-light');
 
 	return {
 		subscribe,
@@ -313,7 +668,7 @@ function createThemeStore() {
 		},
 		initTheme: () => {
 			const savedTheme = localStorage.getItem('kpi-theme') as Theme;
-			const theme = savedTheme && themes[savedTheme] ? savedTheme : 'light';
+			const theme = savedTheme && themes[savedTheme] ? savedTheme : 'modern-light';
 			set(theme);
 			applyTheme(theme);
 		}
@@ -329,6 +684,47 @@ function applyTheme(theme: Theme) {
 	Object.entries(themeConfig.colors).forEach(([key, value]) => {
 		root.style.setProperty(`--color-${key}`, value);
 	});
+	
+	// Aplică variabilele de tipografie dacă există
+	if (themeConfig.typography) {
+		Object.entries(themeConfig.typography).forEach(([category, values]) => {
+			if (typeof values === 'object') {
+				Object.entries(values).forEach(([key, value]) => {
+					root.style.setProperty(`--font-${category}-${key}`, value);
+				});
+			} else {
+				root.style.setProperty(`--font-${category}`, values);
+			}
+		});
+	}
+	
+	// Aplică variabilele de spacing dacă există
+	if (themeConfig.spacing) {
+		Object.entries(themeConfig.spacing).forEach(([key, value]) => {
+			root.style.setProperty(`--spacing-${key}`, value);
+		});
+	}
+	
+	// Aplică variabilele de border radius dacă există
+	if (themeConfig.borderRadius) {
+		Object.entries(themeConfig.borderRadius).forEach(([key, value]) => {
+			root.style.setProperty(`--radius-${key}`, value);
+		});
+	}
+	
+	// Aplică variabilele de shadow dacă există
+	if (themeConfig.shadows) {
+		Object.entries(themeConfig.shadows).forEach(([key, value]) => {
+			root.style.setProperty(`--shadow-${key}`, value);
+		});
+	}
+	
+	// Aplică variabilele de transition dacă există
+	if (themeConfig.transitions) {
+		Object.entries(themeConfig.transitions).forEach(([key, value]) => {
+			root.style.setProperty(`--transition-${key}`, value);
+		});
+	}
 	
 	// Adaugă clasa pentru tema
 	root.className = root.className.replace(/theme-\w+/g, '');
