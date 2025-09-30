@@ -18,6 +18,8 @@ let newComment = $state('');
 let showAddForm = $state(false);
 let showEditTaskModal = $state(false);
 let editingTask: Task | null = $state(null);
+let showDeleteTaskModal = $state(false);
+let taskToDelete: Task | null = $state(null);
 let showModuleDropdown = $state(false);
 let showProjectDropdown = $state(false);
 
@@ -31,6 +33,8 @@ let modules = $state<Array<{id: string, name: string, projects: string[]}>>([
 let allProjects: Project[] = $state([]);
 let tasks: Task[] = $state([]);
 let taskComments: TaskComment[] = $state([]);
+let loadedTaskComments = $state<Set<number>>(new Set());
+let taskCommentInputs = $state<Map<number, string>>(new Map());
 let dailyProgress = $state(0); // ore lucrate în ziua curentă
 const maxDailyHours = 8;
 
@@ -125,7 +129,13 @@ async function addComment(taskId: number, commentText: string) {
 			user_id: $currentUser.id,
 			comment: commentText.trim()
 		});
+		
+		// Reîncarcă comentariile pentru task-ul specific
 		await loadTaskComments(taskId);
+		
+		// Resetează câmpul de comentariu pentru acest task
+		taskCommentInputs.set(taskId, '');
+		
 		notifications.success('Comentariu adăugat', 'Comentariul a fost adăugat cu succes!');
 	} catch (error) {
 		console.error('Error adding comment:', error);
@@ -173,6 +183,32 @@ async function updateTask() {
 function cancelEditTask() {
 	showEditTaskModal = false;
 	editingTask = null;
+}
+
+// Funcții pentru ștergerea task-urilor
+function confirmDeleteTask(task: Task) {
+	taskToDelete = task;
+	showDeleteTaskModal = true;
+}
+
+async function deleteTaskConfirmed() {
+	if (!taskToDelete) return;
+
+	try {
+		await taskService.delete(taskToDelete.id!);
+		await loadDataInBackground();
+		showDeleteTaskModal = false;
+		taskToDelete = null;
+		notifications.success('Succes', 'Task șters cu succes!');
+	} catch (error) {
+		console.error('Error deleting task:', error);
+		notifications.error('Eroare', 'Eroare la ștergerea task-ului!');
+	}
+}
+
+function cancelDeleteTask() {
+	showDeleteTaskModal = false;
+	taskToDelete = null;
 }
 
 async function addTask() {
@@ -482,7 +518,7 @@ Adaugă Task
 								<button class="action-btn edit" onclick={() => editTask(task)}>
 									<Edit3 size={16} />
 								</button>
-								<button class="action-btn delete" onclick={() => deleteTask(task.id!)}>
+								<button class="action-btn delete" onclick={() => confirmDeleteTask(task)}>
 									<Trash2 size={16} />
 								</button>
 </div>
@@ -506,13 +542,14 @@ Adaugă Task
 
 <!-- Formular pentru adăugare comentariu -->
 <div class="add-comment-form">
-<input 
-	type="text" 
-	placeholder="Adaugă un comentariu..." 
-	bind:value={newComment}
-	onkeydown={(e) => e.key === 'Enter' && addComment(task.id!, newComment)}
-/>
-<button onclick={() => addComment(task.id!, newComment)}>Adaugă</button>
+	<input 
+		type="text" 
+		placeholder="Adaugă un comentariu..." 
+		value={taskCommentInputs.get(task.id!) || ''}
+		oninput={(e) => taskCommentInputs.set(task.id!, e.target.value)}
+		onkeydown={(e) => e.key === 'Enter' && addComment(task.id!, taskCommentInputs.get(task.id!) || '')}
+	/>
+	<button onclick={() => addComment(task.id!, taskCommentInputs.get(task.id!) || '')}>Adaugă</button>
 </div>
 {:else}
 <div class="no-tasks">
@@ -575,6 +612,36 @@ Adaugă Task
 		<div class="modal-footer">
 			<button class="btn-cancel" onclick={cancelEditTask}>Anulează</button>
 			<button class="btn-save" onclick={updateTask}>Salvează</button>
+		</div>
+	</div>
+</div>
+{/if}
+
+<!-- Modal pentru confirmarea ștergerii task-urilor -->
+{#if showDeleteTaskModal && taskToDelete}
+<div class="modal-overlay" onclick={cancelDeleteTask} role="dialog" aria-modal="true" aria-labelledby="delete-task-title">
+	<div class="modal-content" onclick={(e) => e.stopPropagation()}>
+		<div class="modal-header">
+			<h3 id="delete-task-title">Confirmă ștergerea</h3>
+			<button class="close-btn" onclick={cancelDeleteTask} aria-label="Închide modal">×</button>
+		</div>
+		<div class="modal-body">
+			<div class="delete-confirmation">
+				<div class="warning-icon">
+					<Trash2 size={48} />
+				</div>
+				<p>Ești sigur că vrei să ștergi acest task?</p>
+				<div class="task-preview">
+					<strong>Descriere:</strong> {taskToDelete.description}<br>
+					<strong>Ore:</strong> {taskToDelete.hours}h<br>
+					<strong>Data:</strong> {taskToDelete.date}
+				</div>
+				<p class="warning-text">Această acțiune nu poate fi anulată!</p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn-cancel" onclick={cancelDeleteTask}>Anulează</button>
+			<button class="btn-delete" onclick={deleteTaskConfirmed}>Șterge</button>
 		</div>
 	</div>
 </div>
@@ -1202,5 +1269,52 @@ color: #6b7280;
 
 .btn-save:hover {
 	background: var(--color-buttonHover);
+}
+
+/* Stiluri pentru modalul de ștergere */
+.delete-confirmation {
+	text-align: center;
+	padding: 1rem 0;
+}
+
+.warning-icon {
+	color: var(--color-error);
+	margin-bottom: 1rem;
+}
+
+.task-preview {
+	background: var(--color-surface);
+	border-radius: 8px;
+	padding: 1rem;
+	margin: 1rem 0;
+	text-align: left;
+	border-left: 4px solid var(--color-primary);
+}
+
+.task-preview strong {
+	color: var(--color-text);
+}
+
+.warning-text {
+	color: var(--color-error);
+	font-weight: 500;
+	margin-top: 1rem;
+}
+
+.btn-delete {
+	padding: 0.75rem 1.5rem;
+	background: var(--color-error);
+	color: white;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: var(--transition);
+}
+
+.btn-delete:hover {
+	background: #dc2626;
+	opacity: 0.9;
 }
 </style>

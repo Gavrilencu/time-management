@@ -38,6 +38,8 @@ async function loadProjects() {
 		} else {
 			projects = await projectService.getAll();
 		}
+		console.log('Loaded projects:', projects);
+		console.log('Current user department:', $currentUser?.department);
 	} catch (error) {
 		console.error('Error loading projects:', error);
 		notifications.error('Eroare', 'Eroare la încărcarea proiectelor!');
@@ -103,7 +105,18 @@ return selectedProject || 'Selectează proiect';
 }
 
 function getAvailableProjects() {
-return projects.filter(p => p.module_type === selectedModule);
+	const filteredProjects = projects.filter(p => p.module_type === selectedModule);
+	console.log('All projects:', projects);
+	console.log('Selected module:', selectedModule);
+	console.log('Available projects for module', selectedModule, ':', filteredProjects);
+	
+	// Dacă nu sunt proiecte pentru modulul selectat, returnează toate proiectele pentru debugging
+	if (filteredProjects.length === 0) {
+		console.log('No projects found for module, returning all projects for debugging');
+		return projects;
+	}
+	
+	return filteredProjects;
 }
 </script>
 
@@ -186,6 +199,11 @@ class="dropdown-item"
 {project.name}
 </button>
 {/each}
+{#if getAvailableProjects().length === 0}
+<div class="dropdown-item disabled">
+Nu sunt proiecte disponibile pentru acest modul
+</div>
+{/if}
 </div>
 {/if}
 </div>
@@ -404,5 +422,15 @@ font-size: 0.875rem;
 text-align: right;
 max-width: 60%;
 word-wrap: break-word;
+}
+
+.dropdown-item.disabled {
+	color: var(--color-textSecondary);
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.dropdown-item.disabled:hover {
+	background: transparent;
 }
 </style>

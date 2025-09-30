@@ -535,6 +535,12 @@ async def get_tasks():
     """)
     tasks = cursor.fetchall()
     conn.close()
+    
+    # Convertește datetime în string pentru fiecare task
+    for task in tasks:
+        if task['created_at']:
+            task['created_at'] = task['created_at'].isoformat() if hasattr(task['created_at'], 'isoformat') else str(task['created_at'])
+    
     return tasks
 
 @app.get("/time-monitoring/api/tasks/department/{department}")
@@ -551,6 +557,12 @@ async def get_department_tasks(department: str):
     """, (department,))
     tasks = cursor.fetchall()
     conn.close()
+    
+    # Convertește datetime în string pentru fiecare task
+    for task in tasks:
+        if task['created_at']:
+            task['created_at'] = task['created_at'].isoformat() if hasattr(task['created_at'], 'isoformat') else str(task['created_at'])
+    
     return tasks
 
 @app.get("/time-monitoring/api/tasks/user/{user_id}")
@@ -567,6 +579,12 @@ async def get_user_tasks(user_id: int):
     """, (user_id,))
     tasks = cursor.fetchall()
     conn.close()
+    
+    # Convertește datetime în string pentru fiecare task
+    for task in tasks:
+        if task['created_at']:
+            task['created_at'] = task['created_at'].isoformat() if hasattr(task['created_at'], 'isoformat') else str(task['created_at'])
+    
     return tasks
 
 @app.get("/time-monitoring/api/tasks/date/{date}")
@@ -583,6 +601,12 @@ async def get_tasks_by_date(date: str):
     """, (date,))
     tasks = cursor.fetchall()
     conn.close()
+    
+    # Convertește datetime în string pentru fiecare task
+    for task in tasks:
+        if task['created_at']:
+            task['created_at'] = task['created_at'].isoformat() if hasattr(task['created_at'], 'isoformat') else str(task['created_at'])
+    
     return tasks
 
 @app.post("/time-monitoring/api/tasks", response_model=Task)
@@ -696,6 +720,12 @@ async def get_task_comments(task_id: int):
     """, (task_id,))
     comments = cursor.fetchall()
     conn.close()
+    
+    # Convertește datetime în string pentru fiecare comentariu
+    for comment in comments:
+        if comment['created_at']:
+            comment['created_at'] = comment['created_at'].isoformat() if hasattr(comment['created_at'], 'isoformat') else str(comment['created_at'])
+    
     return comments
 
 @app.post("/time-monitoring/api/tasks/{task_id}/comments", response_model=TaskComment)
@@ -730,7 +760,23 @@ async def create_task_comment(task_id: int, comment: TaskCommentCreate, request:
         user_agent=request.headers.get("user-agent")
     )
     
-    return TaskComment(id=comment_id, **comment.dict())
+    # Returnează comentariul creat cu datele complete
+    conn = get_db_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    cursor.execute("""
+        SELECT tc.*, u.name as user_name
+        FROM task_comments tc
+        JOIN users u ON tc.user_id = u.id
+        WHERE tc.id = %s
+    """, (comment_id,))
+    created_comment = cursor.fetchone()
+    conn.close()
+    
+    # Convertește datetime în string
+    if created_comment['created_at']:
+        created_comment['created_at'] = created_comment['created_at'].isoformat() if hasattr(created_comment['created_at'], 'isoformat') else str(created_comment['created_at'])
+    
+    return created_comment
 
 @app.delete("/time-monitoring/api/comments/{comment_id}")
 async def delete_task_comment(comment_id: int, request: Request):
@@ -787,6 +833,29 @@ async def get_audit_logs(skip: int = 0, limit: int = 100, user_id: Optional[int]
     cursor.execute(query, params)
     logs = cursor.fetchall()
     conn.close()
+    
+    # Procesează JSON string-urile înapoi în dict-uri
+    for log in logs:
+        if log['old_values']:
+            try:
+                log['old_values'] = json.loads(log['old_values'])
+            except (json.JSONDecodeError, TypeError):
+                log['old_values'] = {}
+        else:
+            log['old_values'] = {}
+            
+        if log['new_values']:
+            try:
+                log['new_values'] = json.loads(log['new_values'])
+            except (json.JSONDecodeError, TypeError):
+                log['new_values'] = {}
+        else:
+            log['new_values'] = {}
+            
+        # Convertește datetime în string
+        if log['created_at']:
+            log['created_at'] = log['created_at'].isoformat() if hasattr(log['created_at'], 'isoformat') else str(log['created_at'])
+    
     return logs
 
 @app.get("/time-monitoring/api/audit-logs/stats")

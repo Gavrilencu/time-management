@@ -72,6 +72,15 @@ button {
   cursor: pointer;
   transition: var(--transition);
   min-height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Iconuri din butoane */
+button svg {
+  flex-shrink: 0;
 }
 
 button:hover {
